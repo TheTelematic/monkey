@@ -8,9 +8,6 @@ install-requirements:
 build:
 	docker build -t ${image_name}:${image_tag} .
 
-run-local:
-	cd src/ && python main.py api
-
 deploy:
 	@extra=$1
 
