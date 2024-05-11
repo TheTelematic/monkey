@@ -1,13 +1,15 @@
 from fastapi import APIRouter
+from .ai.hello import router as ai_hello_router  # noqa: F401 # pylint: disable=unused-import
 
-router = APIRouter()
+
+probes_router = APIRouter()
 
 
-@router.get("/readiness")
+@probes_router.get("/readiness")
 def readiness():
     return {"status": "ok"}
 
 
-@router.get("/liveness")
+@probes_router.get("/liveness")
 def liveness():
     return {"status": "ok"}

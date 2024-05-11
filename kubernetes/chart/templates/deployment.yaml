@@ -33,9 +33,9 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /liveness
+              path: /api/probes/liveness
               port: {{ .Values.service.port.container }}
           readinessProbe:
             httpGet:
-              path: /readiness
+              path: /api/probes/readiness
               port: {{ .Values.service.port.container }}

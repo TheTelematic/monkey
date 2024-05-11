@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 
-from api.routes import router
+from api.routes import probes_router, ai_hello_router
+
+COMMON_PREFIX = "/api"
 
 app = FastAPI()
-app.include_router(router)
+app.include_router(probes_router, prefix=f"{COMMON_PREFIX}/probes")
+app.include_router(ai_hello_router, prefix=f"{COMMON_PREFIX}/ai")
