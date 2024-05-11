@@ -6,3 +6,9 @@ image:
 
 replicas:
   min: 1
+
+service:
+  port:
+    container: 8000
+    name: http
+    port: 80
