@@ -12,5 +12,5 @@ This is a pet project to show all technologies I know and also learn about AI.
 - Redis - TODO
 - Prometheus - TODO
 - Grafana - TODO
-- AI - TODO
+- langchain - WIP
 - CI/CD - TODO
