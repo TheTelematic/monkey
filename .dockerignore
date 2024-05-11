@@ -1,0 +1,5 @@
+kubernetes/
+venv/
+.gitignore
+Dockerfile
+README.md
