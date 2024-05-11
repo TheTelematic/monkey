@@ -1,3 +1,5 @@
+import base64
+
 from langchain_community.llms import Ollama
 
 import config
@@ -29,13 +31,29 @@ class LLM:
         return result
 
     async def _cached(self, text: str) -> bool:
-        return await self.redis.exists(text) == 1
+        key = self._get_key(text)
+        return await self.redis.exists(key) == 1
 
     async def _get_cache(self, text: str) -> str:
-        return await self.redis.get(text)
+        key = self._get_key(text)
+        return self._decode_value(await self.redis.get(key))
 
     async def _set_cache(self, text: str, result: str) -> None:
-        await self.redis.set(text, result, ex=config.CACHE_EXPIRATION_SECONDS)
+        key = self._get_key(text)
+        value = self._encode_value(result)
+        await self.redis.set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
+
+    @staticmethod
+    def _get_key(text: str) -> str:
+        return base64.b64encode(text.encode()).decode()
+
+    @staticmethod
+    def _encode_value(value: str) -> bytes:
+        return value.encode()
+
+    @staticmethod
+    def _decode_value(value: bytes) -> str:
+        return value.decode()
 
 
 llm = LLM()
