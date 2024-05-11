@@ -11,6 +11,9 @@ build:
 deploy:
 	helm upgrade --install monkey kubernetes/chart
 
+deploy-with-ollama:
+	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
+
 undeploy:
 	helm uninstall monkey
 
