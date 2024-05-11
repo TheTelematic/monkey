@@ -1,0 +1,8 @@
+image:
+  name: monkey
+  tag: latest
+  policy: IfNotPresent
+
+
+replicas:
+  min: 1
