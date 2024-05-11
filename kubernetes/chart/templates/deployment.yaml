@@ -39,3 +39,6 @@ spec:
             httpGet:
               path: /api/probes/readiness
               port: {{ .Values.service.port.container }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}
