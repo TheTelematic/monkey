@@ -1,11 +1,10 @@
 from fastapi import APIRouter
 
-from infra.llm import llm
+from core.hello import hello as _hello
 
 router = APIRouter(prefix="/hello")
 
 
 @router.get("")
 async def hello():
-    result = await llm.invoke("Hello!")
-    return {"message": result}
+    return {"message": await _hello()}
