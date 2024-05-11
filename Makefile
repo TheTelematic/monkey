@@ -12,7 +12,9 @@ run-local:
 	cd src/ && python main.py api
 
 deploy:
-	helm upgrade --install --wait monkey kubernetes/chart --set config.LLM_URL=${LLM_URL}
+	@extra=$1
+
+	helm upgrade --install --wait monkey kubernetes/chart --set config.LLM_URL=${LLM_URL} ${extra}
 
 deploy-with-ollama:
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true

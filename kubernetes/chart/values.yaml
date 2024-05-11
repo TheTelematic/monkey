@@ -22,5 +22,6 @@ ollama:
   port: 11434
 
 config:
+  LOG_LEVEL: "INFO"
   LLM_URL: ""
   REDIS_HOST: "redis-master"
