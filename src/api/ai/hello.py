@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from core.llm import llm
+from infra.llm import llm
 
 router = APIRouter(prefix="/hello")
 

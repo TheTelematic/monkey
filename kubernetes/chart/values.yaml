@@ -23,3 +23,4 @@ ollama:
 
 config:
   LLM_URL: ""
+  REDIS_HOST: "redis-master"
