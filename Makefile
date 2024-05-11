@@ -8,6 +8,9 @@ install-requirements:
 build:
 	docker build -t ${image_name}:${image_tag} .
 
+run-local:
+	cd src/ && python main.py api
+
 deploy:
 	helm upgrade --install monkey kubernetes/chart
 
