@@ -15,7 +15,8 @@ html = """
         <h1>AI Chat</h1>
         <form action="" onsubmit="sendMessage(event)">
             <input type="text" id="messageText" autocomplete="off"/>
-            <button>Send</button>
+            <button id="sendButton" >Send</button>
+            <label id="labelButton" >(Click button or Press enter to send)</label>
         </form>
         <ul id='messages'>
         </ul>
@@ -27,8 +28,14 @@ html = """
                 var content = document.createTextNode(event.data)
                 message.appendChild(content)
                 messages.appendChild(message)
+                document.getElementById("sendButton").disabled = false
+                document.getElementById("labelButton").innerHTML = "(Click button or Press enter to send)"
             };
             function sendMessage(event) {
+                // disable button
+                document.getElementById("sendButton").disabled = true
+                // change label
+                document.getElementById("labelButton").innerHTML = "Loading..."
                 var input = document.getElementById("messageText")
                 ws.send(input.value)
                 input.value = ''
