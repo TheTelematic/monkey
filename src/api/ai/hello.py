@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from core.hello import hello as _hello
+from core.ai import get_ai_response
 
 router = APIRouter(prefix="/hello")
 
 
 @router.get("")
 async def hello():
-    return {"message": await _hello()}
+    return {"message": await get_ai_response("Hello!")}
