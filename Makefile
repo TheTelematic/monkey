@@ -17,3 +17,6 @@ undeploy:
 check-chart:
 	helm template --debug monkey kubernetes/chart
 	helm lint kubernetes/chart
+
+port-forward:
+	kubectl port-forward service/monkey 8000:80
