@@ -1,12 +1,11 @@
 import asyncio
 import logging
 from typing import Awaitable, Callable
-import types
 
-from aio_pika import IncomingMessage, Connection, connect_robust, Message
+from aio_pika import IncomingMessage, connect_robust, Message
 
 import config
-from consumers.translations import translate
+from consumers.routes import ROUTES, consumers
 from logger import logger
 
 """
@@ -15,15 +14,6 @@ TODO:
 - Graceful shutdown.
 """
 
-CONSUMER_TRANSLATIONS = "translations"
-consumers = types.SimpleNamespace()
-consumers.TRANSLATIONS = CONSUMER_TRANSLATIONS
-
-_routes = {
-    consumers.TRANSLATIONS: config.RABBITMQ_QUEUE_TRANSLATIONS,
-}
-
-_publisher_connection: Connection | None = None
 
 logging.getLogger("aio_pika").setLevel(logging.WARNING)
 logging.getLogger("aiormq").setLevel(logging.WARNING)
@@ -56,30 +46,7 @@ async def _run_consumer(queue_name: str, callback: Callable[[bytes], Awaitable])
                         )
 
 
-def run_consumer(consumer_type: str) -> None:
-    match consumer_type:
-        case consumers.TRANSLATIONS:
-            _queue_name = config.RABBITMQ_QUEUE_TRANSLATIONS
-            _callback = translate
-        case _:
-            raise ValueError("Invalid argument. Use 'translations' to start the translations consumer.")
-
+def run_consumer(consumer_type: consumers) -> None:
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(_run_consumer(_queue_name, _callback))
+    loop.run_until_complete(_run_consumer(ROUTES[consumer_type]["queue"], ROUTES[consumer_type]["callback"]))
     loop.close()
-
-
-async def send_to_consumer(consumer: consumers, message: bytes) -> None:
-    global _publisher_connection
-    if _publisher_connection is None:
-        logger.info("Connecting to RabbitMQ...")
-        _publisher_connection = await connect_robust(config.RABBITMQ_URL)
-
-    async with _publisher_connection:
-        channel = await _publisher_connection.channel()
-
-        await channel.default_exchange.publish(
-            Message(body=message),
-            routing_key=_routes[consumer],
-        )
-        logger.debug(f"Sent message to {consumer}. {message=}")
