@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-consumer-translations
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-consumer-translations
+spec:
+  replicas: {{ .Values.replicas.consumers.translations.min }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-consumer-translations
+  template:
+    metadata:
+      name: {{ .Release.Name }}-consumer-translations
+      namespace: {{ .Release.Namespace }}
+      labels:
+        app: {{ .Release.Name }}-consumer-translations
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ .Release.Name }}-consumer-translations
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.policy }}
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - python main.py consumer_translations
+          livenessProbe:
+            exec:
+              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]
+          readinessProbe:
+            exec:
+              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}
+---

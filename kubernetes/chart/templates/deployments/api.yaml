@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-api
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}
+    app: {{ .Release.Name }}-api
 spec:
-  replicas: {{ .Values.replicas.min }}
+  replicas: {{ .Values.replicas.api.min }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Release.Name }}-api
   template:
     metadata:
-      name: {{ .Release.Name }}
+      name: {{ .Release.Name }}-api
       namespace: {{ .Release.Namespace }}
       labels:
-        app: {{ .Release.Name }}
+        app: {{ .Release.Name }}-api
     spec:
       restartPolicy: Always
       containers:
-        - name: {{ .Release.Name }}
+        - name: {{ .Release.Name }}-api
           image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.policy }}
           command:
@@ -42,3 +42,4 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}
+---

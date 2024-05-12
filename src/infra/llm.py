@@ -9,7 +9,8 @@ from logger import logger
 
 class LLM:
     def __init__(self):
-        self.llm = Ollama(base_url=config.LLM_URL, model="llama3")
+        assert config.OLLAMA_URL, "OLLAMA_URL environment variable is required for using Ollama as LLM."
+        self.llm = Ollama(base_url=config.OLLAMA_URL, model="llama3")
         self.redis = redis
 
     async def invoke(self, text: str, with_cache: bool = True) -> str:

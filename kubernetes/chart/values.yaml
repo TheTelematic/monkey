@@ -5,7 +5,11 @@ image:
 
 
 replicas:
-  min: 1
+  api:
+    min: 1
+  consumers:
+    translations:
+      min: 1
 
 service:
   port:
@@ -23,5 +27,6 @@ ollama:
 
 config:
   LOG_LEVEL: "INFO"
-  LLM_URL: ""
+  OLLAMA_URL: ""
   REDIS_HOST: "redis-master"
+  RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq:5672/"
