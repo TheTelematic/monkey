@@ -1,6 +1,5 @@
 import base64
 
-
 import config
 from infra.cache import redis
 from infra.llms.factory import LLMFactory

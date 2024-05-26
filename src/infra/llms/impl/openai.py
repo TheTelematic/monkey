@@ -1,8 +1,8 @@
 from langchain_core.messages import AIMessage
+from langchain_openai import ChatOpenAI
 
 import config
 from infra.llms.base import LLMBase
-from langchain_openai import ChatOpenAI
 
 
 class OpenAI(LLMBase):

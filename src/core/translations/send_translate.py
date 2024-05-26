@@ -1,5 +1,5 @@
-from infra.broker import send_to_consumer
 from consumers.routes import CONSUMER_TRANSLATIONS
+from infra.broker import send_to_consumer
 
 
 async def send_translation(original_query: str):

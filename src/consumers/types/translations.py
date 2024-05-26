@@ -1,5 +1,5 @@
-from logger import logger
 from core.translations.translate import translate as _translate
+from logger import logger
 
 
 async def translate(body: bytes) -> None:
