@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>AI Chat</title>
+        <title>AI Sandbox</title>
     </head>
     <body>
-        <h1>AI Chat</h1>
+        <h1>AI Sandbox</h1>
         <form action="" onsubmit="sendMessage(event)">
             <input type="text" id="messageText" autocomplete="off"/>
             <button id="sendButton" >Send</button>
@@ -13,7 +13,7 @@
         <ul id='messages'>
         </ul>
         <script>
-            var ws = new WebSocket("/api/chat/ws");
+            var ws = new WebSocket("/api/sandbox/ws");
             ws.onmessage = function(event) {
                 var messages = document.getElementById('messages')
                 var message = document.createElement('li')

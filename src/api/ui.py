@@ -4,6 +4,6 @@ from starlette.responses import HTMLResponse
 router = APIRouter()
 
 
-@router.get("/chat")
+@router.get("/sandbox")
 async def get():
-    return HTMLResponse(open("templates/chat.html").read())
+    return HTMLResponse(open("templates/sandbox.html").read())
