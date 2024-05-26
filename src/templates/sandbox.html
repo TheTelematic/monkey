@@ -6,9 +6,10 @@
     <body>
         <h1>{{ app_name }} - AI Sandbox</h1>
         <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off" autofocus="autofocus"/>
+            <label for="messageText">Write down your query:</label>
+            <textarea id="messageText" autofocus="autofocus"></textarea>
             <button id="sendButton" >Send</button>
-            <label id="labelButton" >(Click button or Press enter to send)</label>
+            <label id="labelLoading" hidden="hidden">Loading...</label>
         </form>
         <ul id='messages'>
         </ul>
@@ -21,13 +22,12 @@
                 message.appendChild(content)
                 messages.appendChild(message)
                 document.getElementById("sendButton").disabled = false
-                document.getElementById("labelButton").innerHTML = "(Click button or Press enter to send)"
+                document.getElementById("labelLoading").hidden = true
+                document.getElementById("translateButton").hidden = false
             };
             function sendMessage(event) {
-                // disable button
                 document.getElementById("sendButton").disabled = true
-                // change label
-                document.getElementById("labelButton").innerHTML = "Loading..."
+                document.getElementById("labelLoading").hidden = false
                 var input = document.getElementById("messageText")
                 ws.send(input.value)
                 input.value = ''

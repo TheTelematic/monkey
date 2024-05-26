@@ -9,6 +9,7 @@ from aio_pika.abc import AbstractIncomingMessage
 
 import config
 from consumers.routes import ROUTES, consumers
+from infra.cache import graceful_shutdown_redis
 from logger import logger
 
 """
@@ -33,6 +34,7 @@ async def _consume_callback(
         if not __shutdown_event_received.is_set():
             __processing_message.set()
             await callback(message.body)
+            await message.ack()
             __processing_message.clear()
         else:
             logger.info("Shutdown event received, rejecting message...")
@@ -64,6 +66,9 @@ async def _ensure_running(connection, channel):
     if not connection.is_closed:
         logger.info("Ensure running, Closing connection...")
         await connection.close()
+
+    logger.info("Ensure running, Closing redis connection...")
+    await graceful_shutdown_redis()
 
     logger.info("Ensure running, finished.")
     loop = asyncio.get_running_loop()

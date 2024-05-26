@@ -1,3 +1,5 @@
+from charset_normalizer import from_bytes
+
 import config
 from infra.cache import redis_queries
 from infra.llms.factory import LLMFactory
@@ -43,13 +45,18 @@ class LLM:
     def _get_key(text: str) -> str:
         return text
 
-    @staticmethod
-    def _encode_value(value: str) -> bytes:
-        return value.encode("utf-8")
+    @classmethod
+    def _encode_value(cls, value: str) -> bytes:
+        return value.encode()
+
+    @classmethod
+    def _decode_value(cls, value: bytes) -> str:
+        return value.decode(cls._get_charset(value))
 
     @staticmethod
-    def _decode_value(value: bytes) -> str:
-        return value.decode("utf-8")
+    def _get_charset(value: bytes) -> str:
+        charset = from_bytes(value)
+        return charset.best().encoding
 
 
 llm = LLM()
