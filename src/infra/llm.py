@@ -1,5 +1,3 @@
-import base64
-
 import config
 from infra.cache import redis
 from infra.llms.factory import LLMFactory
@@ -43,15 +41,15 @@ class LLM:
 
     @staticmethod
     def _get_key(text: str) -> str:
-        return base64.b64encode(text.encode()).decode()
+        return text
 
     @staticmethod
     def _encode_value(value: str) -> bytes:
-        return value.encode()
+        return value.encode("utf-8")
 
     @staticmethod
     def _decode_value(value: bytes) -> str:
-        return value.decode()
+        return value.decode("utf-8")
 
 
 llm = LLM()
