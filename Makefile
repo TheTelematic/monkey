@@ -2,6 +2,8 @@
 image_name ?= monkey
 image_tag ?= latest
 
+export DOCKER_BUILDKIT = 1
+
 install-requirements:
 	python -m pip install -r requirements.txt
 
