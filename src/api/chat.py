@@ -1,5 +1,5 @@
 from fastapi import APIRouter, WebSocket
-from starlette.websockets import WebSocketState
+from starlette.websockets import WebSocketState, WebSocketDisconnect
 
 from core.ai import get_ai_response
 from core.translations.send_translate import send_translation
@@ -17,14 +17,17 @@ async def chat_ws(websocket: WebSocket):
     await websocket.accept()
 
     while websocket.client_state != WebSocketState.DISCONNECTED:
-        query = await websocket.receive_text()
-        if query.lower() == "translate last":
-            response = await get_translation(_last_query, "ENGLISH", "SPANISH")
-        else:
-            response = await get_ai_response(query)
-            await send_translation(query)
+        try:
+            query = await websocket.receive_text()
+            if query.lower() == "translate last":
+                response = await get_translation(_last_query, "ENGLISH", "SPANISH")
+            else:
+                response = await get_ai_response(query)
+                await send_translation(query)
 
-        await websocket.send_text(f"{query} -> {response}")
-        _last_query = query
+            await websocket.send_text(f"{query} -> {response}")
+            _last_query = query
+        except WebSocketDisconnect:
+            logger.warning("WebSocket disconnected.")
 
     logger.info("WebSocket connection closed.")
