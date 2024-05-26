@@ -4,7 +4,7 @@ from functools import partial
 from signal import SIGINT, SIGTERM
 from typing import Awaitable, Callable
 
-from aio_pika import IncomingMessage, connect_robust, Message, RobustChannel, RobustQueue
+from aio_pika import connect_robust, Message, RobustChannel
 from aio_pika.abc import AbstractIncomingMessage
 
 import config
@@ -14,7 +14,6 @@ from logger import logger
 """
 TODO:
 - If connection is broken reconnect.
-- Graceful shutdown.
 """
 
 
