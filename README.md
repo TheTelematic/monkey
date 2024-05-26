@@ -8,7 +8,7 @@ This is a pet project to show all technologies I know and also learn about AI.
 - Kubernetes
 - RabbitMQ - WIP
 - Keda - TODO
-- aio-pika - TODO
+- aio-pika - WIP
 - Redis/Sentinel - WIP
 - Prometheus - TODO
 - Grafana - TODO
