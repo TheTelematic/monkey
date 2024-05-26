@@ -34,6 +34,9 @@ infra-start:
 	helm repo update
 	helm upgrade --install redis bitnami/redis --set auth.enabled=false --set architecture=standalone --set master.persistence.enabled=false --set slave.persistence.enabled=false --set slave.replicas=0
 	helm upgrade --install rabbitmq bitnami/rabbitmq --set auth.password=monkey --set auth.username=monkey
+	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller --set controller.service.type=LoadBalancer
 
 infra-stop:
 	helm uninstall redis
+	helm uninstall rabbitmq
+	helm uninstall nginx-ingress-controller
