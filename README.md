@@ -16,3 +16,8 @@ This is a pet project to show all technologies I know and also learn about AI.
 - CI/CD - TODO
 - AWS EKS/S3 - TODO
 - Tests with pytest in cluster - TODO
+
+
+## TODO:
+- Add a summary and translate app
+- Add a "find my best phone" app
