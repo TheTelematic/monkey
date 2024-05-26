@@ -14,7 +14,8 @@ This is a pet project to show all technologies I know and also learn about AI.
 - Grafana - TODO
 - langchain - WIP
 - CI/CD - TODO
-- AWS EKS/S3 - TODO
+- AWS EKS - TODO in the future
+- AWS S3 - If needed
 - Tests with pytest in cluster - TODO
 
 
