@@ -13,7 +13,7 @@ build:
 deploy:
 	@extra=$1
 
-	helm upgrade --install --wait monkey kubernetes/chart --set config.OLLAMA_URL=${OLLAMA_URL} ${extra}
+	helm upgrade --install --wait monkey kubernetes/chart ${extra}
 
 deploy-with-ollama:
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true

@@ -11,7 +11,8 @@ LLM_ENGINE = os.getenv("LLM_ENGINE", "openai")
 
 REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
-REDIS_DB = int(os.getenv("REDIS_DB", 0))
+REDIS_DB_QUERIES = int(os.getenv("REDIS_DB_QUERIES", 0))
+REDIS_DB_TRANSLATIONS = int(os.getenv("REDIS_DB_TRANSLATIONS", 1))
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
 CACHE_EXPIRATION_SECONDS = int(os.getenv("CACHE_EXPIRATION_SECONDS", 300))
 

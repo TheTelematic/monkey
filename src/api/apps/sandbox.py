@@ -20,7 +20,7 @@ async def chat_ws(websocket: WebSocket):
         try:
             query = await websocket.receive_text()
             if query.lower() == "translate last":
-                response = await get_translation(_last_query, "ENGLISH", "SPANISH")
+                query, response = await get_translation(_last_query, "ENGLISH", "SPANISH")
             else:
                 response = await get_ai_response(query)
                 await send_translation(query)
