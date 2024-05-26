@@ -28,5 +28,7 @@ ollama:
 config:
   LOG_LEVEL: "INFO"
   OLLAMA_URL: ""
+  OPENAI_API_KEY: ""
+  LLM_ENGINE: ""
   REDIS_HOST: "redis-master"
   RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq:5672/"

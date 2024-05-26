@@ -13,11 +13,13 @@ async def send_to_consumer(consumer: consumers, message: bytes) -> None:
         logger.info("Connecting to RabbitMQ...")
         _publisher_connection = await connect_robust(config.RABBITMQ_URL)
 
-    async with _publisher_connection:
-        channel = await _publisher_connection.channel()
+    channel = await _publisher_connection.channel()
 
-        await channel.default_exchange.publish(
-            Message(body=message),
-            routing_key=ROUTES[consumer]["queue"],
-        )
-        logger.debug(f"Sent message to {consumer}. {message=}")
+    await channel.default_exchange.publish(
+        Message(body=message),
+        routing_key=ROUTES[consumer]["queue"],
+    )
+    logger.debug(f"Sent message to {consumer}. {message=}")
+
+
+# TODO: Graceful shutdown

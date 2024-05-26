@@ -1,17 +1,16 @@
 import base64
 
-from langchain_community.llms import Ollama
 
 import config
 from infra.cache import redis
+from infra.llms.factory import LLMFactory
 from logger import logger
 
 
 class LLM:
     def __init__(self):
-        assert config.OLLAMA_URL, "OLLAMA_URL environment variable is required for using Ollama as LLM."
-        self.llm = Ollama(base_url=config.OLLAMA_URL, model="llama3")
         self.redis = redis
+        self._engine = LLMFactory.create_llm(config.LLM_ENGINE)
 
     async def invoke(self, text: str, with_cache: bool = True) -> str:
         if not with_cache or not await self._cached(text):
@@ -22,7 +21,7 @@ class LLM:
 
     async def _invoke_llm(self, text: str, cache_response: bool = False) -> str:
         logger.info("Invoking LLM...")
-        result = await self.llm.ainvoke(text)
+        result = await self._engine.invoke(text)
         logger.debug(f"LLM response: {result}")
 
         if cache_response:
