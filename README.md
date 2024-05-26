@@ -6,11 +6,13 @@ This is a pet project to show all technologies I know and also learn about AI.
 - Docker
 - Helm
 - Kubernetes
-- RabbitMQ - TODO
+- RabbitMQ - WIP
 - Keda - TODO
 - aio-pika - TODO
-- Redis - TODO
+- Redis/Sentinel - WIP
 - Prometheus - TODO
 - Grafana - TODO
 - langchain - WIP
 - CI/CD - TODO
+- AWS EKS/S3 - TODO
+- Tests with pytest in cluster - TODO
