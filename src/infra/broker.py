@@ -22,4 +22,9 @@ async def send_to_consumer(consumer: consumers, message: bytes) -> None:
     logger.debug(f"Sent message to {consumer}. {message=}")
 
 
-# TODO: Graceful shutdown
+async def graceful_shutdown_publisher():
+    global _publisher_connection
+    if _publisher_connection is not None:
+        await _publisher_connection.close()
+        logger.info("Closed RabbitMQ connection.")
+        _publisher_connection = None

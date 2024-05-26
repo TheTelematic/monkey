@@ -1,4 +1,4 @@
-from consumers.publisher import send_to_consumer
+from infra.broker import send_to_consumer
 from consumers.routes import CONSUMER_TRANSLATIONS
 
 

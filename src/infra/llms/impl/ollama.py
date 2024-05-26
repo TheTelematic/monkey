@@ -1,6 +1,7 @@
+from langchain_community.llms import Ollama as _Ollama
+
 import config
 from infra.llms.base import LLMBase
-from langchain_community.llms import Ollama as _Ollama
 
 
 class Ollama(LLMBase):

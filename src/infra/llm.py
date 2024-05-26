@@ -9,7 +9,6 @@ from logger import logger
 
 class LLM:
     def __init__(self):
-        self.redis = redis
         self._engine = LLMFactory.create_llm(config.LLM_ENGINE)
 
     async def invoke(self, text: str, with_cache: bool = True) -> str:
@@ -32,16 +31,16 @@ class LLM:
 
     async def _cached(self, text: str) -> bool:
         key = self._get_key(text)
-        return await self.redis.exists(key) == 1
+        return await redis.exists(key) == 1
 
     async def _get_cache(self, text: str) -> str:
         key = self._get_key(text)
-        return self._decode_value(await self.redis.get(key))
+        return self._decode_value(await redis.get(key))
 
     async def _set_cache(self, text: str, result: str) -> None:
         key = self._get_key(text)
         value = self._encode_value(result)
-        await self.redis.set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
+        await redis.set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
 
     @staticmethod
     def _get_key(text: str) -> str:

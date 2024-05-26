@@ -2,7 +2,6 @@ from abc import abstractmethod
 
 
 class LLMBase:
-    @staticmethod
     @abstractmethod
-    async def invoke(text: str) -> str:
+    async def invoke(self, text: str) -> str:
         raise NotImplementedError
