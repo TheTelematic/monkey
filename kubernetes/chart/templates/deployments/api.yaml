@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-api
-  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Release.Name }}-api
 spec:
@@ -13,7 +12,6 @@ spec:
   template:
     metadata:
       name: {{ .Release.Name }}-api
-      namespace: {{ .Release.Namespace }}
       labels:
         app: {{ .Release.Name }}-api
     spec:

@@ -8,3 +8,4 @@ aio-pika==9.4.1
 langchain-openai==0.1.7
 Jinja2==3.1.4
 charset-normalizer==3.3.2
+prometheus-fastapi-instrumentator==7.0.0

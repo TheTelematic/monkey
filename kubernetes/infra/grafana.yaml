@@ -7,11 +7,6 @@ ingress:
   hostname: grafana.local
   ingressClassName: nginx
 
-dashboardsConfigMaps:
-  - configMapName: monkey-grafana-dashboards
-    folderName: monkey
-    fileName: monkey.json
-
 datasources:
   secretDefinition:
     apiVersion: 1
