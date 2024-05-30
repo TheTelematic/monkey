@@ -34,9 +34,11 @@ port-forward:
 infra-start:
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo update
-	helm upgrade --install redis bitnami/redis --set auth.enabled=false --set architecture=standalone --set master.persistence.enabled=false --set slave.persistence.enabled=false --set slave.replicas=0
-	helm upgrade --install rabbitmq bitnami/rabbitmq --set auth.password=monkey --set auth.username=monkey
-	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller --set controller.service.type=LoadBalancer
+	helm upgrade --install redis bitnami/redis -f kubernetes/infra/redis.yaml
+	helm upgrade --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml
+	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/infra/nginx-ingress-controller.yaml
+	helm upgrade --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml
+	helm upgrade --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml
 
 infra-stop:
 	helm uninstall redis

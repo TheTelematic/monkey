@@ -1,0 +1,8 @@
+auth:
+  username: monkey
+  password: monkey
+
+ingress:
+  enabled: true
+  hostname: rabbitmq.local
+  ingressClassName: nginx

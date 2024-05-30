@@ -1,0 +1,8 @@
+admin:
+  user: monkey
+  password: monkey
+
+ingress:
+  enabled: true
+  hostname: grafana.local
+  ingressClassName: nginx
