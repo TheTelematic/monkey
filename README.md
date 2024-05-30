@@ -10,8 +10,8 @@ This is a pet project to show all technologies I know and also learn about AI.
 - Keda - TODO
 - aio-pika - WIP
 - Redis/Sentinel - WIP
-- Prometheus - TODO
-- Grafana - TODO
+- Prometheus - WIP
+- Grafana - WIP (dashboards not loaded automatically)
 - langchain - WIP
 - CI/CD - TODO
 - AWS EKS - TODO in the future
