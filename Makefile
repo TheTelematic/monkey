@@ -34,11 +34,11 @@ port-forward:
 infra-start:
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo update
-	helm upgrade --install redis bitnami/redis -f kubernetes/infra/redis.yaml
-	helm upgrade --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml
-	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/infra/nginx-ingress-controller.yaml
-	helm upgrade --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml
-	helm upgrade --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml
+	helm upgrade --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
+	helm upgrade --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml --version 14.3.1
+	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/infra/nginx-ingress-controller.yaml --version 11.3.0
+	helm upgrade --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml --version 9.2.1
+	helm upgrade --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0
 
 infra-stop:
 	helm uninstall redis

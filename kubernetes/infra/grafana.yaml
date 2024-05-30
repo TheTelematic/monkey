@@ -6,3 +6,18 @@ ingress:
   enabled: true
   hostname: grafana.local
   ingressClassName: nginx
+
+dashboardsConfigMaps:
+  - configMapName: monkey-grafana-dashboards
+    folderName: monkey
+    fileName: monkey.json
+
+datasources:
+  secretDefinition:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-operated:9090
+        access: proxy
+        isDefault: true
