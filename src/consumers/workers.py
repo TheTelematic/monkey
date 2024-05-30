@@ -11,7 +11,7 @@ import config
 from consumers.routes import ROUTES, consumers
 from infra.cache import graceful_shutdown_redis
 from logger import logger
-from metrics import setup_consumer_metrics
+from metrics import setup_consumer_metrics, Observer, monkey_consumer_callback_duration_seconds
 
 """
 TODO:
@@ -34,7 +34,9 @@ async def _consume_callback(
     try:
         if not __shutdown_event_received.is_set():
             __processing_message.set()
-            await callback(message.body)
+            full_reference_callback_name = callback.__module__ + "." + callback.__name__
+            with Observer(monkey_consumer_callback_duration_seconds.labels(full_reference_callback_name)):
+                await callback(message.body)
             await message.ack()
             __processing_message.clear()
         else:

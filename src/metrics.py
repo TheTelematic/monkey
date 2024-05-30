@@ -1,10 +1,23 @@
+from datetime import datetime
+
 from fastapi import FastAPI
 from prometheus_async.aio.web import start_http_server
-from prometheus_client import Gauge
+from prometheus_client import Gauge, Histogram
 from prometheus_fastapi_instrumentator import Instrumentator
 
 import config
 from logger import logger
+
+
+def setup_api_metrics(app: FastAPI):
+    logger.info("Setting up API metrics...")
+    Instrumentator().instrument(app).expose(app)
+
+
+async def setup_consumer_metrics():
+    logger.info("Setting up consumer metrics...")
+    await start_http_server(port=config.SERVICE_PORT)
+
 
 monkey_info = Gauge(
     "monkey_info",
@@ -16,12 +29,32 @@ monkey_info.labels(
     llm_engine=config.LLM_ENGINE,
 ).set(1)
 
+monkey_consumer_callback_duration_seconds = Histogram(
+    "monkey_consumer_callback_duration_seconds",
+    "Duration of callbacks processing",
+    ["callback"],
+)
 
-def setup_api_metrics(app: FastAPI):
-    logger.info("Setting up API metrics...")
-    Instrumentator().instrument(app).expose(app)
+
+monkey_translations_duration_seconds = Histogram(
+    "monkey_translations_duration_seconds",
+    "Duration of translations processing",
+    ["from_lang", "to_lang"],
+)
 
 
-async def setup_consumer_metrics():
-    logger.info("Setting up consumer metrics...")
-    await start_http_server(port=config.SERVICE_PORT)
+class Observer:
+    def __init__(self, metric: Histogram):
+        self.now = None
+        self.metric = metric
+
+    def get_seconds(self) -> float:
+        return (datetime.now() - self.now).total_seconds()
+
+    def __enter__(self):
+        self.now = datetime.now()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.metric.observe(self.get_seconds())
+        return False
