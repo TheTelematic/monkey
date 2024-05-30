@@ -1,6 +1,7 @@
 import os
 
 APP_NAME = "monkey"
+VERSION = os.getenv("VERSION")
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 SERVICE_PORT = os.getenv("SERVICE_PORT", 8000)

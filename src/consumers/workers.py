@@ -11,6 +11,7 @@ import config
 from consumers.routes import ROUTES, consumers
 from infra.cache import graceful_shutdown_redis
 from logger import logger
+from metrics import setup_consumer_metrics
 
 """
 TODO:
@@ -80,6 +81,7 @@ async def _run_consumer(queue_name: str, callback: Callable[[bytes], Awaitable])
     loop.add_signal_handler(SIGINT, graceful_shutdown_consumer)
     loop.add_signal_handler(SIGTERM, graceful_shutdown_consumer)
     logger.info("Starting consumer...")
+    await setup_consumer_metrics()
     connection = await connect_robust(config.RABBITMQ_URL)
 
     channel = await connection.channel()

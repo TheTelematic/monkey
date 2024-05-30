@@ -12,4 +12,20 @@ spec:
       port: {{ .Values.service.port.port }}
       targetPort: {{ .Values.service.port.name }}
       name: {{ .Values.service.port.name }}
-  
+---
+{{- range $key, $value := .Values.consumers }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-consumer-{{ $key }}
+  labels:
+    app: {{ $.Release.Name }}-consumer-{{ $key }}
+spec:
+  selector:
+    app: {{ $.Release.Name }}-consumer-{{ $key }}
+  ports:
+    - protocol: TCP
+      port: {{ $.Values.service.port.port }}
+      targetPort: {{ $.Values.service.port.name }}
+      name: {{ $.Values.service.port.name }}
+{{- end }}

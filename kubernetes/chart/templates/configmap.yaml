@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}
 data:
+  VERSION: {{ .Values.image.tag | quote }}
   {{- toYaml .Values.config | nindent 2 }}

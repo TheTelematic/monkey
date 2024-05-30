@@ -1,37 +1,43 @@
+{{- range $key, $value := $.Values.consumers }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-consumer-translations
+  name: {{ $.Release.Name }}-consumer-{{ $key }}
   labels:
-    app: {{ .Release.Name }}-consumer-translations
+    app: {{ $.Release.Name }}-consumer-{{ $key }}
 spec:
-  replicas: {{ .Values.replicas.consumers.translations.min }}
+  replicas: {{ $value.replicas.min }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-consumer-translations
+      app: {{ $.Release.Name }}-consumer-{{ $key }}
   template:
     metadata:
-      name: {{ .Release.Name }}-consumer-translations
+      name: {{ $.Release.Name }}-consumer-{{ $key }}
       labels:
-        app: {{ .Release.Name }}-consumer-translations
+        app: {{ $.Release.Name }}-consumer-{{ $key }}
     spec:
       restartPolicy: Always
       containers:
-        - name: {{ .Release.Name }}-consumer-translations
-          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.policy }}
+        - name: {{ $.Release.Name }}-consumer-{{ $key }}
+          image: "{{ $.Values.image.name }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.policy }}
+          ports:  # For Prometheus metrics
+            - containerPort: {{ $.Values.service.port.container }}
+              name: {{ $.Values.service.port.name }}
+              protocol: TCP
           command:
             - /bin/sh
             - -c
           args:
-            - python main.py consumer_translations
+            - python main.py consumer_{{ $key }}
           livenessProbe:
             exec:
-              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]
+              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]  # TODO: Improve liveness probe
           readinessProbe:
             exec:
-              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]
+              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]  # TODO: Improve readiness probe
           envFrom:
             - configMapRef:
-                name: {{ .Release.Name }}
+                name: {{ $.Release.Name }}
 ---
+{{- end }}

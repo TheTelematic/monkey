@@ -19,7 +19,7 @@ deploy-with-ollama:
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
 
 restart:
-	kubectl rollout restart deployment monkey
+	kubectl rollout restart deployment $(shell kubectl get deployments | grep monkey | awk '{print $$1}')
 
 undeploy:
 	-helm uninstall monkey

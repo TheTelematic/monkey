@@ -36,3 +36,9 @@ config:
 ingress:
   enabled: true
   hostname: "monkey.local"
+
+consumers:
+  translations:
+    replicas:
+      min: 1
+      max: 1
