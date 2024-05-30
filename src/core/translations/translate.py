@@ -4,6 +4,7 @@ import config
 from core.ai import get_ai_response
 from infra.cache import redis_translations
 from logger import logger
+from metrics import Observer, monkey_translations_duration_seconds
 
 
 def _ask_translation(text: str, from_language: str, to_language: str) -> str:
@@ -29,6 +30,11 @@ async def _get_from_cache(key: str) -> str:
 
 
 async def translate(original_query: str, from_language: str = "ENGLISH", to_language: str = "SPANISH") -> (str, str):
+    with Observer(monkey_translations_duration_seconds.labels(from_language, to_language)):
+        return await _translate(original_query, from_language, to_language)
+
+
+async def _translate(original_query: str, from_language: str = "ENGLISH", to_language: str = "SPANISH") -> (str, str):
     original_response = await get_ai_response(original_query)
 
     query_translated = await get_ai_response(_ask_translation(original_query, from_language, to_language))
