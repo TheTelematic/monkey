@@ -2,7 +2,7 @@ from datetime import datetime
 
 from fastapi import FastAPI
 from prometheus_async.aio.web import start_http_server
-from prometheus_client import Gauge, Histogram
+from prometheus_client import Gauge, Histogram, Counter
 from prometheus_fastapi_instrumentator import Instrumentator
 
 import config
@@ -46,6 +46,11 @@ monkey_llm_invoke_duration_seconds = Histogram(
     "monkey_llm_invoke_duration_seconds",
     "Duration of LLM invocations",
     ["llm_engine"],
+)
+
+monkey_llm_cache_hit_count = Counter(
+    "monkey_llm_cache_hit_count",
+    "Number of cache hits",
 )
 
 
