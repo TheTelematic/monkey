@@ -19,6 +19,8 @@ async def setup_consumer_metrics():
     await start_http_server(port=config.SERVICE_PORT)
 
 
+# Gauges
+
 monkey_info = Gauge(
     "monkey_info",
     "Information about the Monkey service",
@@ -29,24 +31,33 @@ monkey_info.labels(
     llm_engine=config.LLM_ENGINE,
 ).set(1)
 
+
+# Histograms
+
+buckets = (0.1, 0.5, 1, 2, 5, 10, 20, 30, 40, 50, 60, 120, 300, 600, 1200, 1800, 2400, 3000, 3600)
 monkey_consumer_callback_duration_seconds = Histogram(
     "monkey_consumer_callback_duration_seconds",
     "Duration of callbacks processing",
     ["callback"],
+    buckets=buckets,
 )
-
 
 monkey_translations_duration_seconds = Histogram(
     "monkey_translations_duration_seconds",
     "Duration of translations processing",
     ["from_lang", "to_lang"],
+    buckets=buckets,
 )
 
 monkey_llm_invoke_duration_seconds = Histogram(
     "monkey_llm_invoke_duration_seconds",
     "Duration of LLM invocations",
     ["llm_engine"],
+    buckets=buckets,
 )
+
+
+# Counters
 
 monkey_llm_cache_hit_count = Counter(
     "monkey_llm_cache_hit_count",
