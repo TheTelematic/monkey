@@ -17,7 +17,7 @@ async def chat_ws(websocket: WebSocket):
     while websocket.client_state != WebSocketState.DISCONNECTED:
         try:
             query = await websocket.receive_json()
-            logger.info(f"Received query: {query}")
+            logger.debug(f"Received query: {query}")
             action = query["action"]
             text = query["text"]
 
