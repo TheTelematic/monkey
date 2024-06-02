@@ -42,6 +42,12 @@ monkey_translations_duration_seconds = Histogram(
     ["from_lang", "to_lang"],
 )
 
+monkey_llm_invoke_duration_seconds = Histogram(
+    "monkey_llm_invoke_duration_seconds",
+    "Duration of LLM invocations",
+    ["llm_engine"],
+)
+
 
 class Observer:
     def __init__(self, metric: Histogram):

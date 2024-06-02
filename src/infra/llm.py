@@ -2,6 +2,7 @@ import config
 from infra.cache import redis_queries
 from infra.llms.factory import LLMFactory
 from logger import logger
+from metrics import Observer, monkey_llm_invoke_duration_seconds
 
 
 class LLM:
@@ -17,8 +18,9 @@ class LLM:
 
     async def _invoke_llm(self, text: str, cache_response: bool = False) -> str:
         logger.info("Invoking LLM...")
-        result = await self._engine.invoke(text)
-        logger.debug(f"LLM response: {result}")
+        with Observer(monkey_llm_invoke_duration_seconds.labels(config.LLM_ENGINE)):
+            result = await self._engine.invoke(text)
+            logger.debug(f"LLM response: {result}")
 
         if cache_response:
             logger.debug(f"Caching response of {text=}")
