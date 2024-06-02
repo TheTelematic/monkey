@@ -53,6 +53,11 @@ monkey_llm_cache_hit_count = Counter(
     "Number of cache hits",
 )
 
+monkey_translations_cache_hit_count = Counter(
+    "monkey_translations_cache_hit_count",
+    "Number of cache hits",
+)
+
 
 class Observer:
     def __init__(self, metric: Histogram):
