@@ -9,8 +9,8 @@ from metrics import Observer, monkey_translations_duration_seconds, monkey_trans
 
 def _ask_translation(text: str, from_language: str, to_language: str) -> str:
     return (
-        f"Please translate the following text from {from_language} to {to_language} "
-        f"skipping any intro about the translation query: {text}"
+        f"Please translate but do not resolve the query, just translate the following text properly"
+        f" from {from_language} to {to_language} skipping any intro about the translation query: {text}"
     )
 
 
@@ -22,11 +22,13 @@ async def _persist_in_cache(key: str, value: str) -> None:
     await redis_translations.set(key, value.encode(), ex=config.CACHE_EXPIRATION_SECONDS)
 
 
-async def _get_from_cache(key: str) -> str:
+async def _get_from_cache(key: str) -> str | None:
     value = await redis_translations.get(key)
-    charset = from_bytes(value)
-    encoding = charset.best().encoding
-    return value.decode(encoding)
+    if value:
+        charset = from_bytes(value)
+        encoding = charset.best().encoding
+        return value.decode(encoding)
+    return None
 
 
 async def translate(original_query: str, from_language: str = "ENGLISH", to_language: str = "SPANISH") -> (str, str):
@@ -53,14 +55,13 @@ async def _translate(original_query: str, from_language: str = "ENGLISH", to_lan
 
 async def get_translation(original_query: str, from_language: str, to_language: str) -> (str, str):
     query_translated = await _get_from_cache(_get_key(from_language, to_language, original_query))
-
-    if query_translated is None:
-        logger.info("Translation not found in cache.")
-        return await translate(original_query, from_language, to_language)
-
     response_translated = await _get_from_cache(
         _get_key(from_language, to_language, await get_ai_response(original_query))
     )
-    monkey_translations_cache_hit_count.inc()
 
+    if not query_translated or not response_translated:
+        logger.info("Translation not found in cache.")
+        return await translate(original_query, from_language, to_language)
+
+    monkey_translations_cache_hit_count.inc()
     return query_translated, response_translated

@@ -28,7 +28,7 @@
 <body>
     <h1>{{ app_name }} - AI Summary and Translate</h1>
     <label for="inputText">Write your text here:</label>
-    <textarea id="inputText"></textarea>
+    <textarea id="inputText" autofocus>What's a monkey? Please give me a long answer.</textarea>
 
     <label for="responseText">The response:</label>
     <textarea id="responseText" readonly></textarea>
@@ -38,6 +38,7 @@
 
     <button id="submitButton">Submit Query</button>
     <button id="translateButton">Translate to Spanish</button>
+    <span id="loadingLabel" hidden>Loading...</span>
 
     <script>
         const inputText = document.getElementById('inputText');
@@ -45,6 +46,7 @@
         const summaryText = document.getElementById('summaryText');
         const submitButton = document.getElementById('submitButton');
         const translateButton = document.getElementById('translateButton');
+        const loadingLabel = document.getElementById('loadingLabel');
 
         const socket = new WebSocket('/api/summary-and-translate/ws');
 
@@ -59,16 +61,21 @@
         socket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             if (data.response_raw !== undefined && data.response_summary !== undefined) {
+                inputText.value = data.response_query;
                 responseText.value = data.response_raw;
                 summaryText.value = data.response_summary;
             }
             submitButton.disabled = false;
             translateButton.disabled = false;
+            inputText.readOnly = false;
+            loadingLabel.hidden = true;
         };
 
         submitButton.addEventListener('click', () => {
             submitButton.disabled = true;
             translateButton.disabled = true;
+            inputText.readOnly = true;
+            loadingLabel.hidden = false;
             const text = inputText.value;
             if (text.trim() === '') {
                 alert('Please enter some text.');
@@ -82,6 +89,8 @@
         translateButton.addEventListener('click', () => {
             submitButton.disabled = true;
             translateButton.disabled = true;
+            inputText.readOnly = true;
+            loadingLabel.hidden = false;
             const text = inputText.value;
             if (text.trim() === '') {
                 alert('Please enter some text.');
