@@ -20,5 +20,11 @@ This is a pet project to show all technologies I know and also learn about AI.
 
 
 ## TODO:
-- Add a summary and translate app
 - Add a "find my best phone" app
+
+
+## WIP:
+- Instrument websocket requests
+
+## Done:
+- Add a summary and translate app
