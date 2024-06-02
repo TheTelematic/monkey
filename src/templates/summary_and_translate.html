@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} - AI Summary and Translate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ app_name }} - AI Summary and Translate</h1>
+    <label for="inputText">Write your text here:</label>
+    <textarea id="inputText"></textarea>
+
+    <label for="responseText">The response:</label>
+    <textarea id="responseText" readonly></textarea>
+
+    <label for="summaryText">The summary:</label>
+    <textarea id="summaryText" readonly></textarea>
+
+    <button id="submitButton">Submit Query</button>
+    <button id="translateButton">Translate to Spanish</button>
+
+    <script>
+        const inputText = document.getElementById('inputText');
+        const responseText = document.getElementById('responseText');
+        const summaryText = document.getElementById('summaryText');
+        const submitButton = document.getElementById('submitButton');
+        const translateButton = document.getElementById('translateButton');
+
+        const socket = new WebSocket('/api/summary-and-translate/ws');
+
+        socket.onopen = function() {
+            console.log('WebSocket connection established.');
+        };
+
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.response_raw !== undefined && data.response_summary !== undefined) {
+                responseText.value = data.response_raw;
+                summaryText.value = data.response_summary;
+            }
+            submitButton.disabled = false;
+            translateButton.disabled = false;
+        };
+
+        submitButton.addEventListener('click', () => {
+            submitButton.disabled = true;
+            translateButton.disabled = true;
+            const text = inputText.value;
+            if (text.trim() === '') {
+                alert('Please enter some text.');
+                return;
+            }
+
+            const message = JSON.stringify({ action: 'submit', text });
+            socket.send(message);
+        });
+
+        translateButton.addEventListener('click', () => {
+            submitButton.disabled = true;
+            translateButton.disabled = true;
+            const text = inputText.value;
+            if (text.trim() === '') {
+                alert('Please enter some text.');
+                return;
+            }
+
+            const message = JSON.stringify({ action: 'translate', text });
+            socket.send(message);
+        });
+
+    </script>
+</body>
+</html>
