@@ -17,7 +17,7 @@ This is a pet project to show all technologies I know and also learn about AI.
 - AWS EKS - TODO in the future
 - AWS S3 - If needed
 - Tests with pytest in cluster - TODO
-
+- Flux
 
 ## TODO:
 - Add a "find my best phone" app
