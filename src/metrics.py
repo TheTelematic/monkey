@@ -58,6 +58,12 @@ monkey_translations_cache_hit_count = Counter(
     "Number of cache hits",
 )
 
+monkey_openai_token_usage_total_tokens = Counter(
+    "monkey_openai_token_usage_total_tokens",
+    "Total tokens used in OpenAI",
+    ("model",),
+)
+
 
 class Observer:
     def __init__(self, metric: Histogram):

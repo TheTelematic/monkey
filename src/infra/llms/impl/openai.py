@@ -3,6 +3,7 @@ from langchain_openai import ChatOpenAI
 
 import config
 from infra.llms.base import LLMBase
+from metrics import monkey_openai_token_usage_total_tokens
 
 
 class OpenAI(LLMBase):
@@ -16,4 +17,7 @@ class OpenAI(LLMBase):
 
     async def invoke(self, text: str) -> str:
         result: AIMessage = await self.llm.ainvoke(text)
+        monkey_openai_token_usage_total_tokens.labels(self.MODEL).inc(
+            result.response_metadata["token_usage"]["total_tokens"]
+        )
         return result.content
