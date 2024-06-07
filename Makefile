@@ -45,11 +45,13 @@ infra-start:
 
 	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
 	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml --version 14.3.1
-	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller \
+	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --version 0.14.0 \
 		--set credentials.apiKey=${NGROK_API_KEY} \
 		--set credentials.authtoken=${NGROK_AUTHTOKEN}
 	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml --version 9.2.1
-	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0 --set admin.user=${GRAFANA_USER} --set admin.password=${GRAFANA_PASSWORD}
+	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0 \
+		--set admin.user=${GRAFANA_USER} \
+		--set admin.password=${GRAFANA_PASSWORD}
 
 infra-stop:
 	-helm uninstall --namespace infra redis
