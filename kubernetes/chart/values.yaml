@@ -30,12 +30,12 @@ config:
   OLLAMA_URL: ""
   OPENAI_API_KEY: ""
   LLM_ENGINE: ""
-  REDIS_HOST: "redis-master"
-  RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq:5672/"  # It should go with a Secret/SealedSecret
+  REDIS_HOST: "redis-master.infra.svc.cluster.local"
+  RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq.infra.svc.cluster.local:5672/"  # It should go with a Secret/SealedSecret
 
 ingress:
   enabled: true
-  hostname: "charming-incredibly-cod.ngrok-free.app"
+  hostname: ""
 
 consumers:
   translations:

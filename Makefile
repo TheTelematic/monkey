@@ -1,4 +1,10 @@
 
+# Load .env file
+ifneq (,$(wildcard ./.env))
+	include .env
+	export
+endif
+
 image_name ?= monkey
 image_tag ?= latest
 
@@ -11,9 +17,10 @@ build:
 	docker build -t ${image_name}:${image_tag} .
 
 deploy:
-	@extra=$1
-
-	helm upgrade --install --wait monkey kubernetes/chart ${extra}
+	helm upgrade --install --wait monkey kubernetes/chart \
+		--set config.LLM_ENGINE=openai \
+		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
+		--set ingress.hostname=${NGROK_DOMAIN}
 
 deploy-with-ollama:
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
@@ -36,17 +43,17 @@ infra-start:
 	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
 	helm repo update
 
-	helm upgrade --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
-	helm upgrade --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml --version 14.3.1
-	helm install ngrok-ingress-controller ngrok/kubernetes-ingress-controller \
-		--namespace ngrok-ingress-controller \
-		--create-namespace \
+	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
+	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml --version 14.3.1
+	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller \
 		--set credentials.apiKey=${NGROK_API_KEY} \
 		--set credentials.authtoken=${NGROK_AUTHTOKEN}
-	helm upgrade --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml --version 9.2.1
-	helm upgrade --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0
+	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml --version 9.2.1
+	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0 --set admin.user=${GRAFANA_USER} --set admin.password=${GRAFANA_PASSWORD}
 
 infra-stop:
-	helm uninstall redis
-	helm uninstall rabbitmq
-	helm uninstall nginx-ingress-controller
+	-helm uninstall --namespace infra redis
+	-helm uninstall --namespace infra rabbitmq
+	-helm uninstall --namespace infra ngrok-ingress-controller
+	-helm uninstall --namespace infra kube-prometheus
+	-helm uninstall --namespace infra grafana
