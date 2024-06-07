@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: ngrok
   rules:
     - host: {{ .Values.ingress.hostname }}
       http:

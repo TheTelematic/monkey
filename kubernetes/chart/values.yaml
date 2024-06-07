@@ -35,7 +35,7 @@ config:
 
 ingress:
   enabled: true
-  hostname: "monkey.local"
+  hostname: "charming-incredibly-cod.ngrok-free.app"
 
 consumers:
   translations:
