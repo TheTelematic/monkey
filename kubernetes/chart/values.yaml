@@ -49,6 +49,7 @@ config:
   RABBITMQ_URL_HTTP: "http://monkey:monkey@rabbitmq.infra.svc.cluster.local:15672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_QUEUE_TRANSLATIONS: *translationsQueue
   READINESS_CONSUMERS_FILE: "/tmp/ready"
+  PROMETHEUS_INTERVAL: "30"
 
 ollama:
   enabled: false

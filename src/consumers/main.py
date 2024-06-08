@@ -79,6 +79,10 @@ async def _ensure_running(connection, channel):
     logger.info("Ensure running, Closing redis connection...")
     await graceful_shutdown_redis()
 
+    logger.info("Waiting for metrics to be collected...")
+    await asyncio.sleep(config.PROMETHEUS_INTERVAL + 1)
+    logger.info("Shutdown complete.")
+
     logger.info("Ensure running, finished.")
     loop = asyncio.get_running_loop()
     loop.stop()

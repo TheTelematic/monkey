@@ -1,5 +1,8 @@
+import asyncio
+
 from fastapi import FastAPI
 
+import config
 from api.routes import (
     probes_router,
     ai_hello_router,
@@ -34,3 +37,6 @@ async def shutdown():
     logger.info("Shutting down...")
     await graceful_shutdown_publisher()
     await graceful_shutdown_redis()
+    logger.info("Waiting for metrics to be collected...")
+    await asyncio.sleep(config.PROMETHEUS_INTERVAL + 1)
+    logger.info("Shutdown complete.")
