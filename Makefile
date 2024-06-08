@@ -39,8 +39,6 @@ port-forward:
 	kubectl port-forward service/monkey-api 8000:80
 
 infra-start:
-	kubectl kustomize "https://github.com/google/cadvisor/deploy/kubernetes/base?ref=v0.49.1" | kubectl apply -f -
-
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
 	helm repo add kedacore https://kedacore.github.io/charts
