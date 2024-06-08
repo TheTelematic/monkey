@@ -13,5 +13,8 @@ redis_translations = Redis(
 
 async def graceful_shutdown_redis():
     logger.info("Closing Redis connection...")
-    await redis_queries.close()
-    await redis_translations.close()
+    try:
+        await redis_queries.close()
+        await redis_translations.close()
+    except Exception as exc:
+        logger.exception(f"Error closing Redis connection. {exc=}")

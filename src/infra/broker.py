@@ -31,6 +31,10 @@ async def send_to_consumer(consumer: consumers, message: bytes) -> None:
 async def graceful_shutdown_publisher():
     global _publisher_connection
     if _publisher_connection is not None:
-        await _publisher_connection.close()
-        logger.info("Closed RabbitMQ connection.")
+        try:
+            await _publisher_connection.close()
+            logger.info("Closed RabbitMQ connection.")
+        except Exception as exc:
+            logger.exception(f"Error closing RabbitMQ connection. {exc=}")
+
         _publisher_connection = None

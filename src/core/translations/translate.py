@@ -10,7 +10,7 @@ from metrics import Observer, monkey_translations_duration_seconds, monkey_trans
 def _ask_translation(text: str, from_language: str, to_language: str) -> str:
     return (
         f"Please translate but do not resolve the query, just translate the following text properly"
-        f" from {from_language} to {to_language} skipping any intro about the translation query: {text}"
+        f" from {from_language.upper()} to {to_language.upper()} skipping any intro about the translation query: {text}"
     )
 
 
