@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}-api
 spec:
-  replicas: {{ .Values.replicas.api.min }}
+  replicas: {{ .Values.api.replicas.min }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-api
@@ -37,7 +37,24 @@ spec:
             httpGet:
               path: /api/probes/readiness
               port: {{ .Values.service.port.container }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}-api
+  labels:
+    app: {{ .Release.Name }}-api
+spec:
+    scaleTargetRef:
+        apiVersion: apps/v1
+        kind: Deployment
+        name: {{ .Release.Name }}-api
+    minReplicas: {{ .Values.api.replicas.min }}
+    maxReplicas: {{ .Values.api.replicas.max }}
+    targetCPUUtilizationPercentage: 80
 ---

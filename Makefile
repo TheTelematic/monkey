@@ -41,21 +41,21 @@ port-forward:
 infra-start:
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	helm repo update
 
 	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
 	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml --version 14.3.1
-	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --version 0.14.0 \
+	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller -f kubernetes/infra/ngrok-ingress-controller.yaml --version 0.14.0 \
 		--set credentials.apiKey=${NGROK_API_KEY} \
 		--set credentials.authtoken=${NGROK_AUTHTOKEN}
-	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml --version 9.2.1
-	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0 \
-		--set admin.user=${GRAFANA_USER} \
-		--set admin.password=${GRAFANA_PASSWORD}
+	helm upgrade --namespace infra --create-namespace --install kube-prometheus-stack prometheus-community/kube-prometheus-stack -f kubernetes/infra/kube-prometheus-stack.yaml --version 60.0.1
 
 infra-stop:
-	-helm uninstall --namespace infra redis
-	-helm uninstall --namespace infra rabbitmq
-	-helm uninstall --namespace infra ngrok-ingress-controller
-	-helm uninstall --namespace infra kube-prometheus
-	-helm uninstall --namespace infra grafana
+	helm uninstall --ignore-not-found --namespace infra redis
+	helm uninstall --ignore-not-found --namespace infra rabbitmq
+	helm uninstall --ignore-not-found --namespace infra ngrok-ingress-controller
+	helm uninstall --ignore-not-found --namespace infra kube-prometheus-stack
+
+fix-node-exporter:  # Error: failed to start container "node-exporter": Error response from daemon: path / is mounted on / but it is not a shared or slave mount
+	kubectl patch ds -n infra kube-prometheus-stack-prometheus-node-exporter --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]'
