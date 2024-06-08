@@ -23,10 +23,19 @@
             padding: 10px 20px;
             font-size: 16px;
         }
+        #history {
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .history-item {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>{{ app_name }} - AI Summary and Translate</h1>
+
     <label for="inputText">Write your text here:</label>
     <textarea id="inputText" autofocus placeholder="What's a monkey? Please give me a long answer."></textarea>
 
@@ -40,6 +49,11 @@
     <button id="translateButton">Translate to Spanish</button>
     <span id="loadingLabel" hidden>Loading...</span>
 
+    <div id="history">
+        <h3>History</h3>
+        <div id="historyContent"></div>
+    </div>
+
     <script>
         const inputText = document.getElementById('inputText');
         const responseText = document.getElementById('responseText');
@@ -47,6 +61,7 @@
         const submitButton = document.getElementById('submitButton');
         const translateButton = document.getElementById('translateButton');
         const loadingLabel = document.getElementById('loadingLabel');
+        const historyContent = document.getElementById('historyContent');
 
         const socket = new WebSocket('/api/summary-and-translate/ws');
 
@@ -64,6 +79,7 @@
                 inputText.value = data.response_query;
                 responseText.value = data.response_raw;
                 summaryText.value = data.response_summary;
+                addToHistory(data.response_query, data.response_raw, data.response_summary);
             }
             submitButton.disabled = false;
             translateButton.disabled = false;
@@ -81,7 +97,6 @@
             translateButton.disabled = true;
             inputText.readOnly = true;
             loadingLabel.hidden = false;
-
             const message = JSON.stringify({ action: 'submit', text });
             socket.send(message);
         });
@@ -96,11 +111,21 @@
             translateButton.disabled = true;
             inputText.readOnly = true;
             loadingLabel.hidden = false;
-
             const message = JSON.stringify({ action: 'translate', text });
             socket.send(message);
         });
 
+        function addToHistory(query, response, summary) {
+            const newItem = document.createElement('div');
+            newItem.classList.add('history-item');
+            newItem.innerHTML = `
+                <strong>Query:</strong> ${query}<br>
+                <strong>Response:</strong> ${response}<br>
+                <strong>Summary:</strong> ${summary}
+                <hr/>
+            `;
+            historyContent.prepend(newItem);
+        }
     </script>
 </body>
 </html>
