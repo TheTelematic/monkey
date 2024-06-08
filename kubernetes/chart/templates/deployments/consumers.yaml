@@ -16,6 +16,7 @@ spec:
       labels:
         app: {{ $.Release.Name }}-consumer-{{ $key }}
     spec:
+      terminationGracePeriodSeconds: {{ $value.terminationGracePeriodSeconds }}
       restartPolicy: Always
       containers:
         - name: {{ $.Release.Name }}-consumer-{{ $key }}

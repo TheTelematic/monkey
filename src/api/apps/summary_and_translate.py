@@ -31,7 +31,8 @@ async def summary_and_translate_ws(websocket: WebSocket):
                         "response_summary": await get_summary(response),
                     }
                 case "translate":
-                    query_translated, response_translated = await get_translation(text, "ENGLISH", "SPANISH")
+                    to_language = query["targetLanguage"]
+                    query_translated, response_translated = await get_translation(text, "ENGLISH", to_language)
                     json_response = {
                         "response_query": query_translated,
                         "response_raw": response_translated,

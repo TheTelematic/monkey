@@ -15,6 +15,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-api
     spec:
+      terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
       restartPolicy: Always
       containers:
         - name: {{ .Release.Name }}-api

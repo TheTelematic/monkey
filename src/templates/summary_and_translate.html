@@ -23,6 +23,11 @@
             padding: 10px 20px;
             font-size: 16px;
         }
+        select {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
         #history {
             margin-top: 40px;
             border-top: 1px solid #ccc;
@@ -46,7 +51,13 @@
     <textarea id="summaryText" readonly></textarea>
 
     <button id="submitButton">Submit Query</button>
-    <button id="translateButton">Translate to Spanish</button>
+    <label for="languageSelector">Select target language:</label>
+    <select id="languageSelector">
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+    </select>
+    <button id="translateButton" disabled>Translate Response</button>
     <span id="loadingLabel" hidden>Loading...</span>
 
     <div id="history">
@@ -62,6 +73,7 @@
         const translateButton = document.getElementById('translateButton');
         const loadingLabel = document.getElementById('loadingLabel');
         const historyContent = document.getElementById('historyContent');
+        const languageSelector = document.getElementById('languageSelector');
 
         const socket = new WebSocket('/api/summary-and-translate/ws');
 
@@ -103,6 +115,7 @@
 
         translateButton.addEventListener('click', () => {
             const text = inputText.value;
+            const targetLanguage = languageSelector.value;
             if (text.trim() === '') {
                 alert('Please enter some text.');
                 return;
@@ -111,7 +124,7 @@
             translateButton.disabled = true;
             inputText.readOnly = true;
             loadingLabel.hidden = false;
-            const message = JSON.stringify({ action: 'translate', text });
+            const message = JSON.stringify({ action: 'translate', text, targetLanguage });
             socket.send(message);
         });
 
