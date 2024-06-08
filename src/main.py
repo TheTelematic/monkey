@@ -4,8 +4,8 @@ import uvicorn
 
 import config
 from api.app import app
+from consumers.main import run_consumer
 from consumers.routes import consumers
-from consumers.workers import run_consumer
 
 if __name__ == "__main__":
     arg = sys.argv[1]

@@ -1,14 +1,13 @@
 from fastapi import APIRouter
 
-from infra.cache import redis_queries, redis_translations
+from core.probeness import check_dependencies
 
 router = APIRouter()
 
 
 @router.get("/readiness")
 async def readiness():
-    await redis_queries.ping()
-    await redis_translations.ping()
+    await check_dependencies()
     return {"status": "ok"}
 
 

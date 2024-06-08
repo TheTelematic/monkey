@@ -48,6 +48,7 @@ config:
   RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq.infra.svc.cluster.local:5672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_URL_HTTP: "http://monkey:monkey@rabbitmq.infra.svc.cluster.local:15672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_QUEUE_TRANSLATIONS: *translationsQueue
+  READINESS_CONSUMERS_FILE: "/tmp/ready"
 
 ollama:
   enabled: false

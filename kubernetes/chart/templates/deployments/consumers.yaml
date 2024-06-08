@@ -32,10 +32,10 @@ spec:
             - python main.py consumer_{{ $key }}
           livenessProbe:
             exec:
-              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]  # TODO: Improve liveness probe
+              command: [ "/bin/sh", "-c", "test -f $LIVENESS_CONSUMERS_FILE" ]
           readinessProbe:
             exec:
-              command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]  # TODO: Improve readiness probe
+              command: [ "/bin/sh", "-c", "test -f $READINESS_CONSUMERS_FILE" ]
           resources:
             {{- toYaml $value.resources | nindent 12 }}
           envFrom:

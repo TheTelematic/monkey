@@ -6,6 +6,8 @@ metadata:
 spec:
   scaleTargetRef:
     name: {{ $.Release.Name }}-consumer-{{ $key }}
+  minReplicaCount: {{ $value.replicas.min }}
+  maxReplicaCount: {{ $value.replicas.max }}
   triggers:
   - type: rabbitmq
     metadata:

@@ -7,13 +7,19 @@ from logger import logger
 _publisher_connection: Connection | None = None
 
 
-async def send_to_consumer(consumer: consumers, message: bytes) -> None:
+async def get_publisher_connection() -> Connection:
     global _publisher_connection
     if _publisher_connection is None:
         logger.info("Connecting to RabbitMQ...")
         _publisher_connection = await connect_robust(config.RABBITMQ_URL)
 
-    channel = await _publisher_connection.channel()
+    return _publisher_connection
+
+
+async def send_to_consumer(consumer: consumers, message: bytes) -> None:
+    connection = await get_publisher_connection()
+
+    channel = await connection.channel()
 
     await channel.default_exchange.publish(
         Message(body=message),
