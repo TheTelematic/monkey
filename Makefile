@@ -43,6 +43,7 @@ infra-start:
 
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
+	helm repo add kedacore https://kedacore.github.io/charts
 	helm repo update
 
 	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
@@ -54,6 +55,7 @@ infra-start:
 	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0 \
 		--set admin.user=${GRAFANA_USER} \
 		--set admin.password=${GRAFANA_PASSWORD}
+	helm upgrade --namespace keda --create-namespace --install keda kedacore/keda
 
 infra-stop:
 	-helm uninstall --namespace infra redis
