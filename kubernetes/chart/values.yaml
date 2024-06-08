@@ -46,6 +46,7 @@ config:
   OPENAI_API_KEY: ""
   LLM_ENGINE: ""
   REDIS_HOST: "redis-master.infra.svc.cluster.local"
+  CACHE_EXPIRATION_SECONDS: "3600"
   RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq.infra.svc.cluster.local:5672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_URL_HTTP: "http://monkey:monkey@rabbitmq.infra.svc.cluster.local:15672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_QUEUE_TRANSLATIONS: *translationsQueue

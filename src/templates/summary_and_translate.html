@@ -51,6 +51,7 @@
     <textarea id="summaryText" readonly></textarea>
 
     <button id="submitButton">Submit Query</button>
+    <button id="newQueryButton" disabled>New Query</button>
     <label for="languageSelector">Select target language:</label>
     <select id="languageSelector">
         <option value="SPANISH">Spanish</option>
@@ -74,6 +75,7 @@
         const loadingLabel = document.getElementById('loadingLabel');
         const historyContent = document.getElementById('historyContent');
         const languageSelector = document.getElementById('languageSelector');
+        const newQueryButton = document.getElementById('newQueryButton');
 
         const socket = new WebSocket('/api/summary-and-translate/ws');
 
@@ -93,7 +95,7 @@
                 summaryText.value = data.response_summary;
                 addToHistory(data.response_query, data.response_raw, data.response_summary);
             }
-            submitButton.disabled = false;
+            newQueryButton.disabled = false;
             translateButton.disabled = false;
             inputText.readOnly = false;
             loadingLabel.hidden = true;
@@ -126,6 +128,14 @@
             loadingLabel.hidden = false;
             const message = JSON.stringify({ action: 'translate', text, targetLanguage });
             socket.send(message);
+        });
+
+        newQueryButton.addEventListener('click', () => {
+            inputText.value = '';
+            responseText.value = '';
+            summaryText.value = '';
+            translateButton.disabled = true;
+            submitButton.disabled = false;
         });
 
         function addToHistory(query, response, summary) {
