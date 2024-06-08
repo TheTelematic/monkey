@@ -41,7 +41,7 @@
 <body>
     <h1>{{ app_name }} - AI Summary and Translate</h1>
 
-    <label for="inputText">Write your text here:</label>
+    <label for="inputText">Write your query here:</label>
     <textarea id="inputText" autofocus placeholder="What's a monkey? Please give me a long answer."></textarea>
 
     <label for="responseText">The response:</label>
@@ -58,7 +58,7 @@
         <option value="FRENCH">French</option>
         <option value="GERMAN">German</option>
     </select>
-    <button id="translateButton" disabled>Translate Response</button>
+    <button id="translateButton" disabled>Translate</button>
     <span id="loadingLabel" hidden>Loading...</span>
 
     <div id="history">
@@ -97,7 +97,6 @@
             }
             newQueryButton.disabled = false;
             translateButton.disabled = false;
-            inputText.readOnly = false;
             loadingLabel.hidden = true;
         };
 
@@ -136,6 +135,7 @@
             summaryText.value = '';
             translateButton.disabled = true;
             submitButton.disabled = false;
+            inputText.readOnly = false;
         });
 
         function addToHistory(query, response, summary) {
