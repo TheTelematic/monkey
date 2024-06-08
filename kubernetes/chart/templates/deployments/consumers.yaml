@@ -41,5 +41,11 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ $.Release.Name }}
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
 ---
 {{- end }}

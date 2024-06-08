@@ -37,7 +37,6 @@ service:
 
 ingress:
   enabled: true
-  hostname: ""
 
 config:
   LOG_LEVEL: "INFO"
@@ -50,6 +49,7 @@ config:
   RABBITMQ_QUEUE_TRANSLATIONS: *translationsQueue
   READINESS_CONSUMERS_FILE: "/tmp/ready"
   PROMETHEUS_INTERVAL: "30"
+  DOMAIN_HOST: ""
 
 ollama:
   enabled: false

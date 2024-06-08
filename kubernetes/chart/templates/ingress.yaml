@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: ngrok
   rules:
-    - host: {{ .Values.ingress.hostname }}
+    - host: {{ .Values.config.DOMAIN_HOST }}
       http:
         paths:
           - path: /

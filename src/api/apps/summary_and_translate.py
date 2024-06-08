@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.websocket("/ws")
-async def chat_ws(websocket: WebSocket):
+async def summary_and_translate_ws(websocket: WebSocket):
     await websocket.accept()
 
     while websocket.client_state != WebSocketState.DISCONNECTED:

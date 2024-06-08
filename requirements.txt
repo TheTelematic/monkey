@@ -1,4 +1,5 @@
 fastapi==0.111.0
+starlette==0.37.2
 pydantic==2.7.3
 uvicorn==0.29.0
 httptools==0.6.1

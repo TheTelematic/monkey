@@ -20,7 +20,7 @@ deploy:
 	helm upgrade --install --wait monkey kubernetes/chart \
 		--set config.LLM_ENGINE=openai \
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
-		--set ingress.hostname=${NGROK_DOMAIN}
+		--set config.DOMAIN_HOST=${NGROK_DOMAIN}
 
 deploy-with-ollama:
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true

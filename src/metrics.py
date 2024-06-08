@@ -31,6 +31,12 @@ monkey_info.labels(
     llm_engine=config.LLM_ENGINE,
 ).set(1)
 
+monkey_websockets_open_connections = Gauge(
+    "monkey_websockets_open_connections",
+    "Number of open WebSocket connections",
+    ["path"],
+)
+
 
 # Histograms
 

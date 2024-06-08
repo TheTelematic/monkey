@@ -2,6 +2,8 @@ import os
 
 APP_NAME = "monkey"
 VERSION = os.getenv("VERSION")
+DOMAIN_HOST = os.getenv("DOMAIN_HOST")
+POD_IP = os.getenv("POD_IP")
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 SERVICE_PORT = os.getenv("SERVICE_PORT", 8000)

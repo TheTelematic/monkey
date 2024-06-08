@@ -1,8 +1,10 @@
 import asyncio
 
 from fastapi import FastAPI
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 import config
+from api.middlewares.prometheus_ws import PrometheusWSMiddleware
 from api.routes import (
     probes_router,
     ai_hello_router,
@@ -28,6 +30,15 @@ app.include_router(ws_sandbox_router, prefix=f"{COMMON_API_PREFIX}/sandbox")
 app.include_router(ws_summary_and_translate_router, prefix=f"{COMMON_API_PREFIX}/summary-and-translate")
 
 app.include_router(ui_router, prefix="")
+
+app.add_middleware(PrometheusWSMiddleware)
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=[
+        config.DOMAIN_HOST,
+        config.POD_IP,
+    ],
+)
 
 setup_api_metrics(app)
 

@@ -12,7 +12,7 @@ _last_query = ""
 
 
 @router.websocket("/ws")
-async def chat_ws(websocket: WebSocket):
+async def sandbox_ws(websocket: WebSocket):
     global _last_query
     await websocket.accept()
 
