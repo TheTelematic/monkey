@@ -36,6 +36,8 @@ spec:
           readinessProbe:
             exec:
               command: [ "/bin/sh", "-c", "test -f /tmp/ready" ]  # TODO: Improve readiness probe
+          resources:
+            {{- toYaml $value.resources | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: {{ $.Release.Name }}
