@@ -9,12 +9,10 @@ class PrometheusWSMiddleware:
         self.app = app
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        url = URL(scope=scope)
-
         if scope["type"] == "websocket":
+            url = URL(scope=scope)
             monkey_websockets_open_connections.labels(url.path).inc()
-
-        await self.app(scope, receive, send)
-
-        if scope["type"] == "websocket":
+            await self.app(scope, receive, send)
             monkey_websockets_open_connections.labels(url.path).dec()
+        else:
+            await self.app(scope, receive, send)

@@ -50,8 +50,10 @@ config:
   RABBITMQ_URL_HTTP: "http://monkey:monkey@rabbitmq.infra.svc.cluster.local:15672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_QUEUE_TRANSLATIONS: *translationsQueue
   READINESS_CONSUMERS_FILE: "/tmp/ready"
+  LIVENESS_CONSUMERS_FILE: "/tmp/live"
   PROMETHEUS_INTERVAL: "30"
   DOMAIN_HOST: ""
+  API_GRACEFUL_SHUTDOWN_TIMEOUT: "50"  # Less than api.terminationGracePeriodSeconds
 
 ollama:
   enabled: false

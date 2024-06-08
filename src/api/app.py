@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from starlette.middleware.trustedhost import TrustedHostMiddleware
@@ -21,7 +22,20 @@ from metrics import setup_api_metrics
 
 COMMON_API_PREFIX = "/api"
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    yield
+
+    logger.info("Graceful Shutdown started...")
+    await graceful_shutdown_publisher()
+    await graceful_shutdown_redis()
+    logger.info("Waiting for metrics to be collected...")
+    await asyncio.sleep(config.PROMETHEUS_INTERVAL + 1)
+    logger.info("Graceful Shutdown finished...")
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(probes_router, prefix=f"{COMMON_API_PREFIX}/probes")
 app.include_router(ai_ask_router, prefix=f"{COMMON_API_PREFIX}/ai")
 app.include_router(ai_hello_router, prefix=f"{COMMON_API_PREFIX}/ai")
@@ -41,13 +55,3 @@ app.add_middleware(
 )
 
 setup_api_metrics(app)
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    logger.info("Shutting down...")
-    await graceful_shutdown_publisher()
-    await graceful_shutdown_redis()
-    logger.info("Waiting for metrics to be collected...")
-    await asyncio.sleep(config.PROMETHEUS_INTERVAL + 1)
-    logger.info("Shutdown complete.")
