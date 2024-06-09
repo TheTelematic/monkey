@@ -84,11 +84,34 @@ button:hover:not(:disabled) {
     margin-bottom: 20px;
 }
 
-.header .logo {
+.header .logo, .loading-logo {
     height: 4em;  /* 2 times the height of a typical line of text */
     margin-right: 20px;
 }
 
 .header h1 {
     font-size: 2em;  /* Larger font size */
+}
+
+/* Loading animation container */
+#loadingContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Rotating animation */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-logo {
+    animation: rotate 1.6s linear infinite;
+    height: 2em; /* Adjust size as needed */
+    margin-right: 10px;
 }

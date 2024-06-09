@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const summaryText = document.getElementById('summaryText');
     const submitButton = document.getElementById('submitButton');
     const translateButton = document.getElementById('translateButton');
-    const loadingLabel = document.getElementById('loadingLabel');
+    const loadingContainer = document.getElementById('loadingContainer');
     const historyContent = document.getElementById('historyContent');
     const languageSelector = document.getElementById('languageSelector');
     const newQueryButton = document.getElementById('newQueryButton');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
         newQueryButton.disabled = false;
         translateButton.disabled = false;
-        loadingLabel.hidden = true;
+        loadingContainer.style.display = "none";  // Show loading
     };
 
     submitButton.addEventListener('click', () => {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         submitButton.disabled = true;
         translateButton.disabled = true;
         inputText.readOnly = true;
-        loadingLabel.hidden = false;
+        loadingContainer.style = "";  // Show loading
 
         const message = JSON.stringify({ action: 'submit', text });
         socket.send(message);
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         submitButton.disabled = true;
         translateButton.disabled = true;
         inputText.readOnly = true;
-        loadingLabel.hidden = false;
+        loadingContainer.style = "";  // Show loading
 
         const message = JSON.stringify({ action: 'translate', text, targetLanguage });
         socket.send(message);

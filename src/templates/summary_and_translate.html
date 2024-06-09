@@ -33,7 +33,11 @@
     </select>
 
     <button id="translateButton" disabled>Translate</button>
-    <span id="loadingLabel" hidden>Loading...</span>
+
+    <div id="loadingContainer" style="display: none;">
+        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
+        <span id="loadingLabel">Loading...</span>
+    </div>
 
     <div id="history">
         <h3>History</h3>
