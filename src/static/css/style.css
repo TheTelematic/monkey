@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+label {
+    display: block;
+    margin-top: 20px;
+}
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+}
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+select {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+#history {
+    margin-top: 40px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+.history-item {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,84 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    const inputText = document.getElementById('inputText');
+    const responseText = document.getElementById('responseText');
+    const summaryText = document.getElementById('summaryText');
+    const submitButton = document.getElementById('submitButton');
+    const translateButton = document.getElementById('translateButton');
+    const loadingLabel = document.getElementById('loadingLabel');
+    const historyContent = document.getElementById('historyContent');
+    const languageSelector = document.getElementById('languageSelector');
+    const newQueryButton = document.getElementById('newQueryButton');
+
+    const socket = new WebSocket('/api/summary-and-translate/ws');
+
+    socket.onopen = function() {
+        console.log('WebSocket connection established.');
+    };
+
+    socket.onerror = function(error) {
+        console.error('WebSocket error:', error);
+    };
+
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.response_raw !== undefined && data.response_summary !== undefined) {
+            inputText.value = data.response_query;
+            responseText.value = data.response_raw;
+            summaryText.value = data.response_summary;
+            addToHistory(data.response_query, data.response_raw, data.response_summary);
+        }
+        newQueryButton.disabled = false;
+        translateButton.disabled = false;
+        loadingLabel.hidden = true;
+    };
+
+    submitButton.addEventListener('click', () => {
+        const text = inputText.value;
+        if (text.trim() === '') {
+            alert('Please enter some text.');
+            return;
+        }
+        submitButton.disabled = true;
+        translateButton.disabled = true;
+        inputText.readOnly = true;
+        loadingLabel.hidden = false;
+        const message = JSON.stringify({ action: 'submit', text });
+        socket.send(message);
+    });
+
+    translateButton.addEventListener('click', () => {
+        const text = inputText.value;
+        const targetLanguage = languageSelector.value;
+        if (text.trim() === '') {
+            alert('Please enter some text.');
+            return;
+        }
+        submitButton.disabled = true;
+        translateButton.disabled = true;
+        inputText.readOnly = true;
+        loadingLabel.hidden = false;
+        const message = JSON.stringify({ action: 'translate', text, targetLanguage });
+        socket.send(message);
+    });
+
+    newQueryButton.addEventListener('click', () => {
+        inputText.value = '';
+        responseText.value = '';
+        summaryText.value = '';
+        translateButton.disabled = true;
+        submitButton.disabled = false;
+        inputText.readOnly = false;
+    });
+
+    function addToHistory(query, response, summary) {
+        const newItem = document.createElement('div');
+        newItem.classList.add('history-item');
+        newItem.innerHTML = `
+            <strong>Query:</strong> ${query}<br>
+            <strong>Response:</strong> ${response}<br>
+            <strong>Summary:</strong> ${summary}
+            <hr/>
+        `;
+        historyContent.prepend(newItem);
+    }
+});

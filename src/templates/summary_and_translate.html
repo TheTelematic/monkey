@@ -4,39 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ app_name }} - AI Summary and Translate</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 20px;
-        }
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin-top: 10px;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        select {
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        #history {
-            margin-top: 40px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
-        }
-        .history-item {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ STATIC_PATH }}/css/style.css">
+    <script src="{{ STATIC_PATH }}/js/summary_and_translate.js"></script>
 </head>
 <body>
     <h1>{{ app_name }} - AI Summary and Translate</h1>
@@ -66,90 +35,5 @@
         <h3>History</h3>
         <div id="historyContent"></div>
     </div>
-
-    <script>
-        const inputText = document.getElementById('inputText');
-        const responseText = document.getElementById('responseText');
-        const summaryText = document.getElementById('summaryText');
-        const submitButton = document.getElementById('submitButton');
-        const translateButton = document.getElementById('translateButton');
-        const loadingLabel = document.getElementById('loadingLabel');
-        const historyContent = document.getElementById('historyContent');
-        const languageSelector = document.getElementById('languageSelector');
-        const newQueryButton = document.getElementById('newQueryButton');
-
-        const socket = new WebSocket('/api/summary-and-translate/ws');
-
-        socket.onopen = function() {
-            console.log('WebSocket connection established.');
-        };
-
-        socket.onerror = function(error) {
-            console.error('WebSocket error:', error);
-        };
-
-        socket.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            if (data.response_raw !== undefined && data.response_summary !== undefined) {
-                inputText.value = data.response_query;
-                responseText.value = data.response_raw;
-                summaryText.value = data.response_summary;
-                addToHistory(data.response_query, data.response_raw, data.response_summary);
-            }
-            newQueryButton.disabled = false;
-            translateButton.disabled = false;
-            loadingLabel.hidden = true;
-        };
-
-        submitButton.addEventListener('click', () => {
-            const text = inputText.value;
-            if (text.trim() === '') {
-                alert('Please enter some text.');
-                return;
-            }
-            submitButton.disabled = true;
-            translateButton.disabled = true;
-            inputText.readOnly = true;
-            loadingLabel.hidden = false;
-            const message = JSON.stringify({ action: 'submit', text });
-            socket.send(message);
-        });
-
-        translateButton.addEventListener('click', () => {
-            const text = inputText.value;
-            const targetLanguage = languageSelector.value;
-            if (text.trim() === '') {
-                alert('Please enter some text.');
-                return;
-            }
-            submitButton.disabled = true;
-            translateButton.disabled = true;
-            inputText.readOnly = true;
-            loadingLabel.hidden = false;
-            const message = JSON.stringify({ action: 'translate', text, targetLanguage });
-            socket.send(message);
-        });
-
-        newQueryButton.addEventListener('click', () => {
-            inputText.value = '';
-            responseText.value = '';
-            summaryText.value = '';
-            translateButton.disabled = true;
-            submitButton.disabled = false;
-            inputText.readOnly = false;
-        });
-
-        function addToHistory(query, response, summary) {
-            const newItem = document.createElement('div');
-            newItem.classList.add('history-item');
-            newItem.innerHTML = `
-                <strong>Query:</strong> ${query}<br>
-                <strong>Response:</strong> ${response}<br>
-                <strong>Summary:</strong> ${summary}
-                <hr/>
-            `;
-            historyContent.prepend(newItem);
-        }
-    </script>
 </body>
 </html>

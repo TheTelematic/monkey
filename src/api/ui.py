@@ -3,10 +3,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 import config
+from api.constants import STATIC_PATH
 
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
+templates.env.globals["STATIC_PATH"] = STATIC_PATH
 
 
 @router.get("/sandbox", response_class=HTMLResponse)

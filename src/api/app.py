@@ -2,9 +2,11 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from starlette.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.staticfiles import StaticFiles
 
 import config
+from api.constants import STATIC_PATH
 from api.middlewares.prometheus_ws import PrometheusWSMiddleware
 from api.routes import (
     probes_router,
@@ -53,5 +55,7 @@ app.add_middleware(
         config.POD_IP,
     ],
 )
+
+app.mount(STATIC_PATH, StaticFiles(directory="static"), name="static")
 
 setup_api_metrics(app)
