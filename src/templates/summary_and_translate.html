@@ -19,6 +19,11 @@
     <button id="submitButton">Submit Query</button>
     <button id="newQueryButton" disabled>New Query</button>
 
+    <div id="loadingContainer1" style="display: none;">
+        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
+        <span>Loading...</span>
+    </div>
+
     <label for="responseText">The response:</label>
     <textarea id="responseText" readonly></textarea>
 
@@ -34,9 +39,9 @@
 
     <button id="translateButton" disabled>Translate</button>
 
-    <div id="loadingContainer" style="display: none;">
+    <div id="loadingContainer2" style="display: none;">
         <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
-        <span id="loadingLabel">Loading...</span>
+        <span>Loading...</span>
     </div>
 
     <div id="history">

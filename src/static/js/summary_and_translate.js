@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const summaryText = document.getElementById('summaryText');
     const submitButton = document.getElementById('submitButton');
     const translateButton = document.getElementById('translateButton');
-    const loadingContainer = document.getElementById('loadingContainer');
+    const loadingContainer1 = document.getElementById('loadingContainer1');
+    const loadingContainer2 = document.getElementById('loadingContainer2');
     const historyContent = document.getElementById('historyContent');
     const languageSelector = document.getElementById('languageSelector');
     const newQueryButton = document.getElementById('newQueryButton');
@@ -31,7 +32,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
         newQueryButton.disabled = false;
         translateButton.disabled = false;
-        loadingContainer.style.display = "none";  // Show loading
+        loadingContainer1.style.display = "none";  // Show loading
+        loadingContainer2.style.display = "none";  // Show loading
     };
 
     submitButton.addEventListener('click', () => {
@@ -43,7 +45,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         submitButton.disabled = true;
         translateButton.disabled = true;
         inputText.readOnly = true;
-        loadingContainer.style = "";  // Show loading
+        loadingContainer1.style = "";  // Show loading
+        loadingContainer2.style = "";  // Show loading
 
         const message = JSON.stringify({ action: 'submit', text });
         socket.send(message);
@@ -59,7 +62,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         submitButton.disabled = true;
         translateButton.disabled = true;
         inputText.readOnly = true;
-        loadingContainer.style = "";  // Show loading
+        loadingContainer1.style = "";  // Show loading
+        loadingContainer2.style = "";  // Show loading
 
         const message = JSON.stringify({ action: 'translate', text, targetLanguage });
         socket.send(message);
