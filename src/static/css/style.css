@@ -55,8 +55,8 @@ button:hover:not(:disabled) {
     padding: 10px;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
-    height: 150px;
-    overflow-y: auto;
+    max-height: 400px;  /* Set a maximum height */
+    overflow-y: auto;  /* Scroll only if content exceeds the maximum height */
 }
 
 /* History item styling */
