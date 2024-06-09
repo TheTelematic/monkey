@@ -58,3 +58,20 @@ button:hover:not(:disabled) {
     height: 150px;
     overflow-y: auto;
 }
+
+/* Header styling - flexbox for proper alignment */
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header .logo {
+    height: 4em;  /* 2 times the height of a typical line of text */
+    margin-right: 20px;
+}
+
+/* Increase the height of the image relative to the text size */
+.header h1 {
+    font-size: 2em; /* Same size as our base font */
+}

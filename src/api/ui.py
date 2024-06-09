@@ -13,7 +13,7 @@ templates.env.globals["STATIC_PATH"] = STATIC_PATH
 
 @router.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    return FileResponse("static/monkey.png")
+    return FileResponse("static/images/monkey-favicon.png")
 
 
 @router.get("/sandbox", response_class=HTMLResponse)

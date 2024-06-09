@@ -8,7 +8,10 @@
     <script src="{{ STATIC_PATH }}/js/summary_and_translate.js"></script>
 </head>
 <body>
-    <h1>{{ app_name }} - AI Summary and Translate</h1>
+    <div class="header">
+        <img src="{{ STATIC_PATH}}/images/monkey.png" alt="Monkey" class="logo">
+        <h1>{{ app_name }} - AI Summary and Translate</h1>
+    </div>
 
     <label for="inputText">Write your query here:</label>
     <textarea id="inputText" autofocus placeholder="What's a monkey? Please give me a long answer."></textarea>
