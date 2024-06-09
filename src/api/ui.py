@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
 import config
@@ -9,6 +9,11 @@ router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
 templates.env.globals["STATIC_PATH"] = STATIC_PATH
+
+
+@router.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("static/monkey.png")
 
 
 @router.get("/sandbox", response_class=HTMLResponse)
