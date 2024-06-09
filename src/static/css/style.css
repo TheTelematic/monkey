@@ -59,6 +59,24 @@ button:hover:not(:disabled) {
     overflow-y: auto;
 }
 
+/* History item styling */
+.history-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;  /* Mouse cursor changes to indicate clickability */
+    transition: background-color 0.3s ease;
+}
+
+.history-item:hover {
+    background-color: #e1f5fe;  /* Lighter background color on hover */
+}
+
+.history-details {
+    display: none;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
 /* Header styling - flexbox for proper alignment */
 .header {
     display: flex;
@@ -71,7 +89,6 @@ button:hover:not(:disabled) {
     margin-right: 20px;
 }
 
-/* Increase the height of the image relative to the text size */
 .header h1 {
-    font-size: 2em; /* Same size as our base font */
+    font-size: 2em;  /* Larger font size */
 }

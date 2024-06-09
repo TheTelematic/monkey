@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const languageSelector = document.getElementById('languageSelector');
     const newQueryButton = document.getElementById('newQueryButton');
 
+    let activeHistoryItem = null;
+
     const socket = new WebSocket('/api/summary-and-translate/ws');
 
     socket.onopen = function() {
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         translateButton.disabled = true;
         inputText.readOnly = true;
         loadingLabel.hidden = false;
+
         const message = JSON.stringify({ action: 'submit', text });
         socket.send(message);
     });
@@ -57,6 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         translateButton.disabled = true;
         inputText.readOnly = true;
         loadingLabel.hidden = false;
+
         const message = JSON.stringify({ action: 'translate', text, targetLanguage });
         socket.send(message);
     });
@@ -73,12 +77,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function addToHistory(query, response, summary) {
         const newItem = document.createElement('div');
         newItem.classList.add('history-item');
-        newItem.innerHTML = `
-            <strong>Query:</strong> ${query}<br>
+        const timestamp = new Date().toLocaleString();  // Add timestamp
+        newItem.innerHTML = `<strong>Query:</strong> ${query} <br><small>${timestamp}</small>`;
+
+        // Create details section
+        const details = document.createElement('div');
+        details.classList.add('history-details');
+        details.innerHTML = `
             <strong>Response:</strong> ${response}<br>
             <strong>Summary:</strong> ${summary}
-            <hr/>
         `;
+        newItem.appendChild(details);
+
+        // Add click event to toggle details display
+        newItem.addEventListener('click', () => {
+            if (activeHistoryItem && activeHistoryItem !== newItem) {
+                activeHistoryItem.querySelector('.history-details').style.display = 'none';
+            }
+            const isDisplayed = details.style.display === 'block';
+            details.style.display = isDisplayed ? 'none' : 'block';
+            activeHistoryItem = newItem;
+        });
+
         historyContent.prepend(newItem);
     }
 });
