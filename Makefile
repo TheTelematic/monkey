@@ -5,6 +5,7 @@ ifneq (,$(wildcard ./.env))
 	export
 endif
 
+docker_hub_image_name = thetelematic95/monkey
 image_name ?= monkey
 image_tag ?= latest
 
@@ -61,3 +62,7 @@ infra-stop:
 	-helm uninstall --namespace infra ngrok-ingress-controller
 	-helm uninstall --namespace infra kube-prometheus
 	-helm uninstall --namespace infra grafana
+
+publish: build
+	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
+	docker push ${docker_hub_image_name}:${image_tag}
