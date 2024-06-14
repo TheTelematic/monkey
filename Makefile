@@ -17,11 +17,15 @@ install-requirements:
 build:
 	docker build -t ${image_name}:${image_tag} .
 
-deploy:
+local-context:
+	kubectl config use-context docker-desktop
+
+deploy-local: local-context
 	helm upgrade --install --wait monkey kubernetes/chart \
 		--set config.LLM_ENGINE=openai \
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
-		--set config.DOMAIN_HOST=${NGROK_DOMAIN}
+		--set config.DOMAIN_HOST=localhost \
+		--set ingress.enabled=false
 
 deploy-with-ollama:
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
@@ -70,8 +74,10 @@ publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:latest
 	docker push ${docker_hub_image_name}:latest
 
-deploy-to-raspberry:
+raspberry-context:
 	kubectl config use-context raspberry
+
+deploy-to-raspberry: raspberry-context
 	helm upgrade --install --wait monkey kubernetes/chart \
 		--set config.LLM_ENGINE=openai \
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
