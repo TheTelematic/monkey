@@ -66,3 +66,12 @@ infra-stop:
 publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
 	docker push ${docker_hub_image_name}:${image_tag}
+
+deploy-to-raspberry:
+	kubectl config use-context raspberry
+	helm upgrade --install --wait monkey kubernetes/chart \
+		--set config.LLM_ENGINE=openai \
+		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
+		--set config.DOMAIN_HOST=${NGROK_DOMAIN} \
+		--set image.name=${docker_hub_image_name} \
+		--set image.tag=${image_tag}
