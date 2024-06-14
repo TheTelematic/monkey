@@ -16,6 +16,7 @@ from api.routes import (
     ws_sandbox_router,
     ui_router,
     ws_summary_and_translate_router,
+    ws_recommend_me_a_phone_router,
 )
 from infra.broker import graceful_shutdown_publisher
 from infra.cache import graceful_shutdown_redis
@@ -44,6 +45,7 @@ app.include_router(ai_hello_router, prefix=f"{COMMON_API_PREFIX}/ai")
 app.include_router(ai_summary_router, prefix=f"{COMMON_API_PREFIX}/ai")
 app.include_router(ws_sandbox_router, prefix=f"{COMMON_API_PREFIX}/sandbox")
 app.include_router(ws_summary_and_translate_router, prefix=f"{COMMON_API_PREFIX}/summary-and-translate")
+app.include_router(ws_recommend_me_a_phone_router, prefix=f"{COMMON_API_PREFIX}/recommend-me-a-phone")
 
 app.include_router(ui_router, prefix="")
 

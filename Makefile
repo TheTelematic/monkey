@@ -27,20 +27,20 @@ deploy-local: local-context
 		--set config.DOMAIN_HOST=localhost \
 		--set ingress.enabled=false
 
-deploy-with-ollama:
+deploy-with-ollama: local-context
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
 
-restart:
+restart: local-context
 	kubectl rollout restart deployment $(shell kubectl get deployments | grep monkey | awk '{print $$1}')
 
-undeploy:
+undeploy: local-context
 	-helm uninstall monkey
 
 check-chart:
 	helm template --debug monkey kubernetes/chart
 	helm lint kubernetes/chart
 
-port-forward:
+port-forward: local-context
 	kubectl port-forward service/monkey-api 8000:80
 
 infra-start:

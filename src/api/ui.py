@@ -26,3 +26,10 @@ async def get(request: Request):
     return templates.TemplateResponse(
         request=request, name="summary_and_translate.html", context={"app_name": config.APP_NAME}
     )
+
+
+@router.get("/recommend-me-a-phone", response_class=HTMLResponse)
+async def get(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="recommend_me_a_phone.html", context={"app_name": config.APP_NAME}
+    )
