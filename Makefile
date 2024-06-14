@@ -67,6 +67,9 @@ publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
 	docker push ${docker_hub_image_name}:${image_tag}
 
+	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:latest
+	docker push ${docker_hub_image_name}:latest
+
 deploy-to-raspberry:
 	kubectl config use-context raspberry
 	helm upgrade --install --wait monkey kubernetes/chart \

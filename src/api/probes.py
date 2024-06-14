@@ -14,3 +14,8 @@ async def readiness():
 @router.get("/liveness")
 def liveness():
     return {"status": "ok"}
+
+
+@router.head("/liveness")
+def liveness():
+    return {"status": "ok"}
