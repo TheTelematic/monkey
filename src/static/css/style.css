@@ -93,13 +93,6 @@ button:hover:not(:disabled) {
     font-size: 2em;  /* Larger font size */
 }
 
-/* Loading animation container */
-#loadingContainer {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-}
-
 /* Rotating animation */
 @keyframes rotate {
     from {
@@ -114,4 +107,5 @@ button:hover:not(:disabled) {
     animation: rotate 1.6s linear infinite;
     height: 2em; /* Adjust size as needed */
     margin-right: 10px;
+    margin-left: 20px;
 }

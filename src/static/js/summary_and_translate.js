@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
         newQueryButton.disabled = false;
         translateButton.disabled = false;
-        loadingContainer1.style.display = "none";  // Show loading
-        loadingContainer2.style.display = "none";  // Show loading
+        loadingContainer1.style.display = "none";  // Hide loading
+        loadingContainer2.style.display = "none";  // Hide loading
     };
 
     submitButton.addEventListener('click', () => {
@@ -45,8 +45,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         submitButton.disabled = true;
         translateButton.disabled = true;
         inputText.readOnly = true;
-        loadingContainer1.style = "";  // Show loading
-        loadingContainer2.style = "";  // Show loading
+        loadingContainer1.style.display = "inline";  // Show loading
 
         const message = JSON.stringify({ action: 'submit', text });
         socket.send(message);
@@ -62,8 +61,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         submitButton.disabled = true;
         translateButton.disabled = true;
         inputText.readOnly = true;
-        loadingContainer1.style = "";  // Show loading
-        loadingContainer2.style = "";  // Show loading
+        loadingContainer2.style.display = "inline";  // Show loading
 
         const message = JSON.stringify({ action: 'translate', text, targetLanguage });
         socket.send(message);
