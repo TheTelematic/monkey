@@ -20,7 +20,6 @@ TODO:
 - If connection is broken reconnect.
 """
 
-
 logging.getLogger("aio_pika").setLevel(logging.WARNING)
 logging.getLogger("aiormq").setLevel(logging.WARNING)
 
@@ -30,7 +29,8 @@ __last_message_id = None
 
 
 async def _consume_callback(
-    channel: RobustChannel, queue_name: str, callback: Callable[[bytes], Awaitable], message: AbstractIncomingMessage
+        channel: RobustChannel, queue_name: str, callback: Callable[[bytes], Awaitable],
+        message: AbstractIncomingMessage
 ) -> None:
     global __shutdown_event_received, __processing_message, __last_message_id
 

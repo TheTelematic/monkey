@@ -37,7 +37,6 @@ monkey_websockets_open_connections = Gauge(
     ["path"],
 )
 
-
 # Histograms
 
 buckets = (0.1, 0.5, 1, 2, 5, 10, 20, 30, 40, 50, 60, 120, 300, 600, 1200, 1800, 2400, 3000, 3600)
@@ -61,7 +60,6 @@ monkey_llm_invoke_duration_seconds = Histogram(
     ["llm_engine"],
     buckets=buckets,
 )
-
 
 # Counters
 
