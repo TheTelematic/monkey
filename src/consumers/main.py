@@ -29,8 +29,7 @@ __last_message_id = None
 
 
 async def _consume_callback(
-        channel: RobustChannel, queue_name: str, callback: Callable[[bytes], Awaitable],
-        message: AbstractIncomingMessage
+    channel: RobustChannel, queue_name: str, callback: Callable[[bytes], Awaitable], message: AbstractIncomingMessage
 ) -> None:
     global __shutdown_event_received, __processing_message, __last_message_id
 
