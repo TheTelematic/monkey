@@ -1,2 +1,12 @@
 alertmanager:
   enabled: false
+
+prometheus:
+  persistence:
+    enabled: true
+    size: 20Gi
+  resources:
+    requests:
+      memory: 2Gi
+    limits:
+      memory: 4Gi
