@@ -11,11 +11,6 @@ async def readiness():
     return {"status": "ok"}
 
 
-@router.get("/liveness")
-def liveness():
-    return {"status": "ok"}
-
-
-@router.head("/liveness")
-def liveness():
+@router.api_route("/liveness", methods=["GET", "HEAD"])
+async def liveness():
     return {"status": "ok"}
