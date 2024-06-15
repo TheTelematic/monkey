@@ -74,6 +74,9 @@ publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:latest
 	docker push ${docker_hub_image_name}:latest
 
+	git tag -a v${image_tag} -m "Release v${image_tag}"
+	git push origin v${image_tag}
+
 raspberry-context:
 	kubectl config use-context raspberry
 
@@ -82,5 +85,4 @@ deploy-to-raspberry: raspberry-context
 		--set config.LLM_ENGINE=openai \
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
 		--set config.DOMAIN_HOST=${NGROK_DOMAIN} \
-		--set image.name=${docker_hub_image_name} \
-		--set image.tag=${image_tag}
+		-f kubernetes/clusters/raspberry/monkey.yaml
