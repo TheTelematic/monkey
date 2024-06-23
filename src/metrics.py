@@ -54,6 +54,13 @@ monkey_translations_duration_seconds = Histogram(
     buckets=buckets,
 )
 
+monkey_summaries_duration_seconds = Histogram(
+    "monkey_summaries_duration_seconds",
+    "Duration of summaries processing",
+    ["lang"],
+    buckets=buckets,
+)
+
 monkey_llm_invoke_duration_seconds = Histogram(
     "monkey_llm_invoke_duration_seconds",
     "Duration of LLM invocations",

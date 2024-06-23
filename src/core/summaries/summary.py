@@ -1,4 +1,5 @@
 from core.ai import get_ai_response
+from metrics import Observer, monkey_summaries_duration_seconds
 
 
 def _populate_query(paragraph: str, language: str) -> str:
@@ -9,4 +10,5 @@ def _populate_query(paragraph: str, language: str) -> str:
 
 
 async def get_summary(text: str, language: str = "ENGLISH") -> str:
-    return await get_ai_response(_populate_query(text, language))
+    with Observer(monkey_summaries_duration_seconds.labels(language)):
+        return await get_ai_response(_populate_query(text, language))

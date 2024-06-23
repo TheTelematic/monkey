@@ -14,4 +14,5 @@ async def translate(translation_query: TranslationQuery):
     )
 
     if translation_query.make_summary_after_translation:
+        logger.info("Sending make summary after translation")
         await send_make_summary(response_translated, translation_query.to_language)
