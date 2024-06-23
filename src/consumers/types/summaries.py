@@ -8,4 +8,4 @@ async def make_summary(summary: Summary) -> None:
 
     await get_summary(summary.text, summary.language)
 
-    logger.info("Summary made")
+    logger.info(f"{summary.language} summary made")
