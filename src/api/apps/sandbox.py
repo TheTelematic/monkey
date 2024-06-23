@@ -23,7 +23,7 @@ async def sandbox_ws(websocket: WebSocket):
                 query, response = await get_translation(_last_query, "ENGLISH", "SPANISH")
             else:
                 response = await get_ai_response(query)
-                await send_translation(query)
+                await send_translation(query, "ENGLISH", "SPANISH")
 
             await websocket.send_text(f"{query} -> {response}")
             _last_query = query

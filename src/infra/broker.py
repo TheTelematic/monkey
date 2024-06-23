@@ -1,3 +1,6 @@
+import pickle
+from typing import TypedDict
+
 from aio_pika import connect_robust, Message, Connection
 
 import config
@@ -16,13 +19,13 @@ async def get_publisher_connection() -> Connection:
     return _publisher_connection
 
 
-async def send_to_consumer(consumer: consumers, message: bytes) -> None:
+async def send_to_consumer(consumer: consumers, message: dict) -> None:
     connection = await get_publisher_connection()
 
     channel = await connection.channel()
 
     await channel.default_exchange.publish(
-        Message(body=message),
+        Message(body=pickle.dumps(message)),
         routing_key=ROUTES[consumer]["queue"],
     )
     logger.debug(f"Sent message to {consumer}. {message=}")

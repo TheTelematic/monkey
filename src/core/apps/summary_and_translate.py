@@ -7,7 +7,7 @@ from dtos.summary_and_translate import ResponseAndSummary, ResponseAndSummaryTra
 
 async def submit_query(text: str) -> ResponseAndSummary:
     response = await get_ai_response(text)
-    await send_translation(text)
+    await send_translation(text, "ENGLISH", "SPANISH")
     return {
         "response": response,
         "summary": await get_summary(response, "ENGLISH"),

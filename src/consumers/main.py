@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import pickle
 from functools import partial
 from signal import SIGINT, SIGTERM
 from typing import Awaitable, Callable
@@ -29,7 +30,7 @@ __last_message_id = None
 
 
 async def _consume_callback(
-    channel: RobustChannel, queue_name: str, callback: Callable[[bytes], Awaitable], message: AbstractIncomingMessage
+    channel: RobustChannel, queue_name: str, callback: Callable[[dict], Awaitable], message: AbstractIncomingMessage
 ) -> None:
     global __shutdown_event_received, __processing_message, __last_message_id
 
@@ -40,7 +41,7 @@ async def _consume_callback(
             try:
                 full_reference_callback_name = callback.__module__ + "." + callback.__name__
                 with Observer(monkey_consumer_callback_duration_seconds.labels(full_reference_callback_name)):
-                    await callback(message.body)
+                    await callback(pickle.loads(message.body))
             finally:
                 await message.ack()
                 __processing_message.clear()
