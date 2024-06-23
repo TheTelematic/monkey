@@ -1,4 +1,5 @@
 import pickle
+from dataclasses import dataclass
 
 from aio_pika import connect_robust, Message, Connection
 
@@ -18,7 +19,7 @@ async def get_publisher_connection() -> Connection:
     return _publisher_connection
 
 
-async def send_to_consumer(consumer: consumers, message: dict) -> None:
+async def send_to_consumer(consumer: consumers, message: dataclass) -> None:
     connection = await get_publisher_connection()
 
     channel = await connection.channel()

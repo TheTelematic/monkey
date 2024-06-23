@@ -23,16 +23,16 @@ async def summary_and_translate_ws(websocket: WebSocket):
                     response_and_summary = await submit_query(text)
                     json_response = {
                         "response_query": text,
-                        "response_raw": response_and_summary["response"],
-                        "response_summary": response_and_summary["summary"],
+                        "response_raw": response_and_summary.response,
+                        "response_summary": response_and_summary.summary,
                     }
                 case "translate":
                     to_language = query["targetLanguage"]
                     response_and_summary = await submit_translation(text, to_language)
                     json_response = {
-                        "response_query": response_and_summary["query"],
-                        "response_raw": response_and_summary["response"],
-                        "response_summary": response_and_summary["summary"],
+                        "response_query": response_and_summary.query,
+                        "response_raw": response_and_summary.response,
+                        "response_summary": response_and_summary.summary,
                     }
                 case _:
                     json_response = {"error": "Invalid action."}

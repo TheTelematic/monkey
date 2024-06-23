@@ -1,6 +1,7 @@
-from typing import TypedDict
+from dataclasses import dataclass
 
 
-class Summary(TypedDict):
+@dataclass(frozen=True, slots=True)
+class Summary:
     text: str
     language: str

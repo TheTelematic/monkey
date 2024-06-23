@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import pickle
+from dataclasses import dataclass
 from functools import partial
 from signal import SIGINT, SIGTERM
 from typing import Awaitable, Callable
@@ -30,7 +31,10 @@ __last_message_id = None
 
 
 async def _consume_callback(
-    channel: RobustChannel, queue_name: str, callback: Callable[[dict], Awaitable], message: AbstractIncomingMessage
+    channel: RobustChannel,
+    queue_name: str,
+    callback: Callable[[dataclass], Awaitable],
+    message: AbstractIncomingMessage,
 ) -> None:
     global __shutdown_event_received, __processing_message, __last_message_id
 
@@ -120,7 +124,7 @@ async def _readiness_check():
         await asyncio.sleep(config.READINESS_CONSUMERS_SLEEP_TIME)
 
 
-async def _run_consumer(queue_name: str, callback: Callable[[bytes], Awaitable]) -> None:
+async def _run_consumer(queue_name: str, callback: Callable[[dataclass], Awaitable]) -> None:
     loop = asyncio.get_running_loop()
     loop.add_signal_handler(SIGINT, graceful_shutdown_consumer)
     loop.add_signal_handler(SIGTERM, graceful_shutdown_consumer)

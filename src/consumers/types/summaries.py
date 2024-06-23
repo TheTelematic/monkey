@@ -6,4 +6,4 @@ from logger import logger
 async def make_summary(summary: Summary) -> None:
     logger.debug(f"Making summary of {summary=}")
 
-    await get_summary(summary["text"], summary["language"])
+    await get_summary(summary.text, summary.language)

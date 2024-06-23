@@ -1,12 +1,14 @@
-from typing import TypedDict
+from dataclasses import dataclass
 
 
-class ResponseAndSummary(TypedDict):
+@dataclass(frozen=True, slots=True)
+class ResponseAndSummary:
     response: str
     summary: str
 
 
-class ResponseAndSummaryTranslated(TypedDict):
+@dataclass(frozen=True, slots=True)
+class ResponseAndSummaryTranslated:
     query: str
     response: str
     summary: str
