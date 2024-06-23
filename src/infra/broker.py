@@ -1,5 +1,4 @@
 import pickle
-from typing import TypedDict
 
 from aio_pika import connect_robust, Message, Connection
 

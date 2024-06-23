@@ -1,5 +1,3 @@
-import pickle
-
 from consumers.routes import CONSUMER_SUMMARIES
 from dtos.summaries import Summary
 from infra.broker import send_to_consumer
