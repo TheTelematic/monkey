@@ -30,6 +30,20 @@ consumers:
         memory: 128Mi
       limits:
         memory: 256Mi
+  summaries:
+    terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
+    keda:
+      queue: &summariesQueue monkey.summaries
+      minMessagesToScaleUp: 1
+    replicas:
+      min: 1
+      max: 2
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
 
 service:
   port:
@@ -52,6 +66,7 @@ config:
   RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq.infra.svc.cluster.local:5672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_URL_HTTP: "http://monkey:monkey@rabbitmq.infra.svc.cluster.local:15672/"  # It should go with a Secret/SealedSecret
   RABBITMQ_QUEUE_TRANSLATIONS: *translationsQueue
+  RABBITMQ_QUEUE_SUMMARIES: *summariesQueue
   READINESS_CONSUMERS_FILE: "/tmp/ready"
   LIVENESS_CONSUMERS_FILE: "/tmp/live"
   PROMETHEUS_INTERVAL: "30"

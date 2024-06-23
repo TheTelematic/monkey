@@ -21,5 +21,7 @@ if __name__ == "__main__":
             )
         case "consumer_translations":
             run_consumer(consumers.TRANSLATIONS)
+        case "consumer_summaries":
+            run_consumer(consumers.SUMMARIES)
         case _:
-            raise ValueError("Invalid argument. Use 'api' or 'consumer_translations'.")
+            raise ValueError("Invalid argument.")

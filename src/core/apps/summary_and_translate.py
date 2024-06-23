@@ -1,20 +1,8 @@
-from typing import TypedDict
-
 from core.ai import get_ai_response
-from core.summary import get_summary
+from core.summaries.summary import get_summary
 from core.translations.send_translate import send_translation
 from core.translations.translate import get_translation
-
-
-class ResponseAndSummary(TypedDict):
-    response: str
-    summary: str
-
-
-class ResponseAndSummaryTranslated(TypedDict):
-    query: str
-    response: str
-    summary: str
+from dtos.summary_and_translate import ResponseAndSummary, ResponseAndSummaryTranslated
 
 
 async def submit_query(text: str) -> ResponseAndSummary:
@@ -22,7 +10,7 @@ async def submit_query(text: str) -> ResponseAndSummary:
     await send_translation(text)
     return {
         "response": response,
-        "summary": await get_summary(response),
+        "summary": await get_summary(response, "ENGLISH"),
     }
 
 
@@ -31,5 +19,5 @@ async def submit_translation(text: str, to_language: str) -> ResponseAndSummaryT
     return {
         "query": query_translated,
         "response": response_translated,
-        "summary": await get_summary(response_translated),
+        "summary": await get_summary(response_translated, to_language),
     }
