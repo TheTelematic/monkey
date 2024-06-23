@@ -3,5 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}
 data:
-  VERSION: {{ .Values.image.tag | quote }}
+  VERSION: "{{ .Values.image.tag }}"
+  DOMAIN_HOST: "{{ .Values.ingress.host }}"
   {{- toYaml .Values.config | nindent 2 }}

@@ -1,0 +1,7 @@
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  host: monkey.local
+
+config:
+  LLM_ENGINE: openai

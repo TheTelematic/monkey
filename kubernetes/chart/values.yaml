@@ -38,7 +38,9 @@ service:
     port: 80
 
 ingress:
-  enabled: true
+  enabled: false
+  ingressClassName: ""
+  host: ""
 
 config:
   LOG_LEVEL: "INFO"
@@ -53,7 +55,6 @@ config:
   READINESS_CONSUMERS_FILE: "/tmp/ready"
   LIVENESS_CONSUMERS_FILE: "/tmp/live"
   PROMETHEUS_INTERVAL: "30"
-  DOMAIN_HOST: ""
   API_GRACEFUL_SHUTDOWN_TIMEOUT: "50"  # Less than api.terminationGracePeriodSeconds
 
 ollama:

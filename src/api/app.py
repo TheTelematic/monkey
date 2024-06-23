@@ -50,12 +50,16 @@ app.include_router(ws_recommend_me_a_phone_router, prefix=f"{COMMON_API_PREFIX}/
 app.include_router(ui_router, prefix="")
 
 app.add_middleware(PrometheusWSMiddleware)
+allowed_hosts = [
+    config.POD_IP,
+]
+if config.DOMAIN_HOST:
+    allowed_hosts.append(config.DOMAIN_HOST)
+
+logger.info(f"Allowed hosts: {allowed_hosts}")
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=[
-        config.DOMAIN_HOST,
-        config.POD_IP,
-    ],
+    allowed_hosts=allowed_hosts,
 )
 
 app.mount(STATIC_PATH, StaticFiles(directory="static"), name="static")

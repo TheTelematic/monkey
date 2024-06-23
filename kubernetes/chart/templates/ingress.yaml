@@ -4,9 +4,9 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}
 spec:
-  ingressClassName: ngrok
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
   rules:
-    - host: {{ .Values.config.DOMAIN_HOST }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: /

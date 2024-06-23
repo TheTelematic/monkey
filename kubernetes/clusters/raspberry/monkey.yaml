@@ -1,3 +1,10 @@
 image:
   name: thetelematic95/monkey
   tag: 0.0.5
+
+ingress:
+  ingressClassName: ngrok
+  host: frankly-unbiased-shark.ngrok-free.app
+
+config:
+  LLM_ENGINE: openai

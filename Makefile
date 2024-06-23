@@ -22,10 +22,8 @@ local-context:
 
 deploy-local: local-context
 	helm upgrade --install --wait monkey kubernetes/chart \
-		--set config.LLM_ENGINE=openai \
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
-		--set config.DOMAIN_HOST=localhost \
-		--set ingress.enabled=false
+		-f kubernetes/clusters/local/monkey.yaml
 
 deploy-with-ollama: local-context
 	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
@@ -43,26 +41,37 @@ check-chart:
 port-forward: local-context
 	kubectl port-forward service/monkey-api 8000:80
 
-infra-start:
+infra-start-common:
 	helm repo add bitnami https://charts.bitnami.com/bitnami
-	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
 	helm repo add kedacore https://kedacore.github.io/charts
 	helm repo update
 
 	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/infra/redis.yaml --version 19.5.0
 	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/infra/rabbitmq.yaml --version 14.3.1
-	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --version 0.14.0 \
-		--set credentials.apiKey=${NGROK_API_KEY} \
-		--set credentials.authtoken=${NGROK_AUTHTOKEN}
 	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/infra/kube-prometheus.yaml --version 9.2.1
 	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/infra/grafana.yaml --version 11.3.0 \
 		--set admin.user=${GRAFANA_USER} \
 		--set admin.password=${GRAFANA_PASSWORD}
 	helm upgrade --namespace keda --create-namespace --install keda kedacore/keda
 
+infra-start-local: local-context infra-start-common
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	helm repo update
+
+	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/infra/nginx-ingress-controller.yaml --version 11.3.0
+
+infra-start-raspberry: raspberry-context infra-start-common
+	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
+	helm repo update
+
+	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --version 0.14.0 \
+		--set credentials.apiKey=${NGROK_API_KEY} \
+		--set credentials.authtoken=${NGROK_AUTHTOKEN}
+
 infra-stop:
 	-helm uninstall --namespace infra redis
 	-helm uninstall --namespace infra rabbitmq
+	-helm uninstall --namespace infra nginx-ingress-controller
 	-helm uninstall --namespace infra ngrok-ingress-controller
 	-helm uninstall --namespace infra kube-prometheus
 	-helm uninstall --namespace infra grafana
@@ -82,7 +91,5 @@ raspberry-context:
 
 deploy-to-raspberry: raspberry-context
 	helm upgrade --install --wait monkey kubernetes/chart \
-		--set config.LLM_ENGINE=openai \
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
-		--set config.DOMAIN_HOST=${NGROK_DOMAIN} \
 		-f kubernetes/clusters/raspberry/monkey.yaml
