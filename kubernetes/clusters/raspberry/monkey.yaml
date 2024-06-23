@@ -3,6 +3,7 @@ image:
   tag: 0.0.5
 
 ingress:
+  enabled: true
   ingressClassName: ngrok
   host: frankly-unbiased-shark.ngrok-free.app
 
