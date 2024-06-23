@@ -8,3 +8,8 @@ ingress:
 
 config:
   LLM_ENGINE: openai
+
+api:
+  replicas:
+    min: 2
+    max: 3
