@@ -120,7 +120,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+raspberry.env
+local.env
 .venv
 env/
 venv/

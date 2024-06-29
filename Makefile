@@ -1,10 +1,3 @@
-
-# Load .env file
-ifneq (,$(wildcard ./.env))
-	include .env
-	export
-endif
-
 docker_hub_image_name = thetelematic95/monkey
 image_name ?= monkey
 image_tag ?= latest
@@ -20,9 +13,16 @@ build:
 local-context:
 	kubectl config use-context docker-desktop
 
-deploy-local: local-context
+local-secret: local-context
+	kubectl create secret generic monkey --from-env-file=local.env \
+ 		--save-config \
+		--dry-run=client \
+		-o yaml | \
+		kubectl apply -f -
+
+deploy-local: local-context local-secret
 	helm upgrade --install --wait monkey kubernetes/chart \
-		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
+		--set secretName=monkey \
 		-f kubernetes/clusters/local/monkey.yaml
 
 deploy-with-ollama: local-context
@@ -93,12 +93,9 @@ publish: build
 raspberry-context:
 	kubectl config use-context raspberry
 
-deploy-to-raspberry: raspberry-context
-	helm upgrade --install --wait monkey kubernetes/chart \
-		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
-		--set config.RABBITMQ_URL=${CLOUDAMQP_URL} \
-		--set config.RABBITMQ_URL_HTTP=${CLOUDAMQP_URL_HTTP} \
-		--set config.REDIS_HOST=${REDIS_HOST} \
-		--set config.REDIS_PORT=${REDIS_PORT} \
-		--set config.REDIS_PASSWORD=${REDIS_PASSWORD} \
-		-f kubernetes/clusters/raspberry/monkey.yaml
+raspberry-secret: raspberry-context
+	kubectl create secret generic monkey --from-env-file=raspberry.env \
+ 		--save-config \
+		--dry-run=client \
+		-o yaml | \
+		kubectl apply -f -

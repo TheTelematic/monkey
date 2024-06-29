@@ -3,3 +3,5 @@ venv/
 .gitignore
 Dockerfile
 README.md
+local.env
+raspberry.env

@@ -3,6 +3,8 @@ image:
   tag: latest
   policy: IfNotPresent
 
+secretName: monkey
+
 api:
   terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
   replicas:
