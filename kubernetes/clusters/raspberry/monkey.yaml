@@ -1,6 +1,6 @@
 image:
   name: thetelematic95/monkey
-  tag: 0.0.11
+  tag: 0.0.12
 
 ingress:
   enabled: true

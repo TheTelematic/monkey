@@ -25,6 +25,9 @@ class PrefixedRedis(Redis):
     ) -> ResponseT:
         return await super().get(f"{self.prefix_keys}:{name}")
 
+    async def exists(self, *names: KeyT) -> ResponseT:
+        return await super().exists(*[f"{self.prefix_keys}:{name}" for name in names])
+
 
 redis_queries = PrefixedRedis(
     host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD, prefix_keys="queries"
