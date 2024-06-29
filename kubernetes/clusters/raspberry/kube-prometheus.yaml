@@ -28,7 +28,7 @@ spec:
         namespace: infra
       interval: 5m
   releaseName: kube-prometheus
-  releaseNamespace: infra
+  targetNamespace: infra
   install:
     remediation:
       retries: 3
