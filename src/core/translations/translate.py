@@ -15,7 +15,7 @@ def _ask_translation(text: str, from_language: str, to_language: str) -> str:
 
 
 def _get_key(from_language: str, to_language: str, key: str) -> str:
-    return f":{from_language}:{to_language}:{key}"  # noqa: E231
+    return f"{from_language}:{to_language}:{key}"  # noqa: E231
 
 
 async def _persist_in_cache(key: str, value: str) -> None:
