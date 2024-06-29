@@ -1,14 +1,14 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: OCIRepository
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
 metadata:
-  name: kube-prometheus
-  namespace: infra
+  name: bitnami
+  namespace: default
 spec:
-  interval: 5m0s
-  url: oci://registry-1.docker.io/bitnamicharts/kube-prometheus
+  interval: 5m
+  url: https://github.com/bitnami/charts
   ref:
-    semver: 9.2.1
+    branch: main
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -20,11 +20,11 @@ spec:
   timeout: 5m
   chart:
     spec:
-      chart: kube-prometheus
+      chart: bitnami/kube-prometheus
       version: 9.2.1
       sourceRef:
-        kind: HelmRepository
-        name: kube-prometheus
+        kind: GitRepository
+        name: bitnami
         namespace: infra
       interval: 5m
   releaseName: kube-prometheus
