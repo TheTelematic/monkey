@@ -1,13 +1,30 @@
 from redis.asyncio import Redis
+from redis.commands.core import ResponseT
+from redis.typing import KeyT
 
 import config
 from logger import logger
 
-redis_queries = Redis(
-    host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB_QUERIES, password=config.REDIS_PASSWORD
+
+class PrefixedRedis(Redis):
+    def __init__(self, *args, **kwargs):
+        self.prefix_keys = kwargs.pop("prefix_keys", "")
+        super().__init__(*args, **kwargs)
+
+    async def set(
+        self,
+        name: KeyT,
+        *args,
+        **kwargs,
+    ) -> ResponseT:
+        return await super().set(f"{self.prefix_keys}:{name}", *args, **kwargs)
+
+
+redis_queries = PrefixedRedis(
+    host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD, prefix_keys="queries"
 )
-redis_translations = Redis(
-    host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB_TRANSLATIONS, password=config.REDIS_PASSWORD
+redis_translations = PrefixedRedis(
+    host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD, prefix_keys="translations"
 )
 
 
