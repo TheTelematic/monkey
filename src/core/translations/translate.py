@@ -15,7 +15,7 @@ def _ask_translation(text: str, from_language: str, to_language: str) -> str:
 
 
 def _get_key(from_language: str, to_language: str, key: str) -> str:
-    return f"{from_language}:{to_language}:{key}"  # noqa: E231
+    return f"{from_language}:{to_language}:{key}"
 
 
 async def _persist_in_cache(key: str, value: str) -> None:
@@ -54,13 +54,15 @@ async def _translate(original_query: str, from_language: str = "ENGLISH", to_lan
 
 
 async def get_translation(original_query: str, from_language: str, to_language: str) -> (str, str):
-    query_translated = await _get_from_cache(_get_key(from_language, to_language, original_query))
-    response_translated = await _get_from_cache(
-        _get_key(from_language, to_language, await get_ai_response(original_query))
-    )
+    query_translated_key = _get_key(from_language, to_language, original_query)
+    response_translated_key = _get_key(from_language, to_language, await get_ai_response(original_query))
+
+    query_translated = await _get_from_cache(query_translated_key)
+    response_translated = await _get_from_cache(response_translated_key)
 
     if not query_translated or not response_translated:
         logger.info("Translation not found in cache.")
+        logger.debug(f"Keys: {query_translated_key=} {response_translated_key=}")
         return await translate(original_query, from_language, to_language)
 
     monkey_translations_cache_hit_count.inc()

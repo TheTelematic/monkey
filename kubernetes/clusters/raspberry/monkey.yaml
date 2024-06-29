@@ -15,7 +15,6 @@ api:
     min: 2
     max: 3
 
-
 consumers:
   translations:
     replicas:

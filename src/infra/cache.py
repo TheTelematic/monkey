@@ -19,6 +19,12 @@ class PrefixedRedis(Redis):
     ) -> ResponseT:
         return await super().set(f"{self.prefix_keys}:{name}", *args, **kwargs)
 
+    async def get(
+        self,
+        name: KeyT,
+    ) -> ResponseT:
+        return await super().get(f"{self.prefix_keys}:{name}")
+
 
 redis_queries = PrefixedRedis(
     host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD, prefix_keys="queries"
