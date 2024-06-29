@@ -86,7 +86,8 @@ publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:latest
 	docker push ${docker_hub_image_name}:latest
 
-	git tag -a v${image_tag} -m "Release v${image_tag}"
+	git tag -s -a v${image_tag} -m "Release v${image_tag}"
+	git tag -v v${image_tag}
 	git push origin v${image_tag}
 
 raspberry-context:
