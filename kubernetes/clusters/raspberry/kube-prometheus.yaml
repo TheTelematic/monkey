@@ -3,6 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
   name: kube-prometheus
+  namespace: infra
 spec:
   interval: 5m0s
   url: oci://registry-1.docker.io/bitnamicharts/kube-prometheus
@@ -22,8 +23,9 @@ spec:
       chart: kube-prometheus
       version: 9.2.1
       sourceRef:
-        kind: GitRepository
+        kind: OCIRepository
         name: kube-prometheus
+        namespace: infra
       interval: 5m
   releaseName: kube-prometheus
   releaseNamespace: infra
