@@ -1,12 +1,14 @@
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: GitRepository
 metadata:
   name: monkey
   namespace: default
 spec:
   interval: 5m
   url: https://github.com/TheTelematic/monkey
+  ref:
+    branch: main
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -18,10 +20,10 @@ spec:
   timeout: 5m
   chart:
     spec:
-      chart: monkey
+      chart: kubernetes/chart
       version: 0.0.x
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: monkey
       interval: 5m
   releaseName: monkey
@@ -54,7 +56,7 @@ spec:
 
     api:
       replicas:
-        min: 3
+        min: 2
         max: 3
 
     consumers:
