@@ -1,7 +1,7 @@
 ingress:
   enabled: true
   hostname: grafana.local
-#  ingressClassName: ngrok
+  ingressClassName: nginx
 
 datasources:
   secretDefinition:
