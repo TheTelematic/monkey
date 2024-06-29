@@ -56,7 +56,7 @@ spec:
 
     api:
       replicas:
-        min: 2
+        min: 3
         max: 3
 
     consumers:
@@ -64,6 +64,7 @@ spec:
         replicas:
           min: 1
           max: 2
+
       summaries:
         replicas:
           min: 1
