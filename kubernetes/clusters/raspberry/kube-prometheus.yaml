@@ -7,8 +7,6 @@ metadata:
 spec:
   interval: 5m0s
   url: oci://registry-1.docker.io/bitnamicharts/kube-prometheus
-  ref:
-    semver: 9.2.1
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -25,6 +23,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus
+        namespace: infra
       interval: 5m
   releaseName: kube-prometheus
   targetNamespace: infra
