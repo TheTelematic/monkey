@@ -14,3 +14,14 @@ api:
   replicas:
     min: 2
     max: 3
+
+
+consumers:
+  translations:
+    replicas:
+      min: 1
+      max: 2
+  summaries:
+    replicas:
+      min: 1
+      max: 2
