@@ -5,4 +5,6 @@ metadata:
 data:
   VERSION: "{{ .Values.image.tag }}"
   DOMAIN_HOST: "{{ .Values.ingress.host }}"
-  {{- toYaml .Values.config | nindent 2 }}
+  {{- range $key, $value := .Values.config }}
+  {{ $key }}: "{{ $value }}"
+  {{- end }}

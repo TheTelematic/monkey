@@ -98,4 +98,7 @@ deploy-to-raspberry: raspberry-context
 		--set config.OPENAI_API_KEY=${OPENAI_API_KEY} \
 		--set config.RABBITMQ_URL=${CLOUDAMQP_URL} \
 		--set config.RABBITMQ_URL_HTTP=${CLOUDAMQP_URL_HTTP} \
+		--set config.REDIS_HOST=${REDIS_HOST} \
+		--set config.REDIS_PORT=${REDIS_PORT} \
+		--set config.REDIS_PASSWORD=${REDIS_PASSWORD} \
 		-f kubernetes/clusters/raspberry/monkey.yaml
