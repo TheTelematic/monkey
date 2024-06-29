@@ -44,7 +44,7 @@ spec:
   values:
     image:
       name: thetelematic95/monkey
-      tag: 0.0.12
+      tag: 0.0.14
 
     ingress:
       enabled: true
