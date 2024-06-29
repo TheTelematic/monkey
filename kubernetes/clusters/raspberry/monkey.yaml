@@ -54,7 +54,7 @@ spec:
 
     api:
       replicas:
-        min: 2
+        min: 3
         max: 3
 
     consumers:
