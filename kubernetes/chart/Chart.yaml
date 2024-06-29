@@ -4,7 +4,3 @@ version: 0.0.0
 keywords:
   - pet project
 home: https://github.com/TheTelematic/monkey
-# dependencies:
-#  - name: The name of the chart (nginx)
-#    version: The version of the chart ("1.2.3")
-#    repository: (optional) The repository URL ("https://example.com/charts") or alias ("@repo-name")

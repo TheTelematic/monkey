@@ -1,26 +1,68 @@
-image:
-  name: thetelematic95/monkey
-  tag: 0.0.12
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: monkey
+  namespace: default
+spec:
+  interval: 5m
+  url: https://github.com/TheTelematic/monkey
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: monkey
+  namespace: default
+spec:
+  interval: 10m
+  timeout: 5m
+  chart:
+    spec:
+      chart: monkey
+      version: 0.0.x
+      sourceRef:
+        kind: HelmRepository
+        name: monkey
+      interval: 5m
+  releaseName: monkey
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled
+    ignore:
+    - paths: ["/spec/replicas"]
+      target:
+        kind: Deployment
+  values:
+    image:
+      name: thetelematic95/monkey
+      tag: 0.0.12
 
-ingress:
-  enabled: true
-  ingressClassName: ngrok
-  host: frankly-unbiased-shark.ngrok-free.app
+    ingress:
+      enabled: true
+      ingressClassName: ngrok
+      host: frankly-unbiased-shark.ngrok-free.app
 
-config:
-  LLM_ENGINE: openai
+    config:
+      LLM_ENGINE: openai
 
-api:
-  replicas:
-    min: 2
-    max: 3
+    api:
+      replicas:
+        min: 2
+        max: 3
 
-consumers:
-  translations:
-    replicas:
-      min: 1
-      max: 2
-  summaries:
-    replicas:
-      min: 1
-      max: 2
+    consumers:
+      translations:
+        replicas:
+          min: 1
+          max: 2
+      summaries:
+        replicas:
+          min: 1
+          max: 2
