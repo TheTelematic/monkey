@@ -23,7 +23,7 @@ spec:
       chart: kube-prometheus
       version: 9.2.1
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: kube-prometheus
         namespace: infra
       interval: 5m
