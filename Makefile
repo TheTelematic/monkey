@@ -22,7 +22,6 @@ local-secret: local-context
 
 deploy-local: local-context local-secret
 	helm upgrade --install --wait monkey kubernetes/chart \
-		--set secretName=monkey \
 		-f kubernetes/clusters/local/monkey.yaml
 
 deploy-with-ollama: local-context

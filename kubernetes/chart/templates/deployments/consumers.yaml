@@ -43,7 +43,7 @@ spec:
             - configMapRef:
                 name: {{ $.Release.Name }}
             - secretRef:
-                name: {{ .Values.secretName }}
+                name: {{ $.Values.secretName }}
           env:
             - name: POD_IP
               valueFrom:
