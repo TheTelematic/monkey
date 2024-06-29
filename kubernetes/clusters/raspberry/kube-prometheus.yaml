@@ -25,7 +25,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kube-prometheus
-        namespace: infra
       interval: 5m
   releaseName: kube-prometheus
   targetNamespace: infra
