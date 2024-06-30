@@ -1,17 +1,4 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: monkey
-  namespace: flux-system
-spec:
-  interval: 5m
-  url: https://github.com/TheTelematic/monkey
-  ref:
-    branch: main
-  secretRef:
-    name: ssh-credentials
----
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageRepository
 metadata:
@@ -42,7 +29,7 @@ spec:
   interval: 30m
   sourceRef:
     kind: GitRepository
-    name: monkey
+    name: flux-system
     namespace: flux-system
   git:
     checkout:
@@ -71,7 +58,7 @@ spec:
       version: 0.0.1
       sourceRef:
         kind: GitRepository
-        name: monkey
+        name: flux-system
         namespace: flux-system
       interval: 5m
   releaseName: monkey
