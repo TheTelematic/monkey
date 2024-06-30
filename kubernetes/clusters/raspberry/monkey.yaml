@@ -36,7 +36,7 @@ spec:
         branch: main
     commit:
       author:
-        email: flux@doesntexist.com
+        email: flux@doesntexist.local
         name: Flux
       messageTemplate: 'RASPBERRY DEPLOY MONKEY: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
   update:
