@@ -1,3 +1,8 @@
+admin:
+  user: monkey
+  existingSecret: monkey
+  existingSecretPasswordKey: GRAFANA_PASSWORD
+
 ingress:
   enabled: true
   hostname: grafana.local

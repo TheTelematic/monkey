@@ -60,9 +60,7 @@ infra-start-local: local-context infra-start-common
 	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
 	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/clusters/local/nginx-ingress-controller.yaml --version 11.3.0
 	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/clusters/local/kube-prometheus.yaml --version 9.2.1
-	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/local/grafana.yaml --version 11.3.0 \
-		--set admin.user=${GRAFANA_USER} \
-		--set admin.password=${GRAFANA_PASSWORD}
+	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/local/grafana.yaml --version 11.3.0
 
 infra-start-raspberry: raspberry-context infra-start-common
 	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
