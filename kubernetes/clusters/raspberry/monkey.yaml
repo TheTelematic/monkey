@@ -47,9 +47,6 @@ spec:
       ref:
         branch: main
     commit:
-      signingKey:
-        secretRef:
-          name: signing-key
       author:
         email: arturoteleco95@protonmail.ch
         name: Flux

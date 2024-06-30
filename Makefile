@@ -95,4 +95,3 @@ raspberry-secret: raspberry-context
 		--dry-run=client \
 		-o yaml | \
 		kubectl apply -n infra -f -
-	kubectl apply -n flux-system -f flux-secret.yaml
