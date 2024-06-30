@@ -103,7 +103,7 @@ raspberry-secret: raspberry-context
 		--dry-run=client \
 		-o yaml | \
 		kubectl apply -n infra -f -
-	kubectl create secret generic ngrok-ingress-controller-kubernetes-ingress-controller-credentials --from-env-file=ngrok.env \
+	kubectl create secret generic ngrok-ingress-controller-credentials --from-env-file=ngrok.env \
  		--save-config \
 		--dry-run=client \
 		-o yaml | \
