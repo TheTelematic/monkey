@@ -6,7 +6,7 @@ metadata:
   namespace: infra
 spec:
   interval: 5m0s
-  url: https://ngrok.github.io/kubernetes-ingress-controller
+  url: https://github.com/ngrok/kubernetes-ingress-controller
   ref:
     tag: helm-chart-0.14.0
 ---
