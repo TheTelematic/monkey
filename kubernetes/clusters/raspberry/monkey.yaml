@@ -47,9 +47,12 @@ spec:
       ref:
         branch: main
     commit:
+      signingKey:
+        secretRef:
+          name: signing-key
       author:
-        email: arturoteleco95@protonmail.ch
-        name: FluxBot
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
       messageTemplate: 'RASPBERRY DEPLOY MONKEY: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
     push:
       branch: main
