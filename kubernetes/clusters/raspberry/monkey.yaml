@@ -1,4 +1,3 @@
----
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageRepository
 metadata:
@@ -79,27 +78,22 @@ spec:
   values:
     image:
       name: thetelematic95/monkey
-      tag: 0.0.14  # {"$imagepolicy": "flux-system:monkey"}
-
+      tag: thetelematic95/monkey:0.0.15 # {"$imagepolicy": "flux-system:monkey"}
     ingress:
       enabled: true
       ingressClassName: ngrok
       host: frankly-unbiased-shark.ngrok-free.app
-
     config:
       LLM_ENGINE: openai
-
     api:
       replicas:
         min: 2
         max: 3
-
     consumers:
       translations:
         replicas:
           min: 1
           max: 2
-
       summaries:
         replicas:
           min: 1
