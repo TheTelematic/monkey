@@ -95,3 +95,12 @@ raspberry-secret: raspberry-context
 		--dry-run=client \
 		-o yaml | \
 		kubectl apply -n infra -f -
+
+init-flux:
+	flux bootstrap git \
+        --url=ssh://git@github.com/TheTelematic/monkey.git \
+        --branch=main \
+        --path=kubernetes/clusters/raspberry \
+        --private-key-file=.ssh/id_ed25519 \
+        --components-extra=image-reflector-controller,image-automation-controller
+	flux create secret git ssh-credentials --url=ssh://git@github.com/TheTelematic/monkey.git
