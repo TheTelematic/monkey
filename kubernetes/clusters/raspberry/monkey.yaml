@@ -10,7 +10,7 @@ spec:
   ref:
     branch: main
   secretRef:
-    name: flux-system
+    name: ssh-credentials
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageRepository
