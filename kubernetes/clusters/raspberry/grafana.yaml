@@ -39,6 +39,10 @@ spec:
       target:
         kind: Deployment
   values:
+    admin:
+      user: monkey
+      existingSecret: monkey
+      existingSecretPasswordKey: GRAFANA_PASSWORD
     datasources:
       secretDefinition:
         apiVersion: 1

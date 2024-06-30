@@ -19,6 +19,11 @@ local-secret: local-context
 		--dry-run=client \
 		-o yaml | \
 		kubectl apply -f -
+	kubectl create secret generic monkey --from-env-file=local.env \
+ 		--save-config \
+		--dry-run=client \
+		-o yaml | \
+		kubectl apply -n infra -f -
 
 deploy-local: local-context local-secret
 	helm upgrade --install --wait monkey kubernetes/chart \
@@ -66,7 +71,6 @@ infra-start-raspberry: raspberry-context infra-start-common
 	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller -f kubernetes/clusters/raspberry/ngrok-ingress-controller.yaml --version 0.14.0 \
 		--set credentials.apiKey=${NGROK_API_KEY} \
 		--set credentials.authtoken=${NGROK_AUTHTOKEN}
-	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/clusters/raspberry/kube-prometheus.yaml --version 9.2.1
 	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/raspberry/grafana.yaml --version 11.3.0 \
 		--set admin.user=${GRAFANA_USER} \
 		--set admin.password=${GRAFANA_PASSWORD}
@@ -99,3 +103,8 @@ raspberry-secret: raspberry-context
 		--dry-run=client \
 		-o yaml | \
 		kubectl apply -f -
+	kubectl create secret generic monkey --from-env-file=raspberry.env \
+ 		--save-config \
+		--dry-run=client \
+		-o yaml | \
+		kubectl apply -n infra -f -
