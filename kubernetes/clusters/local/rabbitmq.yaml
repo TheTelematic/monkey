@@ -4,5 +4,5 @@ auth:
 
 ingress:
   enabled: false
-#  hostname: rabbitmq.local
-#  ingressClassName: nginx
+  hostname: rabbitmq.local
+  ingressClassName: nginx
