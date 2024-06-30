@@ -82,7 +82,7 @@ spec:
     ingress:
       enabled: true
       ingressClassName: ngrok
-      host: frankly-unbiased-shark.ngrok-free.app
+      host: ghoul-happy-evidently.ngrok-free.app
     config:
       LLM_ENGINE: openai
     api:
