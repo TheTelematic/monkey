@@ -9,6 +9,8 @@ spec:
   url: https://github.com/TheTelematic/monkey
   ref:
     branch: main
+  secretRef:
+    name: flux-system
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageRepository
@@ -51,8 +53,6 @@ spec:
         email: arturoteleco95@protonmail.ch
         name: Flux
       messageTemplate: 'RASPBERRY DEPLOY MONKEY: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
-    push:
-      branch: main
   update:
     path: ./kubernetes/clusters/raspberry/monkey.yaml
     strategy: Setters
