@@ -1,14 +1,12 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: GitRepository
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
 metadata:
   name: ngrok-ingress-controller
   namespace: infra
 spec:
-  interval: 5m0s
-  url: https://github.com/ngrok/kubernetes-ingress-controller
-  ref:
-    tag: helm-chart-0.14.0
+  interval: 1m
+  url: https://ngrok.github.io/kubernetes-ingress-controller
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -20,10 +18,10 @@ spec:
   timeout: 5m
   chart:
     spec:
-      chart: helm/ingress-controller
+      chart: kubernetes-ingress-controller
       version: 0.14.0
       sourceRef:
-        kind: GitRepository
+        kind: HelmRepository
         name: ngrok-ingress-controller
         namespace: infra
       interval: 5m
