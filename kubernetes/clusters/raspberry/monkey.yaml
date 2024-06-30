@@ -10,6 +10,27 @@ spec:
   ref:
     branch: main
 ---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: monkey
+  namespace: flux-system
+spec:
+  image: thetelematic95/monkey
+  interval: 5m
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: monkey
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: thetelematic95/monkey
+  policy:
+    semver:
+      range: x.x.x
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -44,7 +65,7 @@ spec:
   values:
     image:
       name: thetelematic95/monkey
-      tag: 0.0.14
+      tag: 0.0.14  # {"$imagepolicy": "flux-system:monkey"}
 
     ingress:
       enabled: true
