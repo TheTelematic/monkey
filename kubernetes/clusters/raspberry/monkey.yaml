@@ -36,7 +36,7 @@ spec:
         branch: main
     commit:
       author:
-        email: arturoteleco95@protonmail.ch
+        email: flux@doesntexist.com
         name: Flux
       messageTemplate: 'RASPBERRY DEPLOY MONKEY: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
   update:
