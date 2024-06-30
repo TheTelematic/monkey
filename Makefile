@@ -45,17 +45,12 @@ check-chart:
 port-forward: local-context
 	kubectl port-forward service/monkey-api 8000:80
 
-infra-start-common:
+infra-start-local: local-context
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	helm repo add kedacore https://kedacore.github.io/charts
 	helm repo update
 
 	helm upgrade --namespace keda --create-namespace --install keda kedacore/keda
-
-infra-start-local: local-context infra-start-common
-	helm repo add bitnami https://charts.bitnami.com/bitnami
-	helm repo update
-
 	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/clusters/local/redis.yaml --version 19.5.0
 	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
 	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/clusters/local/nginx-ingress-controller.yaml --version 11.3.0
@@ -69,14 +64,6 @@ infra-stop-local: local-context
 	-helm uninstall --namespace infra ngrok-ingress-controller
 	-helm uninstall --namespace infra kube-prometheus
 	-helm uninstall --namespace infra grafana
-
-infra-start-raspberry: raspberry-context infra-start-common
-	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
-	helm repo update
-
-	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller -f kubernetes/clusters/raspberry/ngrok-ingress-controller.yaml --version 0.14.0 \
-		--set credentials.apiKey=${NGROK_API_KEY} \
-		--set credentials.authtoken=${NGROK_AUTHTOKEN}
 
 publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
