@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: monkey
-  namespace: default
+  namespace: flux-system
 spec:
   interval: 5m
   url: https://github.com/TheTelematic/monkey
@@ -41,7 +41,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: monkey
-    namespace: default
+    namespace: flux-system
   git:
     checkout:
       ref:
@@ -72,6 +72,7 @@ spec:
       sourceRef:
         kind: GitRepository
         name: monkey
+        namespace: flux-system
       interval: 5m
   releaseName: monkey
   install:
