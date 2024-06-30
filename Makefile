@@ -103,4 +103,3 @@ init-flux:
         --path=kubernetes/clusters/raspberry \
         --private-key-file=.ssh/id_ed25519 \
         --components-extra=image-reflector-controller,image-automation-controller
-	flux create secret git ssh-credentials --url=ssh://git@github.com/TheTelematic/monkey.git
