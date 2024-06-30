@@ -1,0 +1,50 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: grafana
+  namespace: infra
+spec:
+  interval: 5m0s
+  url: oci://registry-1.docker.io/bitnamicharts/grafana
+  ref:
+    tag: 11.3.6
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: infra
+spec:
+  interval: 10m
+  timeout: 5m
+  chartRef:
+    kind: OCIRepository
+    name: grafana
+    namespace: infra
+  releaseName: grafana
+  targetNamespace: infra
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  test:
+    enable: true
+  driftDetection:
+    mode: enabled
+    ignore:
+    - paths: ["/spec/replicas"]
+      target:
+        kind: Deployment
+  values:
+    datasources:
+      secretDefinition:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://prometheus-operated:9090
+            access: proxy
+            isDefault: true
