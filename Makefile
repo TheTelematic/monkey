@@ -62,6 +62,14 @@ infra-start-local: local-context infra-start-common
 	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/clusters/local/kube-prometheus.yaml --version 9.2.1
 	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/local/grafana.yaml --version 11.3.0
 
+infra-stop-local: local-context
+	-helm uninstall --namespace infra redis
+	-helm uninstall --namespace infra rabbitmq
+	-helm uninstall --namespace infra nginx-ingress-controller
+	-helm uninstall --namespace infra ngrok-ingress-controller
+	-helm uninstall --namespace infra kube-prometheus
+	-helm uninstall --namespace infra grafana
+
 infra-start-raspberry: raspberry-context infra-start-common
 	helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
 	helm repo update
@@ -69,17 +77,6 @@ infra-start-raspberry: raspberry-context infra-start-common
 	helm upgrade --namespace infra --create-namespace --install ngrok-ingress-controller ngrok/kubernetes-ingress-controller -f kubernetes/clusters/raspberry/ngrok-ingress-controller.yaml --version 0.14.0 \
 		--set credentials.apiKey=${NGROK_API_KEY} \
 		--set credentials.authtoken=${NGROK_AUTHTOKEN}
-	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/raspberry/grafana.yaml --version 11.3.0 \
-		--set admin.user=${GRAFANA_USER} \
-		--set admin.password=${GRAFANA_PASSWORD}
-
-infra-stop:
-	-helm uninstall --namespace infra redis
-	-helm uninstall --namespace infra rabbitmq
-	-helm uninstall --namespace infra nginx-ingress-controller
-	-helm uninstall --namespace infra ngrok-ingress-controller
-	-helm uninstall --namespace infra kube-prometheus
-	-helm uninstall --namespace infra grafana
 
 publish: build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
@@ -102,6 +99,11 @@ raspberry-secret: raspberry-context
 		-o yaml | \
 		kubectl apply -f -
 	kubectl create secret generic monkey --from-env-file=raspberry.env \
+ 		--save-config \
+		--dry-run=client \
+		-o yaml | \
+		kubectl apply -n infra -f -
+	kubectl create secret generic ngrok-ingress-controller-credentials --from-env-file=raspberry.env \
  		--save-config \
 		--dry-run=client \
 		-o yaml | \
