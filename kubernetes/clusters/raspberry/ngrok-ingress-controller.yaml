@@ -43,4 +43,6 @@ spec:
     - paths: ["/spec/replicas"]
       target:
         kind: Deployment
-  values: {}
+  values:
+    nameOverride: ngrok-ingress-controller
+    fullnameOverride: ngrok-ingress-controller
