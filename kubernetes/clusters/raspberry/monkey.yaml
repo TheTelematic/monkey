@@ -48,8 +48,8 @@ spec:
         branch: main
     commit:
       author:
-        email: fluxcdbot@users.noreply.github.com
-        name: fluxcdbot
+        email: arturoteleco95@protonmail.ch
+        name: FluxBot
       messageTemplate: 'RASPBERRY DEPLOY MONKEY: {{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
     push:
       branch: main
