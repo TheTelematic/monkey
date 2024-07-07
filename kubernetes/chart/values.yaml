@@ -74,6 +74,7 @@ config:
   PROMETHEUS_INTERVAL: "30"
   API_GRACEFUL_SHUTDOWN_TIMEOUT: "50"  # Less than api.terminationGracePeriodSeconds
   APIFY_CONTENT_CRAWLER_URL: "https://www.techradar.com/news/best-phone"
+  PINECONE_INDEX_NAME: "monkey"
 
 ollama:
   enabled: false

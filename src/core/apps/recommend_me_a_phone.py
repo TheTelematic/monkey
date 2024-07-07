@@ -1,6 +1,7 @@
 import json
 
 from infra.apify import apify
+from logger import logger
 
 _PROMPT = (
     "Can you tell me the top 5 of best phones please? "
@@ -12,4 +13,6 @@ _PROMPT = (
 
 
 async def get_phones_recommendations() -> dict:
-    return json.loads(await apify.invoke(_PROMPT))
+    response = await apify.invoke(_PROMPT)
+    logger.info(f"Response from Apify: {response}")
+    return json.loads(response)

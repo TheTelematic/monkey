@@ -1,16 +1,28 @@
+# API
 fastapi==0.111.0
 starlette==0.37.2
 pydantic==2.7.3
 uvicorn==0.29.0
 httptools==0.6.1
 uvloop==0.19.0
+
+# AI
 langchain==0.2.3
 langchain-community==0.2.4
-redis==5.0.4
-aio-pika==9.4.1
 langchain-openai==0.1.7
-Jinja2==3.1.4
+langchain-pinecone==0.1.1
+apify-client==1.7.0
+
+# Cache
+redis==5.0.4
 charset-normalizer==3.3.2
+
+# RabbitMQ
+aio-pika==9.4.1
+
+# Templates
+Jinja2==3.1.4
+
+# Prometheus
 prometheus-fastapi-instrumentator==7.0.0
 prometheus-async==22.2.0
-apify-client==1.7.0

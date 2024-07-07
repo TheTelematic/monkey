@@ -1,8 +1,8 @@
 from langchain.indexes import VectorstoreIndexCreator
 from langchain_community.docstore.document import Document
 from langchain_community.utilities import ApifyWrapper
-from langchain_community.vectorstores import InMemoryVectorStore
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_pinecone import PineconeVectorStore
 
 import config
 from infra.llms.base import LLMBase
@@ -31,8 +31,14 @@ class ApifyContentCrawler(LLMBase):
         )
 
         # Create a vector store based on the crawled data
+        embedding = OpenAIEmbeddings(openai_api_key=config.OPENAI_API_KEY)
         creator = VectorstoreIndexCreator(
-            vectorstore_cls=InMemoryVectorStore, embedding=OpenAIEmbeddings(openai_api_key=config.OPENAI_API_KEY)
+            vectorstore_cls=PineconeVectorStore,
+            embedding=embedding,
+            vectorstore_kwargs={
+                "pinecone_api_key": config.PINECONE_API_KEY,
+                "index_name": config.PINECONE_INDEX_NAME,
+            },
         )
         index = await creator.afrom_loaders([loader])
 

@@ -50,7 +50,7 @@ infra-start-local: local-context
 	helm repo add kedacore https://kedacore.github.io/charts
 	helm repo update
 
-	helm upgrade --namespace keda --create-namespace --install keda kedacore/keda
+	helm upgrade --namespace infra --create-namespace --install keda kedacore/keda
 	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/clusters/local/redis.yaml --version 19.5.0
 	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
 	helm upgrade --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/clusters/local/nginx-ingress-controller.yaml --version 11.3.0
@@ -58,10 +58,10 @@ infra-start-local: local-context
 	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/local/grafana.yaml --version 11.3.0
 
 infra-stop-local: local-context
+	-helm uninstall --namespace infra keda
 	-helm uninstall --namespace infra redis
 	-helm uninstall --namespace infra rabbitmq
 	-helm uninstall --namespace infra nginx-ingress-controller
-	-helm uninstall --namespace infra ngrok-ingress-controller
 	-helm uninstall --namespace infra kube-prometheus
 	-helm uninstall --namespace infra grafana
 
