@@ -1,58 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ APP_NAME }} - AI Summary and Translate</title>
-    <link rel="stylesheet" href="{{ STATIC_PATH }}/css/style.css">
-    <script src="{{ STATIC_PATH }}/js/summary_and_translate.js"></script>
-</head>
-<body>
-    <div class="header">
-        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Monkey" class="logo">
-        <h1>{{ APP_NAME }} v{{ VERSION }} - AI Summary and Translate</h1>
-    </div>
-    <a href="/recommend-me-a-phone">Recommend Me A Phone! ---></a>
+{% extends 'common/base.html' %}
 
-    <label for="inputText">Write your query here:</label>
-    <textarea id="inputText" autofocus placeholder="What's a monkey? Please give me a long answer."></textarea>
+{% block title %}
+{{ APP_NAME }} - AI Summary and Translate
+{% endblock %}
 
-    <button id="submitButton">Submit Query</button>
-    <button id="newQueryButton" disabled>New Query</button>
+{% block extraJs %}
+<script src="{{ STATIC_PATH }}/js/summary_and_translate.js"></script>
+{% endblock %}
 
-    <div id="loadingContainer1" style="display: none;">
-        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
-        <span>Loading...</span>
-    </div>
+{% block body %}
+<div class="header">
+    <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Monkey" class="logo">
+    <h1>{{ APP_NAME }} - AI Summary and Translate</h1>
+</div>
+<a href="/recommend-me-a-phone">Recommend Me A Phone! ---></a>
 
-    <label for="responseText">The response:</label>
-    <textarea id="responseText" readonly></textarea>
+<label for="inputText">Write your query here:</label>
+<textarea id="inputText" autofocus placeholder="What's a monkey? Please give me a long answer."></textarea>
 
-    <label for="summaryText">The summary:</label>
-    <textarea id="summaryText" readonly></textarea>
+<button id="submitButton">Submit Query</button>
+<button id="newQueryButton" disabled>New Query</button>
 
-    <label for="languageSelector">Select target language:</label>
-    <select id="languageSelector">
-        <option value="SPANISH">Spanish</option>
-        <option value="FRENCH">French</option>
-        <option value="GERMAN">German</option>
-    </select>
+<div id="loadingContainer1" style="display: none;">
+    <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
+    <span>Loading...</span>
+</div>
 
-    <button id="translateButton" disabled>Translate</button>
+<label for="responseText">The response:</label>
+<textarea id="responseText" readonly></textarea>
 
-    <div id="loadingContainer2" style="display: none;">
-        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
-        <span>Loading...</span>
-    </div>
+<label for="summaryText">The summary:</label>
+<textarea id="summaryText" readonly></textarea>
 
-    <div id="history">
-        <h3>History</h3>
-        <div id="historyContent"></div>
-    </div>
+<label for="languageSelector">Select target language:</label>
+<select id="languageSelector">
+    <option value="SPANISH">Spanish</option>
+    <option value="FRENCH">French</option>
+    <option value="GERMAN">German</option>
+</select>
 
-    <footer>
-        <hr>
-        <p>By <b>Arturo Parra</b> - <a href="https://github.com/TheTelematic/monkey">Source Code</a></p>
-    </footer>
-</body>
-</html>
+<button id="translateButton" disabled>Translate</button>
+
+<div id="loadingContainer2" style="display: none;">
+    <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
+    <span>Loading...</span>
+</div>
+
+<div id="history">
+    <h3>History</h3>
+    <div id="historyContent"></div>
+</div>
+{% endblock %}
