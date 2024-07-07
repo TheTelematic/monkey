@@ -14,5 +14,8 @@ _PROMPT = (
 
 async def get_phones_recommendations() -> dict:
     response = await apify.invoke(_PROMPT)
+    if response.startswith("```json"):
+        response = response.replace("```json", "").replace("```", "")
+
     logger.info(f"Response from Apify: {response}")
     return json.loads(response)
