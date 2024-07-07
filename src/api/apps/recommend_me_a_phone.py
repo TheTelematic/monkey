@@ -1,3 +1,6 @@
+import asyncio
+from asyncio import Event
+
 from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketState, WebSocketDisconnect
 
@@ -5,6 +8,21 @@ from core.apps.recommend_me_a_phone import get_phones_recommendations
 from logger import logger
 
 router = APIRouter()
+
+
+async def _ensure_websocket_is_connected(websocket: WebSocket, event: Event):
+    while not event.is_set():
+        await websocket.send_json({"status": "processing"})
+        await asyncio.sleep(1)
+
+
+async def _get_recommendations(websocket: WebSocket):
+    """Get recommendations and while it's processing, keep the connection open."""
+    event = Event()
+    asyncio.create_task(_ensure_websocket_is_connected(websocket, event))
+    json_response = await get_phones_recommendations()
+    event.set()
+    await websocket.send_json({"status": "done", "data": json_response})
 
 
 @router.websocket("/ws")
@@ -15,10 +33,7 @@ async def recommend_me_a_phone(websocket: WebSocket):
         try:
             query = await websocket.receive_json()
             logger.debug(f"Received query: {query}")
-            # json_response = get_phones_recommendations()
-            logger.info(await get_phones_recommendations())
-            json_response = {}
-            await websocket.send_json(json_response)
+            logger.info(await _get_recommendations(websocket))
         except WebSocketDisconnect:
             logger.warning("WebSocket disconnected.")
 

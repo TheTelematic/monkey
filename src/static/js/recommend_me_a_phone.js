@@ -16,10 +16,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
 
-        resultContainer.innerText = data;
+        if (data.status === 'done') {
+            resultContainer.innerText = data.data;
 
-        startButton.disabled = false;
-        loadingContainer.style.display = "none";  // Hide loading
+            startButton.disabled = false;
+            loadingContainer.style.display = "none";  // Hide loading
+        }
     };
 
     startButton.addEventListener('click', () => {
