@@ -6,7 +6,7 @@ ingress:
 config:
   LLM_ENGINE: openai
   CACHE_EXPIRATION_SECONDS: "300" # 5 minutes
-  LOG_LEVEL: "DEBUG"
+  LOG_LEVEL: "INFO"
 
 consumers:
   translations:

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const startButton = document.getElementById('startButton');
     const loadingContainer = document.getElementById('loadingContainer');
+    const resultContainer = document.getElementById('resultContainer');
 
     const socket = new WebSocket('/api/recommend-me-a-phone/ws');
 
@@ -14,6 +15,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
+
+        resultContainer.innerText = data;
 
         startButton.disabled = false;
         loadingContainer.style.display = "none";  // Hide loading

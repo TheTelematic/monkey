@@ -73,6 +73,7 @@ config:
   LIVENESS_CONSUMERS_FILE: "/tmp/live"
   PROMETHEUS_INTERVAL: "30"
   API_GRACEFUL_SHUTDOWN_TIMEOUT: "50"  # Less than api.terminationGracePeriodSeconds
+  APIFY_CONTENT_CRAWLER_URL: "https://www.techradar.com/news/best-phone"
 
 ollama:
   enabled: false

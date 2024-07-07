@@ -18,6 +18,8 @@ if __name__ == "__main__":
                 access_log=True,
                 timeout_graceful_shutdown=config.API_GRACEFUL_SHUTDOWN_TIMEOUT,
                 lifespan="on",
+                ws_ping_interval=config.WS_PING_INTERVAL,
+                ws_ping_timeout=config.WS_PING_TIMEOUT,
             )
         case _:
             from consumers.main import run_consumer
