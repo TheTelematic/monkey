@@ -17,11 +17,6 @@ from infra.cache import graceful_shutdown_redis
 from logger import logger
 from metrics import setup_consumer_metrics, Observer, monkey_consumer_callback_duration_seconds
 
-"""
-TODO:
-- If connection is broken reconnect.
-"""
-
 logging.getLogger("aio_pika").setLevel(logging.WARNING)
 logging.getLogger("aiormq").setLevel(logging.WARNING)
 
@@ -97,18 +92,29 @@ def __touch_file(file_path: str):
         f.write("1")
 
 
-async def _liveness_check():
+async def _liveness_check(channel: RobustChannel):
     __touch_file(config.LIVENESS_CONSUMERS_FILE)
 
     while not __shutdown_event_received.is_set():
-        os.remove(config.LIVENESS_CONSUMERS_FILE)
+        try:
+            try:
+                os.remove(config.LIVENESS_CONSUMERS_FILE)
+            except FileNotFoundError:
+                pass
 
-        if __processing_message.is_set():
-            current_message_id = __last_message_id
-            while __processing_message.is_set() and current_message_id == __last_message_id:
-                await asyncio.sleep(0.1)
+            if channel.is_closed:
+                logger.error("Consumer channel is closed, exiting.")
+                break
 
-        __touch_file(config.LIVENESS_CONSUMERS_FILE)
+            if __processing_message.is_set():
+                current_message_id = __last_message_id
+                while __processing_message.is_set() and current_message_id == __last_message_id:
+                    await asyncio.sleep(0.1)
+
+            __touch_file(config.LIVENESS_CONSUMERS_FILE)
+        except Exception as exc:
+            logger.exception(f"Error checking liveness. {exc=}")
+
         await asyncio.sleep(config.LIVENESS_CONSUMERS_SLEEP_TIME)
 
 
@@ -116,11 +122,18 @@ async def _readiness_check():
     __touch_file(config.READINESS_CONSUMERS_FILE)
 
     while not __shutdown_event_received.is_set():
-        os.remove(config.READINESS_CONSUMERS_FILE)
+        try:
+            try:
+                os.remove(config.READINESS_CONSUMERS_FILE)
+            except FileNotFoundError:
+                pass
 
-        await check_dependencies()
+            await check_dependencies()
 
-        __touch_file(config.READINESS_CONSUMERS_FILE)
+            __touch_file(config.READINESS_CONSUMERS_FILE)
+        except Exception as exc:
+            logger.exception(f"Error checking dependencies. {exc=}")
+
         await asyncio.sleep(config.READINESS_CONSUMERS_SLEEP_TIME)
 
 
@@ -140,7 +153,7 @@ async def _run_consumer(queue_name: str, callback: Callable[[dataclass], Awaitab
     asyncio.create_task(_ensure_running(connection, channel))
     await queue.consume(partial(_consume_callback, channel, queue_name, callback))
 
-    asyncio.create_task(_liveness_check())
+    asyncio.create_task(_liveness_check(channel))
     asyncio.create_task(_readiness_check())
 
     logger.info("Consumer running.")

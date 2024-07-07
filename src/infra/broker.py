@@ -12,7 +12,7 @@ _publisher_connection: Connection | None = None
 
 async def get_publisher_connection() -> Connection:
     global _publisher_connection
-    if _publisher_connection is None:
+    if _publisher_connection is None or _publisher_connection.is_closed:
         logger.info("Connecting to RabbitMQ...")
         _publisher_connection = await connect_robust(config.RABBITMQ_URL)
 
