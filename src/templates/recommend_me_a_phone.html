@@ -1,29 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ APP_NAME }} - AI Recommend Me A Phone</title>
-    <link rel="stylesheet" href="{{ STATIC_PATH }}/css/style.css">
-    <script src="{{ STATIC_PATH }}/js/recommend_me_a_phone.js"></script>
-</head>
-<body>
-    <div class="header">
-        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Monkey" class="logo">
-        <h1>{{ APP_NAME }} v{{ VERSION }} - AI Recommend Me A Phone</h1>
-    </div>
-    <a href="/"><--- AI Summary and Translate</a>
+{% extends 'common/base.html' %}
 
-    <button id="startButton">Start</button>
+{% block title %}
+{{ APP_NAME }} - AI Recommend Me A Phone
+{% endblock %}
 
-    <div id="loadingContainer" style="display: none;">
-        <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
-        <span>Loading...</span>
-    </div>
+{% block extraJs %}
+<script src="{{ STATIC_PATH }}/js/recommend_me_a_phone.js"></script>
+{% endblock %}
 
-    <footer>
-        <hr>
-        <p>By <b>Arturo Parra</b> - <a href="https://github.com/TheTelematic/monkey">Source Code</a></p>
-    </footer>
-</body>
-</html>
+{% block body %}
+<div class="header">
+    <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Monkey" class="logo">
+    <h1>{{ APP_NAME }} v{{ VERSION }} - AI Recommend Me A Phone</h1>
+</div>
+<a href="/"><--- AI Summary and Translate</a>
+
+<button id="startButton">Start</button>
+
+<div id="loadingContainer" style="display: none;">
+    <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">
+    <span>Loading...</span>
+</div>
+{% endblock %}
