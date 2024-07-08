@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const languageSelector = document.getElementById('languageSelector');
     const newQueryButton = document.getElementById('newQueryButton');
 
+    let currentQuery = null;
     let activeHistoryItem = null;
 
     const socket = new WebSocket('/api/summary-and-translate/ws');
@@ -49,10 +50,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const message = JSON.stringify({ action: 'submit', text });
         socket.send(message);
+        currentQuery = text;
     });
 
     translateButton.addEventListener('click', () => {
-        const text = inputText.value;
+        const text = currentQuery;
         const targetLanguage = languageSelector.value;
         if (text.trim() === '') {
             alert('Please enter some text.');
@@ -63,11 +65,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         inputText.readOnly = true;
         loadingContainer2.style.display = "inline";  // Show loading
 
-        const message = JSON.stringify({ action: 'translate', text, targetLanguage });
+        const message = JSON.stringify({ action: 'translate', text, originLanguage: "ENGLISH", targetLanguage });
         socket.send(message);
     });
 
     newQueryButton.addEventListener('click', () => {
+        currentQuery = null;
         inputText.value = '';
         responseText.value = '';
         summaryText.value = '';

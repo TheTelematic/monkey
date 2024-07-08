@@ -2,7 +2,7 @@ from charset_normalizer import from_bytes
 
 import config
 from core.ai import get_ai_response
-from infra.cache import get_redis_translations, PrefixedRedis
+from infra.cache import get_redis_translations, PrefixedRedis, hash_key
 from logger import logger
 from metrics import Observer, monkey_translations_duration_seconds, monkey_translations_cache_hit_count
 
@@ -15,7 +15,7 @@ def _ask_translation(text: str, from_language: str, to_language: str) -> str:
 
 
 def _get_key(from_language: str, to_language: str, key: str) -> str:
-    return f"{from_language}:{to_language}:{key}"
+    return f"{from_language}:{to_language}:{hash_key(key)}"
 
 
 async def _persist_in_cache(redis_translations: PrefixedRedis, key: str, value: str) -> None:

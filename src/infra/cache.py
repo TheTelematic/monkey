@@ -1,3 +1,5 @@
+from hashlib import sha1
+
 from redis.asyncio import Redis
 from redis.commands.core import ResponseT
 from redis.exceptions import ConnectionError as RedisConnectionError
@@ -5,6 +7,10 @@ from redis.typing import KeyT
 
 import config
 from logger import logger
+
+
+def hash_key(key: str) -> str:
+    return sha1(key[:255].encode()).hexdigest()
 
 
 class PrefixedRedis(Redis):

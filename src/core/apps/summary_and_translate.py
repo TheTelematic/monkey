@@ -14,8 +14,8 @@ async def submit_query(text: str) -> ResponseAndSummary:
     )
 
 
-async def submit_translation(text: str, to_language: str) -> ResponseAndSummaryTranslated:
-    query_translated, response_translated = await get_translation(text, "ENGLISH", to_language)
+async def submit_translation(text: str, from_language: str, to_language: str) -> ResponseAndSummaryTranslated:
+    query_translated, response_translated = await get_translation(text, from_language, to_language)
     return ResponseAndSummaryTranslated(
         query=query_translated,
         response=response_translated,

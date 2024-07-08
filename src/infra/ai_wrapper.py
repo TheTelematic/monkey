@@ -1,5 +1,5 @@
 import config
-from infra.cache import get_redis_queries
+from infra.cache import get_redis_queries, hash_key
 from infra.ai.factory import AIEngineFactory, AIEngineTypes
 from logger import logger
 from metrics import Observer, monkey_ai_engine_invoke_duration_seconds, monkey_ai_engine_cache_hit_count
@@ -45,7 +45,7 @@ class AIWrapper:
 
     @staticmethod
     def _get_key(text: str) -> str:
-        return text
+        return hash_key(text)
 
     @classmethod
     def _encode_value(cls, value: str) -> bytes:
