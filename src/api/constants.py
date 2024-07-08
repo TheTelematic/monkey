@@ -1,1 +1,3 @@
-STATIC_PATH = "/static"
+import config
+
+STATIC_PATH = f"/static/{config.BUILD_TIMESTAMP}"
