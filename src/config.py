@@ -3,6 +3,7 @@ import os
 # Service configuration
 APP_NAME = "monkey"
 VERSION = os.getenv("VERSION")
+BUILD_TIMESTAMP = os.getenv("BUILD_TIMESTAMP")
 DOMAIN_HOST = os.getenv("DOMAIN_HOST")
 
 # API

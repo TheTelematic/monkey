@@ -11,6 +11,7 @@ templates = Jinja2Templates(directory="templates")
 templates.env.globals["STATIC_PATH"] = STATIC_PATH
 templates.env.globals["APP_NAME"] = config.APP_NAME
 templates.env.globals["VERSION"] = config.VERSION
+templates.env.globals["BUILD_TIMESTAMP"] = config.BUILD_TIMESTAMP
 
 
 @router.get("/favicon.ico", include_in_schema=False)

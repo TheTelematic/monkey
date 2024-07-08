@@ -8,7 +8,7 @@ install-requirements:
 	python -m pip install -r requirements.txt
 
 build:
-	docker build -t ${image_name}:${image_tag} .
+	docker build -t ${image_name}:${image_tag} . --build-arg BUILD_TIMESTAMP=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 
 local-context:
 	kubectl config use-context docker-desktop
