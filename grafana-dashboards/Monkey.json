@@ -31,7 +31,7 @@
       },
       "id": 16,
       "panels": [],
-      "title": "ai_engine",
+      "title": "AI",
       "type": "row"
     },
     {
@@ -128,7 +128,7 @@
           "refId": "A"
         }
       ],
-      "title": "ai_engine Invoke Duration",
+      "title": "AI Invoke Duration",
       "type": "timeseries"
     },
     {
@@ -225,7 +225,7 @@
           "refId": "A"
         }
       ],
-      "title": "ai_engine Invoke Count",
+      "title": "AI Invoke Count",
       "type": "timeseries"
     },
     {
@@ -290,7 +290,7 @@
           "refId": "A"
         }
       ],
-      "title": "ai_engine Invoke Count",
+      "title": "AI Invoke Count",
       "type": "stat"
     },
     {
@@ -387,7 +387,7 @@
           "refId": "A"
         }
       ],
-      "title": "ai_engine Cache Hit Count Total",
+      "title": "AI Cache Hit Count Total",
       "type": "timeseries"
     },
     {
