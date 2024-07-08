@@ -62,19 +62,19 @@ monkey_summaries_duration_seconds = Histogram(
     buckets=buckets,
 )
 
-monkey_llm_invoke_duration_seconds = Histogram(
-    "monkey_llm_invoke_duration_seconds",
-    "Duration of LLM invocations",
-    ["llm_type"],
+monkey_ai_engine_invoke_duration_seconds = Histogram(
+    "monkey_ai_engine_invoke_duration_seconds",
+    "Duration of ai_engine invocations",
+    ["ai_engine_type"],
     buckets=buckets,
 )
 
 # Counters
 
-monkey_llm_cache_hit_count = Counter(
-    "monkey_llm_cache_hit_count",
+monkey_ai_engine_cache_hit_count = Counter(
+    "monkey_ai_engine_cache_hit_count",
     "Number of cache hits",
-    ["llm_type"],
+    ["ai_engine_type"],
 )
 
 monkey_translations_cache_hit_count = Counter(

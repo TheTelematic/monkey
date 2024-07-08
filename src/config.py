@@ -15,7 +15,7 @@ WS_PING_TIMEOUT = int(os.getenv("WS_PING_TIMEOUT", 60))
 # Logging
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
-# LLM
+# ai_engine
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 APIFY_API_TOKEN = os.getenv("APIFY_API_TOKEN")
 APIFY_CONTENT_CRAWLER_URL = os.getenv("APIFY_CONTENT_CRAWLER_URL")

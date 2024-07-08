@@ -5,10 +5,10 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_pinecone import PineconeVectorStore
 
 import config
-from infra.ai.base import LLMBase
+from infra.ai.base import AIEngineBase
 
 
-class ApifyContentCrawler(LLMBase):
+class ApifyContentCrawler(AIEngineBase):
     CONTENT_URL = config.APIFY_CONTENT_CRAWLER_URL
     LLM_MODEL = "gpt-4o"
 

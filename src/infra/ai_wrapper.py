@@ -1,28 +1,28 @@
 import config
 from infra.cache import get_redis_queries
-from infra.ai.factory import LLMFactory, LLMTypes
+from infra.ai.factory import AIEngineFactory, AIEngineTypes
 from logger import logger
-from metrics import Observer, monkey_llm_invoke_duration_seconds, monkey_llm_cache_hit_count
+from metrics import Observer, monkey_ai_engine_invoke_duration_seconds, monkey_ai_engine_cache_hit_count
 
 
 class AIWrapper:
-    def __init__(self, llm_type: LLMTypes):
-        self.llm_type = llm_type
-        self._engine = LLMFactory.create_llm(llm_type)
+    def __init__(self, ai_engine_type: AIEngineTypes):
+        self.ai_engine_type = ai_engine_type
+        self._engine = AIEngineFactory.get_ai_engine(ai_engine_type)
 
     async def invoke(self, text: str, with_cache: bool = True) -> str:
         if not with_cache or not await self._cached(text) or not (result := await self._get_cache(text)):
-            return await self._invoke_llm(text, cache_response=with_cache)
+            return await self._invoke_ai_engine(text, cache_response=with_cache)
 
         logger.debug(f"Using cache for {text=}")
-        monkey_llm_cache_hit_count.labels(self.llm_type).inc()
+        monkey_ai_engine_cache_hit_count.labels(self.ai_engine_type).inc()
         return result
 
-    async def _invoke_llm(self, text: str, cache_response: bool = False) -> str:
-        logger.info("Invoking LLM...")
-        with Observer(monkey_llm_invoke_duration_seconds.labels(self.llm_type)):
+    async def _invoke_ai_engine(self, text: str, cache_response: bool = False) -> str:
+        logger.info("Invoking ai_engine...")
+        with Observer(monkey_ai_engine_invoke_duration_seconds.labels(self.ai_engine_type)):
             result = await self._engine.invoke(text)
-            logger.debug(f"LLM response: {result}")
+            logger.debug(f"ai_engine response: {result}")
 
         if cache_response:
             logger.debug(f"Caching response of {text=}")
@@ -56,5 +56,5 @@ class AIWrapper:
         return value.decode("utf-8")
 
 
-llm_chat = AIWrapper(LLMTypes.CHAT)
-llm_web_content_crawler = AIWrapper(LLMTypes.WEB_CONTENT_CRAWLER)
+ai_engine_chat = AIWrapper(AIEngineTypes.CHAT)
+ai_engine_web_content_crawler = AIWrapper(AIEngineTypes.WEB_CONTENT_CRAWLER)

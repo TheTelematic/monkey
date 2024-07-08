@@ -1,18 +1,18 @@
 from enum import Enum
 
-from infra.ai.base import LLMBase
+from infra.ai.base import AIEngineBase
 from infra.ai.impl.web_content_crawler import ApifyContentCrawler
 from infra.ai.impl.chat import OpenAI
 
 
-class LLMTypes(Enum):
+class AIEngineTypes(Enum):
     CHAT = "chat"
     WEB_CONTENT_CRAWLER = "web_content_crawler"
 
 
-class LLMFactory:
-    _engines = {LLMTypes.CHAT: OpenAI, LLMTypes.WEB_CONTENT_CRAWLER: ApifyContentCrawler}
+class AIEngineFactory:
+    _engines = {AIEngineTypes.CHAT: OpenAI, AIEngineTypes.WEB_CONTENT_CRAWLER: ApifyContentCrawler}
 
     @classmethod
-    def create_llm(cls, llm_type: LLMTypes) -> LLMBase:
-        return cls._engines[llm_type]()
+    def get_ai_engine(cls, ai_engine_type: AIEngineTypes) -> AIEngineBase:
+        return cls._engines[ai_engine_type]()
