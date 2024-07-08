@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const data = JSON.parse(event.data);
 
         if (data.status === 'done') {
-            resultContainer.innerText = data.data;
+            resultContainer.innerText = JSON.stringify(data.data);
 
             startButton.disabled = false;
             loadingContainer.style.display = "none";  // Hide loading

@@ -33,7 +33,7 @@ async def recommend_me_a_phone(websocket: WebSocket):
         try:
             query = await websocket.receive_json()
             logger.debug(f"Received query: {query}")
-            logger.info(await _get_recommendations(websocket))
+            await _get_recommendations(websocket)
         except WebSocketDisconnect:
             logger.warning("WebSocket disconnected.")
 
