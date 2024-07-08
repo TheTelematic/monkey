@@ -5,7 +5,7 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_pinecone import PineconeVectorStore
 
 import config
-from infra.llms.base import LLMBase
+from infra.ai.base import LLMBase
 
 
 class ApifyContentCrawler(LLMBase):

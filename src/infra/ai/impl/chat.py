@@ -2,7 +2,7 @@ from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
 
 import config
-from infra.llms.base import LLMBase
+from infra.ai.base import LLMBase
 from metrics import monkey_openai_token_usage_total_tokens
 
 

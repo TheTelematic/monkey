@@ -1,6 +1,6 @@
 import json
 
-from infra.llm import llm_web_content_crawler
+from infra.aiwrapper import llm_web_content_crawler
 from logger import logger
 
 _PROMPT = (

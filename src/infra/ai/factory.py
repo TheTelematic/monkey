@@ -1,8 +1,8 @@
 from enum import Enum
 
-from infra.llms.base import LLMBase
-from infra.llms.impl.apify import ApifyContentCrawler
-from infra.llms.impl.openai import OpenAI
+from infra.ai.base import LLMBase
+from infra.ai.impl.web_content_crawler import ApifyContentCrawler
+from infra.ai.impl.chat import OpenAI
 
 
 class LLMTypes(Enum):

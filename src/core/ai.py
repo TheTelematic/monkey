@@ -1,4 +1,4 @@
-from infra.llm import llm_chat
+from infra.aiwrapper import llm_chat
 from logger import logger
 
 

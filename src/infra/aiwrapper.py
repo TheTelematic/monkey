@@ -1,11 +1,11 @@
 import config
 from infra.cache import get_redis_queries
-from infra.llms.factory import LLMFactory, LLMTypes
+from infra.ai.factory import LLMFactory, LLMTypes
 from logger import logger
 from metrics import Observer, monkey_llm_invoke_duration_seconds, monkey_llm_cache_hit_count
 
 
-class LLM:
+class AIWrapper:
     def __init__(self, llm_type: LLMTypes):
         self.llm_type = llm_type
         self._engine = LLMFactory.create_llm(llm_type)
@@ -56,5 +56,5 @@ class LLM:
         return value.decode("utf-8")
 
 
-llm_chat = LLM(LLMTypes.CHAT)
-llm_web_content_crawler = LLM(LLMTypes.WEB_CONTENT_CRAWLER)
+llm_chat = AIWrapper(LLMTypes.CHAT)
+llm_web_content_crawler = AIWrapper(LLMTypes.WEB_CONTENT_CRAWLER)
