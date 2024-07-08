@@ -1,6 +1,6 @@
 import json
 
-from infra.apify import apify
+from infra.llm import llm_web_content_crawler
 from logger import logger
 
 _PROMPT = (
@@ -13,7 +13,7 @@ _PROMPT = (
 
 
 async def get_phones_recommendations() -> dict:
-    response = await apify.invoke(_PROMPT)
+    response = await llm_web_content_crawler.invoke(_PROMPT)
     if response.startswith("```json"):
         response = response.replace("```json", "").replace("```", "")
 

@@ -4,7 +4,6 @@ ingress:
   host: monkey.local
 
 config:
-  LLM_ENGINE: openai
   CACHE_EXPIRATION_SECONDS: "300" # 5 minutes
   LOG_LEVEL: "INFO"
 

@@ -83,8 +83,6 @@ spec:
       enabled: true
       ingressClassName: ngrok
       host: ghoul-happy-evidently.ngrok-free.app
-    config:
-      LLM_ENGINE: openai
     api:
       replicas:
         min: 2

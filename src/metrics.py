@@ -24,11 +24,12 @@ async def setup_consumer_metrics():
 monkey_info = Gauge(
     "monkey_info",
     "Information about the Monkey service",
-    ["version", "llm_engine"],
+    [
+        "version",
+    ],
 )
 monkey_info.labels(
     version=config.VERSION,
-    llm_engine=config.LLM_ENGINE,
 ).set(1)
 
 monkey_websockets_open_connections = Gauge(
@@ -64,7 +65,7 @@ monkey_summaries_duration_seconds = Histogram(
 monkey_llm_invoke_duration_seconds = Histogram(
     "monkey_llm_invoke_duration_seconds",
     "Duration of LLM invocations",
-    ["llm_engine"],
+    ["llm_type"],
     buckets=buckets,
 )
 
@@ -73,6 +74,7 @@ monkey_llm_invoke_duration_seconds = Histogram(
 monkey_llm_cache_hit_count = Counter(
     "monkey_llm_cache_hit_count",
     "Number of cache hits",
+    ["llm_type"],
 )
 
 monkey_translations_cache_hit_count = Counter(
