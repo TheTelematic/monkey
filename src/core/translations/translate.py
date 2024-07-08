@@ -2,7 +2,7 @@ from charset_normalizer import from_bytes
 
 import config
 from core.ai import get_ai_response
-from infra.cache import redis_translations
+from infra.cache import get_redis_translations, PrefixedRedis
 from logger import logger
 from metrics import Observer, monkey_translations_duration_seconds, monkey_translations_cache_hit_count
 
@@ -18,11 +18,11 @@ def _get_key(from_language: str, to_language: str, key: str) -> str:
     return f"{from_language}:{to_language}:{key}"
 
 
-async def _persist_in_cache(key: str, value: str) -> None:
+async def _persist_in_cache(redis_translations: PrefixedRedis, key: str, value: str) -> None:
     await redis_translations.set(key, value.encode(), ex=config.CACHE_EXPIRATION_SECONDS)
 
 
-async def _get_from_cache(key: str) -> str | None:
+async def _get_from_cache(redis_translations: PrefixedRedis, key: str) -> str | None:
     value = await redis_translations.get(key)
     if value:
         charset = from_bytes(value)
@@ -37,6 +37,7 @@ async def translate(original_query: str, from_language: str = "ENGLISH", to_lang
 
 
 async def _translate(original_query: str, from_language: str = "ENGLISH", to_language: str = "SPANISH") -> (str, str):
+    redis_translations = await get_redis_translations()
     original_response = await get_ai_response(original_query)
 
     query_translated = await get_ai_response(_ask_translation(original_query, from_language, to_language))
@@ -46,19 +47,23 @@ async def _translate(original_query: str, from_language: str = "ENGLISH", to_lan
     logger.debug(f"Original response: {original_response}")
     logger.debug(f"Translated query: {query_translated}")
     logger.debug(f"Translated response: {response_translated}")
-    await _persist_in_cache(_get_key(from_language, to_language, original_query), query_translated)
-    await _persist_in_cache(_get_key(from_language, to_language, original_response), response_translated)
+    await _persist_in_cache(redis_translations, _get_key(from_language, to_language, original_query), query_translated)
+    await _persist_in_cache(
+        redis_translations, _get_key(from_language, to_language, original_response), response_translated
+    )
 
     logger.info(f"Translation complete from {from_language} to {to_language}.")
     return query_translated, response_translated
 
 
 async def get_translation(original_query: str, from_language: str, to_language: str) -> (str, str):
+    redis_translations = await get_redis_translations()
+
     query_translated_key = _get_key(from_language, to_language, original_query)
     response_translated_key = _get_key(from_language, to_language, await get_ai_response(original_query))
 
-    query_translated = await _get_from_cache(query_translated_key)
-    response_translated = await _get_from_cache(response_translated_key)
+    query_translated = await _get_from_cache(redis_translations, query_translated_key)
+    response_translated = await _get_from_cache(redis_translations, response_translated_key)
 
     if not query_translated or not response_translated:
         logger.info("Translation not found in cache.")

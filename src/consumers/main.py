@@ -102,6 +102,8 @@ async def _liveness_check(channel: RobustChannel):
             except FileNotFoundError:
                 pass
 
+            await check_dependencies()
+
             if channel.is_closed:
                 logger.error("Consumer channel is closed, exiting.")
                 break

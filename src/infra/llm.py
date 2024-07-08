@@ -1,5 +1,5 @@
 import config
-from infra.cache import redis_queries
+from infra.cache import get_redis_queries
 from infra.llms.factory import LLMFactory
 from logger import logger
 from metrics import Observer, monkey_llm_invoke_duration_seconds, monkey_llm_cache_hit_count
@@ -31,16 +31,16 @@ class LLM:
 
     async def _cached(self, text: str) -> bool:
         key = self._get_key(text)
-        return await redis_queries.exists(key) == 1
+        return await (await get_redis_queries()).exists(key) == 1
 
     async def _get_cache(self, text: str) -> str:
         key = self._get_key(text)
-        return self._decode_value(await redis_queries.get(key))
+        return self._decode_value(await (await get_redis_queries()).get(key))
 
     async def _set_cache(self, text: str, result: str) -> None:
         key = self._get_key(text)
         value = self._encode_value(result)
-        await redis_queries.set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
+        await (await get_redis_queries()).set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
 
     @staticmethod
     def _get_key(text: str) -> str:
