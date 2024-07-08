@@ -60,7 +60,6 @@ ingress:
 
 config:
   LOG_LEVEL: "INFO"
-  OLLAMA_URL: ""
   OPENAI_API_KEY: ""
   LLM_ENGINE: ""
   REDIS_HOST: "redis-master.infra.svc.cluster.local"
@@ -75,11 +74,3 @@ config:
   API_GRACEFUL_SHUTDOWN_TIMEOUT: "50"  # Less than api.terminationGracePeriodSeconds
   APIFY_CONTENT_CRAWLER_URL: "https://www.techradar.com/news/best-phone"
   PINECONE_INDEX_NAME: "monkey"
-
-ollama:
-  enabled: false
-  port: 11434
-  image:
-    name: ollama/ollama
-    tag: 0.1.36
-    policy: IfNotPresent

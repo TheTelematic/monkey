@@ -16,7 +16,6 @@ WS_PING_TIMEOUT = int(os.getenv("WS_PING_TIMEOUT", 60))
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 # LLM
-OLLAMA_URL = os.getenv("OLLAMA_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LLM_ENGINE = os.getenv("LLM_ENGINE", "openai")
 APIFY_API_TOKEN = os.getenv("APIFY_API_TOKEN")

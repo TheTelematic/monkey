@@ -29,9 +29,6 @@ deploy-local: local-context local-secret
 	helm upgrade --install --wait monkey kubernetes/chart \
 		-f kubernetes/clusters/local/monkey.yaml
 
-deploy-with-ollama: local-context
-	helm upgrade --install monkey kubernetes/chart --set ollama.enabled=true
-
 restart: local-context
 	kubectl rollout restart deployment $(shell kubectl get deployments | grep monkey | awk '{print $$1}')
 
