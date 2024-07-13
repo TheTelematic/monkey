@@ -1,6 +1,7 @@
 import json
 
 from infra.ai_wrapper import ai_engine_web_content_crawler
+from infra.google import google_images_search
 from logger import logger
 
 _PROMPT = """
@@ -20,4 +21,13 @@ EXAMPLE OF THE OUTPUT:
 async def get_phones_recommendations() -> dict:
     response = await ai_engine_web_content_crawler.invoke(_PROMPT)
     logger.info(f"Response from ai_engine_web_content_crawler: {response}")
-    return json.loads(response)
+    information = json.loads(response)
+    information = await _inject_phone_pictures(information)
+    return information
+
+
+async def _inject_phone_pictures(information: dict) -> dict:
+    for phone in information["phones"]:
+        phone["picture_link"] = await google_images_search.get_image_link(phone["name"])
+
+    return information
