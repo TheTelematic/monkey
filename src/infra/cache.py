@@ -87,8 +87,8 @@ async def graceful_shutdown_redis():
     logger.info("Closing Redis connection...")
     try:
         if _redis_queries is not None and await _redis_queries.is_connected():
-            await _redis_queries.close()
+            await _redis_queries.aclose()
         if _redis_translations is not None and await _redis_translations.is_connected():
-            await _redis_translations.close()
+            await _redis_translations.aclose()
     except Exception as exc:
         logger.exception(f"Error closing Redis connection. {exc=}")
