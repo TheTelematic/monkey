@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const startButton = document.getElementById('startButton');
     const loadingContainer = document.getElementById('loadingContainer');
-    const resultContainer = document.getElementById('resultContainer');
+    const nameContainer = document.querySelector('.phone-name');
+    const imageContainer = document.querySelector('.phone-image');
+    const featuresList = document.querySelector('.features-list');
+    const priceContainer = document.querySelector('.price');
 
     const socket = new WebSocket('/api/recommend-me-a-phone/ws');
 
@@ -15,18 +18,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-
         if (data.status === 'done') {
-            resultContainer.innerText = JSON.stringify(data.data);
+          loadingContainer.style.display = "none"; // Hide loading
 
-            startButton.disabled = false;
-            loadingContainer.style.display = "none";  // Hide loading
+          // Update image, features list, and price dynamically
+          nameContainer.innerHTML = data.data.name;
+          imageContainer.src = data.data.picture_link;
+
+          // Clear previous list
+          featuresList.innerHTML = '';
+          data.data.specifications.forEach(feature => {
+            const li = document.createElement('li');
+            li.textContent = feature;
+            featuresList.appendChild(li);
+          });
+
+          // Update price
+          priceContainer.textContent = `$${data.data.price}`;
         }
     };
 
     startButton.addEventListener('click', () => {
         startButton.disabled = true;
-        loadingContainer.style.display = "inline";  // Show loading
+        loadingContainer.style.display = "inline"; // Show loading
         const message = JSON.stringify({ action: 'start' });
         socket.send(message);
     });

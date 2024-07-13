@@ -4,7 +4,7 @@ from asyncio import Event
 from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketState, WebSocketDisconnect
 
-from core.apps.recommend_me_a_phone import get_phones_recommendations
+from core.apps.recommend_me_a_phone import get_phone_recommendation
 from logger import logger
 
 router = APIRouter()
@@ -20,9 +20,9 @@ async def _get_recommendations(websocket: WebSocket):
     """Get recommendations and while it's processing, keep the connection open."""
     event = Event()
     asyncio.create_task(_ensure_websocket_is_connected(websocket, event))
-    json_response = await get_phones_recommendations()
+    phone_recommendation = await get_phone_recommendation()
     event.set()
-    await websocket.send_json({"status": "done", "data": json_response})
+    await websocket.send_json({"status": "done", "data": phone_recommendation.to_dict()})
 
 
 @router.websocket("/ws")

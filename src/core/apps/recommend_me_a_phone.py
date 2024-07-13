@@ -1,5 +1,6 @@
 import json
 
+from dtos.recommend_me_a_phone import PhoneRecommendation
 from infra.ai_wrapper import ai_engine_web_content_crawler
 from infra.google import google_images_search
 from logger import logger
@@ -18,12 +19,13 @@ EXAMPLE OF THE OUTPUT:
 """
 
 
-async def get_phones_recommendations() -> dict:
+async def get_phone_recommendation() -> PhoneRecommendation:
     response = await ai_engine_web_content_crawler.invoke(_PROMPT)
     logger.info(f"Response from ai_engine_web_content_crawler: {response}")
     information = json.loads(response)
-    information = await _inject_phone_pictures(information)
-    return information
+    first_phone = information["phones"][0]
+    first_phone["picture_link"] = await google_images_search.get_image_link(first_phone["name"])
+    return PhoneRecommendation(**first_phone)
 
 
 async def _inject_phone_pictures(information: dict) -> dict:

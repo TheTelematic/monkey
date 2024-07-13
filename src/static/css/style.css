@@ -109,3 +109,45 @@ button:hover:not(:disabled) {
     margin-right: 10px;
     margin-left: 20px;
 }
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+/* Styling for the image container */
+.image-container {
+  flex: 1; /* Take up 1 fraction of the available space */
+  max-width: 50%; /* Optional maximum width for the image container */
+}
+
+/* Ensuring the phone image is contained within a rounded square */
+.phone-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/1; /* Ensure it stays square */
+  border-radius: 20px; /* Rounded corners */
+  object-fit: cover; /* Scale uniformly and crop if needed */
+}
+
+/* Styling for the details container */
+.details-container {
+  flex: 2; /* Take up 2 fractions of the available space */
+  margin-left: 20px; /* Space between the image and details */
+}
+
+/* Styling for the bullet point list */
+.features-list {
+  list-style-type: disc; /* Default bullet points */
+  padding-left: 20px; /* To add space to the left side of bullets */
+  margin-bottom: 20px; /* Space between list and price */
+}
+
+/* Styling for the price */
+.price {
+  font-weight: bold;
+  font-size: 1.2em; /* Adjust size as needed */
+  color: #333; /* Adjust color as needed */
+}
