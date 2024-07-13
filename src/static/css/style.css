@@ -122,6 +122,11 @@ button:hover:not(:disabled) {
   max-width: 50%; /* Optional maximum width for the image container */
 }
 
+.phone-name {
+  font-size: 1.5em; /* Adjust size as needed */
+  margin-bottom: 10px; /* Space between name and image */
+}
+
 /* Ensuring the phone image is contained within a rounded square */
 .phone-image {
   display: block;
@@ -141,6 +146,7 @@ button:hover:not(:disabled) {
 /* Styling for the bullet point list */
 .features-list {
   list-style-type: disc; /* Default bullet points */
+  padding-top: 10em;
   padding-left: 20px; /* To add space to the left side of bullets */
   margin-bottom: 20px; /* Space between list and price */
 }

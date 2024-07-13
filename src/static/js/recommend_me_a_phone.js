@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
           });
 
           // Update price
-          priceContainer.textContent = `$${data.data.price}`;
+          priceContainer.textContent = `${data.data.price}`;
         }
     };
 
