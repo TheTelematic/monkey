@@ -1,5 +1,6 @@
 import json
 
+import config
 from core.ai import get_ai_response
 from dtos.recommend_me_a_phone import PhoneRecommendation, PhoneRecommendationWithJustification
 from infra.ai_wrapper import ai_engine_web_content_crawler
@@ -54,12 +55,12 @@ async def get_phone_recommendation(
         prompt = _PROMPT_WITH_FEEDBACK.format(
             information=information, user_feedback=user_feedback, previous_phone_name=current_phone_info["name"]
         )
-        logger.info(f"Prompt for AI: {prompt}")
+        logger.debug(f"Prompt for AI: {prompt}")
         response = await get_ai_response(prompt)
-        logger.info(f"Response from AI given the feedback '{user_feedback}': {response}")
+        logger.debug(f"Response from AI given the feedback '{user_feedback}': {response}")
         phone_name, justification = response.split(":")
         phone_info = next((phone for phone in information["phones"] if phone["name"] == phone_name), None)
-        if phone_info:
+        if phone_info and phone_info["name"] != first_phone["name"]:
             phone_info["picture_link"] = await google_images_search.get_image_link(phone_info["name"])
             return PhoneRecommendationWithJustification(
                 name=phone_info["name"],
@@ -74,7 +75,7 @@ async def get_phone_recommendation(
                 price=first_phone["price"],
                 specifications=first_phone["specifications"],
                 picture_link=await google_images_search.get_image_link(first_phone["name"]),
-                justification="I'm sorry, I couldn't find the phone you requested. I chose the first phone instead.",
+                justification=f"I'm sorry, I couldn't find the phone you requested. My information is based on {config.APIFY_CONTENT_CRAWLER_URL}.",
             )
 
 

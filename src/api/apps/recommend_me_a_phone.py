@@ -5,7 +5,6 @@ from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketState, WebSocketDisconnect
 
 from core.apps.recommend_me_a_phone import get_phone_recommendation
-from dtos.recommend_me_a_phone import PhoneRecommendationWithJustification
 from logger import logger
 
 router = APIRouter()
