@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const imageContainer = document.querySelector('.phone-image');
     const featuresList = document.querySelector('.features-list');
     const priceContainer = document.querySelector('.price');
+    const chatContainer = document.getElementById('chatContainer');
+    const userFeedback = document.getElementById('userFeedback');
+    const chatButton = document.getElementById('chatButton');
+    const chatAnswer = document.getElementById('chatAnswer');
 
     const socket = new WebSocket('/api/recommend-me-a-phone/ws');
 
@@ -20,6 +24,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const data = JSON.parse(event.data);
         if (data.status === 'done') {
           loadingContainer.style.display = "none"; // Hide loading
+          chatContainer.style.display = "inline"; // Show chat
 
           // Update image, features list, and price dynamically
           nameContainer.innerHTML = data.data.name;
@@ -35,11 +40,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
           // Update price
           priceContainer.textContent = `${data.data.price}`;
+
+          // Update chat answer
+          chatAnswer.textContent = data.data.chat_answer;
         }
     };
 
+    function sendFeedback() {
+        loadingContainer.style.display = "inline"; // Show loading
+        const message = JSON.stringify({ action: 'start' , feedback: userFeedback.value });
+        userFeedback.placeholder = userFeedback.value;
+        userFeedback.value = '';
+        socket.send(message);
+    }
+
+    // Listen for Enter key within the input field
+    userFeedback.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          sendFeedback();
+        }
+    });
+
+    // Listen for button click
+    chatButton.addEventListener('click', () => {
+        sendFeedback();
+    });
+
     startButton.addEventListener('click', () => {
-        startButton.disabled = true;
+        startButton.hidden = true;
         loadingContainer.style.display = "inline"; // Show loading
         const message = JSON.stringify({ action: 'start' });
         socket.send(message);

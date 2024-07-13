@@ -34,7 +34,12 @@
   </div>
 
   <button id="startButton">Start</button>
-  <div id="resultContainer"></div>
+  <div id="chatContainer" hidden="hidden">
+    <label for="userFeedback">What do you think about the choice?</label>
+    <input type="text" id="userFeedback" autofocus="autofocus">
+    <button id="chatButton">Respond</button>
+    <div id="chatAnswer"></div>
+  </div>
 
   <div id="loadingContainer" style="display: none;">
     <img src="{{ STATIC_PATH }}/images/monkey.png" alt="Loading..." class="loading-logo">

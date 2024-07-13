@@ -157,3 +157,10 @@ button:hover:not(:disabled) {
   font-size: 1.2em; /* Adjust size as needed */
   color: #333; /* Adjust color as needed */
 }
+
+input {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;  /* Rounded corners */
+}
