@@ -45,7 +45,7 @@ class ApifyContentCrawler(AIEngineBase):
             "index_name": config.PINECONE_INDEX_NAME,
         }
 
-    async def create_index(self):
+    async def load_data(self):
         loader = await ApifyWrapper(APIFY_API_TOKEN=config.APIFY_API_TOKEN).acall_actor(
             actor_id="apify/website-content-crawler",
             run_input={"startUrls": [{"url": self.CONTENT_URL}]},

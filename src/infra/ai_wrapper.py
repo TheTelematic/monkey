@@ -10,6 +10,9 @@ class AIWrapper:
         self.ai_engine_type = ai_engine_type
         self._engine = AIEngineFactory.get_ai_engine(ai_engine_type)
 
+    async def load_data(self):
+        await self._engine.load_data()
+
     async def invoke(self, text: str, with_cache: bool = True) -> str:
         if not with_cache or not await self._cached(text) or not (result := await self._get_cache(text)):
             return await self._invoke_ai_engine(text, cache_response=with_cache)

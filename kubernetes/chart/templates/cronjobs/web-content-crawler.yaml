@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-web-content-crawler
+  labels:
+    app: {{ .Release.Name }}-web-content-crawler
+spec:
+  schedule: {{ .Values.cronjobs.webContentCrawler.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          terminationGracePeriodSeconds: {{ .Values.cronjobs.webContentCrawler.terminationGracePeriodSeconds }}
+          restartPolicy: Never
+          containers:
+            - name: {{ .Release.Name }}-web-content-crawler
+              image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.policy }}
+              command:
+                - /bin/sh
+                - -c
+              args:
+                - python main.py cronjobs web_content_crawler
+              ports:
+                - containerPort: {{ .Values.service.port.container }}
+                  name: {{ .Values.service.port.name }}
+                  protocol: TCP
+              resources:
+                {{- toYaml .Values.cronjobs.webContentCrawler.resources | nindent 16 }}
+              envFrom:
+                - configMapRef:
+                    name: {{ .Release.Name }}
+                - secretRef:
+                    name: {{ .Values.secretName }}
+              env:
+                - name: POD_IP
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: status.podIP
+---

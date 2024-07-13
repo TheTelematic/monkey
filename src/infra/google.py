@@ -1,6 +1,7 @@
 import httpx
 
 import config
+from api.constants import STATIC_PATH
 
 
 class GoogleImagesSearch:
@@ -19,9 +20,12 @@ class GoogleImagesSearch:
                     "searchType": "image",
                 },
             )
-            response.raise_for_status()
-            data = response.json()
-            return data["items"][0]["link"]
+            try:
+                response.raise_for_status()
+                data = response.json()
+                return data["items"][0]["link"]
+            except httpx.HTTPStatusError as e:
+                return f"{STATIC_PATH}/images/sample-phone.png"
 
 
 google_images_search = GoogleImagesSearch()

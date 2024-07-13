@@ -30,5 +30,11 @@ if __name__ == "__main__":
                     run_consumer(consumers.TRANSLATIONS)
                 case "consumer_summaries":
                     run_consumer(consumers.SUMMARIES)
+                case "cronjobs":
+                    match sys.argv[2]:
+                        case "web_content_crawler":
+                            from cronjobs.web_content_crawler import run_web_content_crawler
+
+                            run_web_content_crawler()
                 case _:
                     raise ValueError("Invalid argument.")

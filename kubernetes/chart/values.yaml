@@ -47,6 +47,17 @@ consumers:
       limits:
         memory: 256Mi
 
+cronjobs:
+  webContentCrawler:
+    schedule: "0 8 * * *"  # At 08:00
+    terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+
 service:
   port:
     container: 8000
