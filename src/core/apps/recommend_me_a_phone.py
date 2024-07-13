@@ -1,6 +1,7 @@
 import json
 
-from dtos.recommend_me_a_phone import PhoneRecommendation
+from core.ai import get_ai_response
+from dtos.recommend_me_a_phone import PhoneRecommendation, PhoneRecommendationWithJustification
 from infra.ai_wrapper import ai_engine_web_content_crawler
 from infra.google import google_images_search
 from logger import logger
@@ -18,14 +19,63 @@ EXAMPLE OF THE OUTPUT:
 {"phones": [{"name": "iPhone 13", "price": "$799", "specifications": ["A15 Bionic chip", "Super Retina XDR display"]}]}
 """
 
+_PROMPT_WITH_FEEDBACK = """
+Hello, given the following JSON information related to the best phones:
+##### START JSON Information #####
+{information}
+##### END JSON Information #####
 
-async def get_phone_recommendation() -> PhoneRecommendation:
+And the user feedback:
+##### START User Feedback #####
+{user_feedback}
+##### END User Feedback #####
+
+Previously, the chosen phone for the user was "{previous_phone_name}".
+Could you please choose the best phone for the user based on the information provided?
+Please respect the User Feedback section above to make the decision. 
+Also, please start your response with the name of the phone, next to the character ':' and the explanation of your decision.
+"""
+
+
+async def get_phone_recommendation(
+    current_phone_info: dict | None = None, user_feedback: str | None = None
+) -> PhoneRecommendation:
     response = await ai_engine_web_content_crawler.invoke(_PROMPT)
     logger.info(f"Response from ai_engine_web_content_crawler: {response}")
     information = json.loads(response)
     first_phone = information["phones"][0]
-    first_phone["picture_link"] = await google_images_search.get_image_link(first_phone["name"])
-    return PhoneRecommendation(**first_phone)
+    if not user_feedback:
+        first_phone["picture_link"] = await google_images_search.get_image_link(first_phone["name"])
+        return PhoneRecommendation(**first_phone)
+    else:
+        if not current_phone_info:
+            current_phone_info = first_phone
+
+        prompt = _PROMPT_WITH_FEEDBACK.format(
+            information=information, user_feedback=user_feedback, previous_phone_name=current_phone_info["name"]
+        )
+        logger.info(f"Prompt for AI: {prompt}")
+        response = await get_ai_response(prompt)
+        logger.info(f"Response from AI given the feedback '{user_feedback}': {response}")
+        phone_name, justification = response.split(":")
+        phone_info = next((phone for phone in information["phones"] if phone["name"] == phone_name), None)
+        if phone_info:
+            phone_info["picture_link"] = await google_images_search.get_image_link(phone_info["name"])
+            return PhoneRecommendationWithJustification(
+                name=phone_info["name"],
+                price=phone_info["price"],
+                specifications=phone_info["specifications"],
+                picture_link=phone_info["picture_link"],
+                justification=justification,
+            )
+        else:
+            return PhoneRecommendationWithJustification(
+                name=first_phone["name"],
+                price=first_phone["price"],
+                specifications=first_phone["specifications"],
+                picture_link=await google_images_search.get_image_link(first_phone["name"]),
+                justification="I'm sorry, I couldn't find the phone you requested. I chose the first phone instead.",
+            )
 
 
 async def _inject_phone_pictures(information: dict) -> dict:

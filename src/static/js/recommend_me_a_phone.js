@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     const socket = new WebSocket('/api/recommend-me-a-phone/ws');
 
+    let currentPhoneInfo = null;
+
     socket.onopen = function() {
         console.log('WebSocket connection established.');
     };
@@ -42,13 +44,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
           priceContainer.textContent = `${data.data.price}`;
 
           // Update chat answer
-          chatAnswer.textContent = data.data.chat_answer;
+          chatAnswer.textContent = data.data.justification;
+
+          currentPhoneInfo = data.data;
         }
     };
 
     function sendFeedback() {
         loadingContainer.style.display = "inline"; // Show loading
-        const message = JSON.stringify({ action: 'start' , feedback: userFeedback.value });
+        const message = JSON.stringify({ action: 'start' , feedback: userFeedback.value, currentPhoneInfo });
         userFeedback.placeholder = userFeedback.value;
         userFeedback.value = '';
         socket.send(message);

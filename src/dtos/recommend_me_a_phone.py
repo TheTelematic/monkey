@@ -10,3 +10,8 @@ class PhoneRecommendation(BaseDTO):
     price: str
     specifications: List[str]
     picture_link: str
+
+
+@dataclass(frozen=True, slots=True)
+class PhoneRecommendationWithJustification(PhoneRecommendation):
+    justification: str

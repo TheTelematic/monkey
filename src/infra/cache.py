@@ -10,7 +10,7 @@ from logger import logger
 
 
 def hash_key(key: str) -> str:
-    return sha1(key[:255].encode()).hexdigest()
+    return sha1(key.encode()).hexdigest()
 
 
 class PrefixedRedis(Redis):
