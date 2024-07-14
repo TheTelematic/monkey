@@ -37,7 +37,7 @@ async def translate(original_query: str, from_language: str = "ENGLISH", to_lang
 
 
 async def _translate(original_query: str, from_language: str = "ENGLISH", to_language: str = "SPANISH") -> (str, str):
-    redis_translations = await get_redis_translations()
+    redis_translations = get_redis_translations()
     original_response = await get_ai_response(original_query)
 
     query_translated = await get_ai_response(_ask_translation(original_query, from_language, to_language))
@@ -57,7 +57,7 @@ async def _translate(original_query: str, from_language: str = "ENGLISH", to_lan
 
 
 async def get_translation(original_query: str, from_language: str, to_language: str) -> (str, str):
-    redis_translations = await get_redis_translations()
+    redis_translations = get_redis_translations()
 
     query_translated_key = _get_key(from_language, to_language, original_query)
     response_translated_key = _get_key(from_language, to_language, await get_ai_response(original_query))
