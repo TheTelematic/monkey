@@ -13,7 +13,6 @@ from aio_pika.abc import AbstractIncomingMessage
 import config
 from consumers.routes import ROUTES, consumers
 from core.probeness import check_dependencies, graceful_shutdown
-from infra.cache import graceful_shutdown_redis
 from logger import logger
 from metrics import setup_consumer_metrics, Observer, monkey_consumer_callback_duration_seconds
 
