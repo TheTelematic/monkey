@@ -1,11 +1,25 @@
 from hashlib import sha1
 
+from redis import RedisError
 from redis.asyncio import Redis
+from redis.asyncio.retry import Retry
+from redis.backoff import ExponentialBackoff
 from redis.commands.core import ResponseT
 from redis.typing import KeyT
 
 import config
 from logger import logger
+
+__COMMON_KWARGS = dict(
+    host=config.REDIS_HOST,
+    port=config.REDIS_PORT,
+    db=0,
+    password=config.REDIS_PASSWORD,
+    single_connection_client=True,
+    retry_on_timeout=True,
+    retry_on_error=[RedisError],
+    retry=Retry(backoff=ExponentialBackoff(), retries=3),
+)
 
 
 def hash_key(key: str) -> str:
@@ -38,22 +52,14 @@ class PrefixedRedis(Redis):
 _redis_queries: PrefixedRedis | None = None
 _redis_translations: PrefixedRedis | None = None
 
-redis_translations = PrefixedRedis(
-    host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD, prefix_keys="translations"
-)
-
 
 def get_redis_queries() -> PrefixedRedis:
     global _redis_queries
     if _redis_queries is None:
         logger.info("Creating a new Redis connection for queries...")
         _redis_queries = PrefixedRedis(
-            host=config.REDIS_HOST,
-            port=config.REDIS_PORT,
-            db=0,
-            password=config.REDIS_PASSWORD,
             prefix_keys="queries",
-            single_connection_client=True,
+            **__COMMON_KWARGS,
         )
 
     return _redis_queries
@@ -64,12 +70,8 @@ def get_redis_translations() -> PrefixedRedis:
     if _redis_translations is None:
         logger.info("Creating a new Redis connection for translations...")
         _redis_translations = PrefixedRedis(
-            host=config.REDIS_HOST,
-            port=config.REDIS_PORT,
-            db=0,
-            password=config.REDIS_PASSWORD,
             prefix_keys="translations",
-            single_connection_client=True,
+            **__COMMON_KWARGS,
         )
 
     return _redis_translations
