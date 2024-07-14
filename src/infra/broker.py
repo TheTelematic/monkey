@@ -1,4 +1,5 @@
 import pickle
+from asyncio import Lock
 from dataclasses import dataclass
 
 from aio_pika import connect_robust, Message, Connection
@@ -12,9 +13,14 @@ _publisher_connection: Connection | None = None
 
 async def get_publisher_connection() -> Connection:
     global _publisher_connection
-    if _publisher_connection is None or _publisher_connection.is_closed:
-        logger.info("Connecting to RabbitMQ...")
-        _publisher_connection = await connect_robust(config.RABBITMQ_URL)
+    lock = Lock()
+    await lock.acquire()
+    try:
+        if _publisher_connection is None or _publisher_connection.is_closed:
+            logger.info("Connecting to RabbitMQ...")
+            _publisher_connection = await connect_robust(config.RABBITMQ_URL)
+    finally:
+        lock.release()
 
     return _publisher_connection
 

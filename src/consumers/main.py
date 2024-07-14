@@ -93,6 +93,7 @@ def __touch_file(file_path: str):
 
 
 async def _liveness_check(channel: RobustChannel):
+    global __shutdown_event_received, __processing_message, __last_message_id
     __touch_file(config.LIVENESS_CONSUMERS_FILE)
 
     while not __shutdown_event_received.is_set():
@@ -121,6 +122,7 @@ async def _liveness_check(channel: RobustChannel):
 
 
 async def _readiness_check():
+    global __shutdown_event_received
     __touch_file(config.READINESS_CONSUMERS_FILE)
 
     while not __shutdown_event_received.is_set():
