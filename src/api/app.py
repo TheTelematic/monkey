@@ -18,6 +18,7 @@ from api.routes import (
     ws_summary_and_translate_router,
     ws_recommend_me_a_phone_router,
 )
+from core.probeness import graceful_shutdown
 from infra.broker import graceful_shutdown_publisher
 from infra.cache import graceful_shutdown_redis
 from logger import logger
@@ -31,8 +32,7 @@ async def lifespan(_app: FastAPI):
     yield
 
     logger.info("Graceful Shutdown started...")
-    await graceful_shutdown_publisher()
-    await graceful_shutdown_redis()
+    await graceful_shutdown()
     logger.info("Waiting for metrics to be collected...")
     await asyncio.sleep(config.PROMETHEUS_INTERVAL + 1)
     logger.info("Graceful Shutdown finished...")

@@ -12,7 +12,7 @@ from aio_pika.abc import AbstractIncomingMessage
 
 import config
 from consumers.routes import ROUTES, consumers
-from core.probeness import check_dependencies
+from core.probeness import check_dependencies, graceful_shutdown
 from infra.cache import graceful_shutdown_redis
 from logger import logger
 from metrics import setup_consumer_metrics, Observer, monkey_consumer_callback_duration_seconds
@@ -75,8 +75,8 @@ async def _ensure_running(connection, channel):
         logger.info("Ensure running, Closing connection...")
         await connection.close()
 
-    logger.info("Ensure running, Closing redis connection...")
-    await graceful_shutdown_redis()
+    logger.info("Ensure running, graceful shutdown...")
+    await graceful_shutdown()
 
     logger.info("Waiting for metrics to be collected...")
     await asyncio.sleep(config.PROMETHEUS_INTERVAL + 1)

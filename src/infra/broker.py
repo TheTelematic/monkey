@@ -19,6 +19,7 @@ async def get_publisher_connection() -> Connection:
         if _publisher_connection is None or _publisher_connection.is_closed:
             logger.info("Connecting to RabbitMQ...")
             _publisher_connection = await connect_robust(config.RABBITMQ_URL)
+            logger.info("Connected to RabbitMQ...")
     finally:
         lock.release()
 
@@ -41,6 +42,7 @@ async def graceful_shutdown_publisher():
     global _publisher_connection
     if _publisher_connection is not None:
         try:
+            logger.info("Closing RabbitMQ connection.")
             await _publisher_connection.close()
             logger.info("Closed RabbitMQ connection.")
         except Exception as exc:

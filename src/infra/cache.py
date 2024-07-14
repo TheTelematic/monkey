@@ -79,11 +79,18 @@ def get_redis_translations() -> PrefixedRedis:
 
 async def graceful_shutdown_redis():
     global _redis_queries, _redis_translations
-    logger.info("Closing Redis connection...")
     try:
+        logger.info("Closing Redis connection for queries...")
         if _redis_queries is not None:
             await _redis_queries.aclose()
+            logger.info("Closed Redis connection for queries...")
+    except Exception as exc:
+        logger.exception(f"Error closing Redis connection for queries. {exc=}")
+
+    try:
+        logger.info("Closing Redis connection for translations...")
         if _redis_translations is not None:
             await _redis_translations.aclose()
+            logger.info("Closed Redis connection for translations...")
     except Exception as exc:
-        logger.exception(f"Error closing Redis connection. {exc=}")
+        logger.exception(f"Error closing Redis connection for translations. {exc=}")
