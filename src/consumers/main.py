@@ -164,9 +164,14 @@ async def _run_consumer(queue_name: str, callback: Callable[[dataclass], Awaitab
 
 def run_consumer(consumer_type: consumers) -> None:
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(_run_consumer(ROUTES[consumer_type]["queue"], ROUTES[consumer_type]["callback"]))
-    loop.run_forever()
-    loop.close()
+    try:
+        loop.run_until_complete(_run_consumer(ROUTES[consumer_type]["queue"], ROUTES[consumer_type]["callback"]))
+        loop.run_forever()
+    except Exception as exc:
+        logger.exception(f"Error running consumer. {exc=}")
+    finally:
+        logger.info("Closing loop...")
+        loop.close()
 
 
 def graceful_shutdown_consumer():
