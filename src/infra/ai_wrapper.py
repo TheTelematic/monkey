@@ -1,5 +1,5 @@
 import config
-from infra.cache import get_redis_queries, hash_key
+from infra.cache import get_redis_queries, hash_key, PrefixedRedis
 from infra.ai.factory import AIEngineFactory, AIEngineTypes
 from logger import logger
 from metrics import Observer, monkey_ai_engine_invoke_duration_seconds, monkey_ai_engine_cache_hit_count
@@ -9,7 +9,10 @@ class AIWrapper:
     def __init__(self, ai_engine_type: AIEngineTypes):
         self.ai_engine_type = ai_engine_type
         self._engine = AIEngineFactory.get_ai_engine(ai_engine_type)
-        self._redis = get_redis_queries()
+
+    @staticmethod
+    async def _redis() -> PrefixedRedis:
+        return await get_redis_queries()
 
     async def load_data(self):
         await self._engine.load_data()
@@ -36,16 +39,19 @@ class AIWrapper:
 
     async def _cached(self, text: str) -> bool:
         key = self._get_key(text)
-        return await self._redis.exists(key) == 1
+        redis = await self._redis()
+        return await redis.exists(key) == 1
 
     async def _get_cache(self, text: str) -> str:
         key = self._get_key(text)
-        return self._decode_value(await self._redis.get(key))
+        redis = await self._redis()
+        return self._decode_value(await redis.get(key))
 
     async def _set_cache(self, text: str, result: str) -> None:
         key = self._get_key(text)
         value = self._encode_value(result)
-        await self._redis.set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
+        redis = await self._redis()
+        await redis.set(key, value, ex=config.CACHE_EXPIRATION_SECONDS)
 
     @staticmethod
     def _get_key(text: str) -> str:

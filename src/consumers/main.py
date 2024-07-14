@@ -96,6 +96,7 @@ async def _liveness_check(channel: RobustChannel):
     __touch_file(config.LIVENESS_CONSUMERS_FILE)
 
     while not __shutdown_event_received.is_set():
+        logger.debug("Checking liveness...")
         try:
             try:
                 os.remove(config.LIVENESS_CONSUMERS_FILE)
@@ -125,6 +126,7 @@ async def _readiness_check():
     __touch_file(config.READINESS_CONSUMERS_FILE)
 
     while not __shutdown_event_received.is_set():
+        logger.debug("Checking readiness...")
         try:
             try:
                 os.remove(config.READINESS_CONSUMERS_FILE)

@@ -1,3 +1,4 @@
+from asyncio import Lock
 from hashlib import sha1
 
 from redis import RedisError
@@ -51,28 +52,46 @@ class PrefixedRedis(Redis):
 
 _redis_queries: PrefixedRedis | None = None
 _redis_translations: PrefixedRedis | None = None
+_lock_queries = Lock()
+_lock_translations = Lock()
 
 
-def get_redis_queries() -> PrefixedRedis:
-    global _redis_queries
-    if _redis_queries is None:
-        logger.info("Creating a new Redis connection for queries...")
-        _redis_queries = PrefixedRedis(
-            prefix_keys="queries",
-            **__COMMON_KWARGS,
-        )
+async def get_redis_queries() -> PrefixedRedis:
+    global _redis_queries, _lock_queries
+    await _lock_queries.acquire()
+    try:
+        if _redis_queries is None:
+            logger.info("Creating a new Redis connection for queries...")
+            _redis_queries = PrefixedRedis(
+                prefix_keys="queries",
+                **__COMMON_KWARGS,
+            )
+            logger.info("Created a new Redis connection for queries...")
+    except Exception as exc:
+        logger.exception(f"Error creating a new Redis connection for queries. {exc=}")
+        raise exc
+    finally:
+        _lock_queries.release()
 
     return _redis_queries
 
 
-def get_redis_translations() -> PrefixedRedis:
-    global _redis_translations
-    if _redis_translations is None:
-        logger.info("Creating a new Redis connection for translations...")
-        _redis_translations = PrefixedRedis(
-            prefix_keys="translations",
-            **__COMMON_KWARGS,
-        )
+async def get_redis_translations() -> PrefixedRedis:
+    global _redis_translations, _lock_translations
+    await _lock_translations.acquire()
+    try:
+        if _redis_translations is None:
+            logger.info("Creating a new Redis connection for translations...")
+            _redis_translations = PrefixedRedis(
+                prefix_keys="translations",
+                **__COMMON_KWARGS,
+            )
+            logger.info("Created a new Redis connection for translations...")
+    except Exception as exc:
+        logger.exception(f"Error creating a new Redis connection for translations. {exc=}")
+        raise exc
+    finally:
+        _lock_translations.release()
 
     return _redis_translations
 

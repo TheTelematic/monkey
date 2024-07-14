@@ -9,19 +9,22 @@ from consumers.routes import ROUTES, consumers
 from logger import logger
 
 _publisher_connection: Connection | None = None
+_lock = Lock()
 
 
 async def get_publisher_connection() -> Connection:
-    global _publisher_connection
-    lock = Lock()
-    await lock.acquire()
+    global _publisher_connection, _lock
+    await _lock.acquire()
     try:
         if _publisher_connection is None or _publisher_connection.is_closed:
             logger.info("Connecting to RabbitMQ...")
             _publisher_connection = await connect_robust(config.RABBITMQ_URL)
             logger.info("Connected to RabbitMQ...")
+    except Exception as exc:
+        logger.exception(f"Error connecting to RabbitMQ. {exc=}")
+        raise exc
     finally:
-        lock.release()
+        _lock.release()
 
     return _publisher_connection
 

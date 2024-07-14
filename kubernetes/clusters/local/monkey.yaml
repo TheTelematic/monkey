@@ -5,7 +5,8 @@ ingress:
 
 config:
   CACHE_EXPIRATION_SECONDS: "300" # 5 minutes
-  LOG_LEVEL: "INFO"
+#  LOG_LEVEL: "INFO"
+  LOG_LEVEL: "DEBUG"
 
 consumers:
   translations:
