@@ -36,16 +36,7 @@ class PrefixedRedis(Redis):
         return await super().exists(*[f"{self.prefix_keys}:{name}" for name in names])
 
     async def is_connected(self) -> bool:
-        connection = self.connection
-        if not connection:
-            pool = self.connection_pool
-            connection = pool.get_available_connection()
-            try:
-                await pool.ensure_connection(connection)
-            except RedisConnectionError:
-                return False
-
-        return connection.is_connected
+        return self.connection and self.connection.is_connected
 
 
 _redis_queries: PrefixedRedis | None = None
@@ -61,7 +52,12 @@ async def get_redis_queries() -> PrefixedRedis:
     if _redis_queries is None or not await _redis_queries.is_connected():
         logger.info("Creating a new Redis connection for queries...")
         _redis_queries = PrefixedRedis(
-            host=config.REDIS_HOST, port=config.REDIS_PORT, db=0, password=config.REDIS_PASSWORD, prefix_keys="queries"
+            host=config.REDIS_HOST,
+            port=config.REDIS_PORT,
+            db=0,
+            password=config.REDIS_PASSWORD,
+            prefix_keys="queries",
+            single_connection_client=True,
         )
 
     return _redis_queries
@@ -77,6 +73,7 @@ async def get_redis_translations() -> PrefixedRedis:
             db=0,
             password=config.REDIS_PASSWORD,
             prefix_keys="translations",
+            single_connection_client=True,
         )
 
     return _redis_translations
