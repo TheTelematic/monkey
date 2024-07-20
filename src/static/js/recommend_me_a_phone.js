@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const sendPing = function() {
         const pingMessage = JSON.stringify({ action: 'ping' });
         socket.send(pingMessage);
-        setInterval(sendPing, pingInterval);
     };
 
     socket.onopen = function() {
