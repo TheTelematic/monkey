@@ -38,4 +38,8 @@ spec:
                     fieldRef:
                       apiVersion: v1
                       fieldPath: status.podIP
+                {{- if .Values.cronjobs.webContentCrawler.debug.enabled }}
+                - name: DEBUG
+                  value: "true"
+                {{- end }}
 ---

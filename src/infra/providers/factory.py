@@ -1,9 +1,9 @@
 from enum import Enum
 
 from infra.providers.base import ProviderBase
+from infra.providers.impl.chat import OpenAI
 from infra.providers.impl.google import GoogleImagesSearch
 from infra.providers.impl.web_content_crawler import ApifyContentCrawler
-from infra.providers.impl.chat import OpenAI
 
 
 class ProviderTypes(Enum):

@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Debug Docker Desktop" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
+    <module name="monkey" />
+    <option name="PORT" value="8888" />
+    <option name="HOST" value="kubernetes.docker.internal" />
+    <PathMappingSettings>
+      <option name="pathMappings">
+        <list>
+          <mapping local-root="$PROJECT_DIR$/src" remote-root="/app" />
+          <mapping local-root="$PROJECT_DIR$/venv" remote-root="/opt/venv" />
+        </list>
+      </option>
+    </PathMappingSettings>
+    <option name="REDIRECT_OUTPUT" value="true" />
+    <option name="SUSPEND_AFTER_CONNECT" value="true" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 
 import config
 from api.constants import STATIC_PATH
+from api.middlewares.ping_pong_ws import KeepAliveWSMiddleware
 from api.middlewares.prometheus_ws import PrometheusWSMiddleware
 from api.routes import (
     probes_router,
@@ -19,8 +20,6 @@ from api.routes import (
     ws_recommend_me_a_phone_router,
 )
 from core.probeness import graceful_shutdown
-from infra.broker import graceful_shutdown_publisher
-from infra.cache import graceful_shutdown_redis
 from logger import logger
 from metrics import setup_api_metrics
 
@@ -61,6 +60,7 @@ app.add_middleware(
     TrustedHostMiddleware,
     allowed_hosts=allowed_hosts,
 )
+app.add_middleware(KeepAliveWSMiddleware)
 
 app.mount(STATIC_PATH, StaticFiles(directory="static"), name="static")
 

@@ -30,6 +30,7 @@ spec:
             - containerPort: {{ .Values.service.port.container }}
               name: {{ .Values.service.port.name }}
               protocol: TCP
+          {{- if not .Values.api.debug.enabled }}
           livenessProbe:
             httpGet:
               path: /api/probes/liveness
@@ -38,6 +39,7 @@ spec:
             httpGet:
               path: /api/probes/readiness
               port: {{ .Values.service.port.container }}
+          {{- end }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}
           envFrom:
@@ -51,4 +53,8 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
+            {{- if .Values.api.debug.enabled }}
+            - name: DEBUG
+              value: "true"
+            {{- end }}
 ---

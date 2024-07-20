@@ -6,6 +6,8 @@ image:
 secretName: monkey
 
 api:
+  debug:
+    enabled: false
   terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
   replicas:
     min: 1
@@ -19,6 +21,8 @@ api:
 
 consumers:
   translations:
+    debug:
+      enabled: false
     terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
     keda:
       queue: &translationsQueue monkey.translations
@@ -33,6 +37,8 @@ consumers:
       limits:
         memory: 256Mi
   summaries:
+    debug:
+      enabled: false
     terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
     keda:
       queue: &summariesQueue monkey.summaries
@@ -49,6 +55,8 @@ consumers:
 
 cronjobs:
   webContentCrawler:
+    debug:
+      enabled: false
     schedule: "0 8 * * *"  # At 08:00
     terminationGracePeriodSeconds: 60  # It has to be greater than Prometheus scrape interval
     resources:
@@ -84,3 +92,6 @@ config:
   API_GRACEFUL_SHUTDOWN_TIMEOUT: "50"  # Less than api.terminationGracePeriodSeconds
   APIFY_CONTENT_CRAWLER_URL: "https://www.techradar.com/news/best-phone"
   PINECONE_INDEX_NAME: "monkey"
+  DEBUG_PYDEVD_PYCHARM: "pydevd-pycharm~=241.18034.82"
+  DEBUG_HOST: "host.docker.internal"
+  DEBUG_PORT: "8888"

@@ -31,12 +31,14 @@ spec:
             - -c
           args:
             - python main.py consumer_{{ $key }}
+          {{- if not $value.debug.enabled }}
           livenessProbe:
             exec:
               command: [ "/bin/sh", "-c", "test -f $LIVENESS_CONSUMERS_FILE" ]
           readinessProbe:
             exec:
               command: [ "/bin/sh", "-c", "test -f $READINESS_CONSUMERS_FILE" ]
+          {{- end }}
           resources:
             {{- toYaml $value.resources | nindent 12 }}
           envFrom:
@@ -50,5 +52,9 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
+            {{- if $value.debug.enabled }}
+            - name: DEBUG
+              value: "true"
+            {{- end }}
 ---
 {{- end }}

@@ -12,29 +12,47 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     let currentQuery = null;
     let activeHistoryItem = null;
+    const pingInterval = 15000; // 15 seconds
 
     const socket = new WebSocket('/api/summary-and-translate/ws');
 
+    const sendPing = function() {
+        const pingMessage = JSON.stringify({ action: 'ping' });
+        socket.send(pingMessage);
+        setInterval(sendPing, pingInterval);
+    };
+
     socket.onopen = function() {
         console.log('WebSocket connection established.');
+        setInterval(sendPing, pingInterval);
     };
+
+   socket.onclose = function() {
+        console.log('WebSocket connection closed.');
+        clearInterval(sendPing);
+    }
 
     socket.onerror = function(error) {
         console.error('WebSocket error:', error);
+        clearInterval(sendPing);
     };
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        if (data.response_raw !== undefined && data.response_summary !== undefined) {
-            inputText.value = data.response_query;
-            responseText.value = data.response_raw;
-            summaryText.value = data.response_summary;
-            addToHistory(data.response_query, data.response_raw, data.response_summary);
+        if (data.action === "ping") {
+            socket.send(JSON.stringify({ action: 'pong' }));
+        } else {
+             if (data.response_raw !== undefined && data.response_summary !== undefined) {
+                inputText.value = data.response_query;
+                responseText.value = data.response_raw;
+                summaryText.value = data.response_summary;
+                addToHistory(data.response_query, data.response_raw, data.response_summary);
+            }
+            newQueryButton.disabled = false;
+            translateButton.disabled = false;
+            loadingContainer1.style.display = "none";  // Hide loading
+            loadingContainer2.style.display = "none";  // Hide loading
         }
-        newQueryButton.disabled = false;
-        translateButton.disabled = false;
-        loadingContainer1.style.display = "none";  // Hide loading
-        loadingContainer2.style.display = "none";  // Hide loading
     };
 
     submitButton.addEventListener('click', () => {

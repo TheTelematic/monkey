@@ -10,43 +10,61 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const chatButton = document.getElementById('chatButton');
     const chatAnswer = document.getElementById('chatAnswer');
 
+    let currentPhoneInfo = null;
+    const pingInterval = 15000; // 15 seconds
+
     const socket = new WebSocket('/api/recommend-me-a-phone/ws');
 
-    let currentPhoneInfo = null;
+    const sendPing = function() {
+        const pingMessage = JSON.stringify({ action: 'ping' });
+        socket.send(pingMessage);
+        setInterval(sendPing, pingInterval);
+    };
 
     socket.onopen = function() {
         console.log('WebSocket connection established.');
+        setInterval(sendPing, pingInterval);
     };
+
+    socket.onclose = function() {
+        console.log('WebSocket connection closed.');
+        clearInterval(sendPing);
+    }
 
     socket.onerror = function(error) {
         console.error('WebSocket error:', error);
+        clearInterval(sendPing);
     };
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        if (data.status === 'done') {
-          loadingContainer.style.display = "none"; // Hide loading
-          chatContainer.style.display = "inline"; // Show chat
+        if (data.action === "ping") {
+            socket.send(JSON.stringify({ action: 'pong' }));
+        } else {
+            if (data.status === 'done') {
+              loadingContainer.style.display = "none"; // Hide loading
+              chatContainer.style.display = "inline"; // Show chat
 
-          // Update image, features list, and price dynamically
-          nameContainer.innerHTML = data.data.name;
-          imageContainer.src = data.data.picture_link;
+              // Update image, features list, and price dynamically
+              nameContainer.innerHTML = data.data.name;
+              imageContainer.src = data.data.picture_link;
 
-          // Clear previous list
-          featuresList.innerHTML = '';
-          data.data.specifications.forEach(feature => {
-            const li = document.createElement('li');
-            li.textContent = feature;
-            featuresList.appendChild(li);
-          });
+              // Clear previous list
+              featuresList.innerHTML = '';
+              data.data.specifications.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+              });
 
-          // Update price
-          priceContainer.textContent = `${data.data.price}`;
+              // Update price
+              priceContainer.textContent = `${data.data.price}`;
 
-          // Update chat answer
-          chatAnswer.textContent = data.data.justification;
+              // Update chat answer
+              chatAnswer.textContent = data.data.justification;
 
-          currentPhoneInfo = data.data;
+              currentPhoneInfo = data.data;
+            }
         }
     };
 
