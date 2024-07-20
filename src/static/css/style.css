@@ -129,12 +129,10 @@ button:hover:not(:disabled) {
 
 /* Ensuring the phone image is contained within a rounded square */
 .phone-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1/1; /* Ensure it stays square */
-  border-radius: 20px; /* Rounded corners */
-  object-fit: cover; /* Scale uniformly and crop if needed */
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px; /* Rounded corners */
 }
 
 /* Styling for the details container */
