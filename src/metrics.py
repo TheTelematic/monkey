@@ -20,7 +20,6 @@ async def setup_consumer_metrics():
 
 
 # Gauges
-
 monkey_info = Gauge(
     "monkey_info",
     "Information about the Monkey service",
@@ -31,7 +30,6 @@ monkey_info = Gauge(
 monkey_info.labels(
     version=config.VERSION,
 ).set(1)
-
 monkey_websockets_open_connections = Gauge(
     "monkey_websockets_open_connections",
     "Number of open WebSocket connections",
@@ -39,7 +37,6 @@ monkey_websockets_open_connections = Gauge(
 )
 
 # Histograms
-
 buckets = (0.1, 0.5, 1, 2, 5, 10, 20, 30, 40, 50, 60, 120, 300, 600, 1200, 1800, 2400, 3000, 3600)
 monkey_consumer_callback_duration_seconds = Histogram(
     "monkey_consumer_callback_duration_seconds",
@@ -47,41 +44,35 @@ monkey_consumer_callback_duration_seconds = Histogram(
     ["callback"],
     buckets=buckets,
 )
-
 monkey_translations_duration_seconds = Histogram(
     "monkey_translations_duration_seconds",
     "Duration of translations processing",
     ["from_lang", "to_lang"],
     buckets=buckets,
 )
-
 monkey_summaries_duration_seconds = Histogram(
     "monkey_summaries_duration_seconds",
     "Duration of summaries processing",
     ["lang"],
     buckets=buckets,
 )
-
-monkey_ai_engine_invoke_duration_seconds = Histogram(
-    "monkey_ai_engine_invoke_duration_seconds",
-    "Duration of ai_engine invocations",
-    ["ai_engine_type"],
+monkey_provider_invoke_duration_seconds = Histogram(
+    "monkey_provider_invoke_duration_seconds",
+    "Duration of provider invocations",
+    ["provider_type"],
     buckets=buckets,
 )
 
 # Counters
-
-monkey_ai_engine_cache_hit_count = Counter(
-    "monkey_ai_engine_cache_hit_count",
+monkey_provider_cache_hit_count = Counter(
+    "monkey_provider_cache_hit_count",
     "Number of cache hits",
-    ["ai_engine_type"],
+    ["provider_type"],
 )
-
 monkey_translations_cache_hit_count = Counter(
     "monkey_translations_cache_hit_count",
     "Number of cache hits",
 )
-
 monkey_openai_token_usage_total_tokens = Counter(
     "monkey_openai_token_usage_total_tokens",
     "Total tokens used in OpenAI",

@@ -1,12 +1,12 @@
 import asyncio
 
-from infra.ai_wrapper import ai_engine_web_content_crawler
+from infra.cached_provider import web_content_crawler_provider
 from logger import logger
 
 
 async def _crawl_web_content():
     logger.info("Crawling web content...")
-    await ai_engine_web_content_crawler.load_data()
+    await web_content_crawler_provider.load_data()
     logger.info("Web content crawled successfully.")
 
 

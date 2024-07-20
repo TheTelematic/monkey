@@ -121,7 +121,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.9, sum by(le, ai_engine_type) (rate(monkey_ai_engine_invoke_duration_seconds_bucket[$__rate_interval])))",
+          "expr": "histogram_quantile(0.9, sum by(le, provider_type) (rate(monkey_provider_invoke_duration_seconds_bucket[$__rate_interval])))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -218,7 +218,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum by (ai_engine_type) (increase(monkey_ai_engine_invoke_duration_seconds_count[$__rate_interval]))",
+          "expr": "sum by (provider_type) (increase(monkey_provider_invoke_duration_seconds_count[$__rate_interval]))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -283,7 +283,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(increase(monkey_ai_engine_invoke_duration_seconds_count[$__range]))",
+          "expr": "sum(increase(monkey_provider_invoke_duration_seconds_count[$__range]))",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -380,9 +380,9 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum by (ai_engine_type) (increase(monkey_ai_engine_cache_hit_count_total[$__rate_interval]))",
+          "expr": "sum by (provider_type) (increase(monkey_provider_cache_hit_count_total[$__rate_interval]))",
           "instant": false,
-          "legendFormat": "{{ai_engine_type}}",
+          "legendFormat": "{{provider_type}}",
           "range": true,
           "refId": "A"
         }

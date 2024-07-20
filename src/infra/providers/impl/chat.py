@@ -2,12 +2,12 @@ from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
 
 import config
-from infra.ai.base import AIEngineBase
+from infra.providers.base import ProviderBase
 from logger import logger
 from metrics import monkey_openai_token_usage_total_tokens
 
 
-class OpenAI(AIEngineBase):
+class OpenAI(ProviderBase):
     MODEL = "gpt-4o"
 
     def __init__(self):

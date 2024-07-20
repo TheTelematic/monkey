@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 
-class AIEngineBase:
+class ProviderBase:
     @abstractmethod
     async def invoke(self, text: str) -> str:
         raise NotImplementedError

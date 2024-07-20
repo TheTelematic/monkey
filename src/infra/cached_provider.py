@@ -1,14 +1,14 @@
 import config
 from infra.cache import get_redis_queries, hash_key, PrefixedRedis
-from infra.ai.factory import AIEngineFactory, AIEngineTypes
+from infra.providers.factory import ProvidersFactory, ProviderTypes
 from logger import logger
-from metrics import Observer, monkey_ai_engine_invoke_duration_seconds, monkey_ai_engine_cache_hit_count
+from metrics import Observer, monkey_provider_invoke_duration_seconds, monkey_provider_cache_hit_count
 
 
-class AIWrapper:
-    def __init__(self, ai_engine_type: AIEngineTypes):
-        self.ai_engine_type = ai_engine_type
-        self._engine = AIEngineFactory.get_ai_engine(ai_engine_type)
+class CachedProvider:
+    def __init__(self, provider_type: ProviderTypes):
+        self.provider_type = provider_type
+        self._engine = ProvidersFactory.get_provider(provider_type)
 
     @staticmethod
     async def _redis() -> PrefixedRedis:
@@ -19,17 +19,17 @@ class AIWrapper:
 
     async def invoke(self, text: str, with_cache: bool = True) -> str:
         if not with_cache or not await self._cached(text) or not (result := await self._get_cache(text)):
-            return await self._invoke_ai_engine(text, cache_response=with_cache)
+            return await self._invoke_provider(text, cache_response=with_cache)
 
         logger.debug(f"Using cache for {text=}")
-        monkey_ai_engine_cache_hit_count.labels(self.ai_engine_type).inc()
+        monkey_provider_cache_hit_count.labels(self.provider_type).inc()
         return result
 
-    async def _invoke_ai_engine(self, text: str, cache_response: bool = False) -> str:
-        logger.info("Invoking ai_engine...")
-        with Observer(monkey_ai_engine_invoke_duration_seconds.labels(self.ai_engine_type)):
+    async def _invoke_provider(self, text: str, cache_response: bool = False) -> str:
+        logger.info(f"Invoking provider {self.provider_type}...")
+        with Observer(monkey_provider_invoke_duration_seconds.labels(self.provider_type)):
             result = await self._engine.invoke(text)
-            logger.debug(f"ai_engine response: {result}")
+            logger.debug(f"provider response: {result}")
 
         if cache_response:
             logger.debug(f"Caching response of {text=}")
@@ -66,5 +66,6 @@ class AIWrapper:
         return value.decode("utf-8")
 
 
-ai_engine_chat = AIWrapper(AIEngineTypes.CHAT)
-ai_engine_web_content_crawler = AIWrapper(AIEngineTypes.WEB_CONTENT_CRAWLER)
+chat_provider = CachedProvider(ProviderTypes.CHAT)
+web_content_crawler_provider = CachedProvider(ProviderTypes.WEB_CONTENT_CRAWLER)
+google_images_search = CachedProvider(ProviderTypes.SEARCH_IMAGES)

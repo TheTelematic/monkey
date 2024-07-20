@@ -3,8 +3,7 @@ import json
 import config
 from core.ai import get_ai_response
 from dtos.recommend_me_a_phone import PhoneRecommendation, PhoneRecommendationWithJustification
-from infra.ai_wrapper import ai_engine_web_content_crawler
-from infra.google import google_images_search
+from infra.cached_provider import web_content_crawler_provider, google_images_search
 from logger import logger
 
 _PROMPT = """
@@ -41,7 +40,7 @@ Also, please start your response with the name of the phone, next to the charact
 async def get_phone_recommendation(
     current_phone_info: dict | None = None, user_feedback: str | None = None
 ) -> PhoneRecommendation:
-    response = await ai_engine_web_content_crawler.invoke(_PROMPT)
+    response = await web_content_crawler_provider.invoke(_PROMPT)
     logger.info(f"Response from ai_engine_web_content_crawler: {response}")
     information = json.loads(response)
     first_phone = information["phones"][0]
