@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     let currentQuery = null;
     let activeHistoryItem = null;
-    const pingInterval = 15000; // 15 seconds
 
     const socket = new WebSocket('/api/summary-and-translate/ws');
 
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     socket.onopen = function() {
         console.log('WebSocket connection established.');
-        setInterval(sendPing, pingInterval);
     };
 
    socket.onclose = function() {
@@ -40,6 +38,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const data = JSON.parse(event.data);
         if (data.action === "ping") {
             socket.send(JSON.stringify({ action: 'pong' }));
+        } else if (data.ping_interval_seconds !== undefined) {
+            let pingInterval = data.ping_interval_seconds * 1000 / 2;
+            console.log("Setting ping interval to", pingInterval, "ms");
+            setInterval(sendPing, pingInterval);
         } else {
              if (data.response_raw !== undefined && data.response_summary !== undefined) {
                 inputText.value = data.response_query;

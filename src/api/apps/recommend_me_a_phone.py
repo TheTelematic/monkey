@@ -1,6 +1,7 @@
 from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketState, WebSocketDisconnect
 
+from api.websockets import notify_ping_interval
 from core.apps.recommend_me_a_phone import get_phone_recommendation
 from logger import logger
 
@@ -10,6 +11,7 @@ router = APIRouter()
 @router.websocket("/ws")
 async def recommend_me_a_phone(websocket: WebSocket):
     await websocket.accept()
+    await notify_ping_interval(websocket)
 
     while websocket.client_state != WebSocketState.DISCONNECTED:
         try:

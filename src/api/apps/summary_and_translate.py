@@ -1,6 +1,7 @@
 from fastapi import APIRouter, WebSocket
 from starlette.websockets import WebSocketState, WebSocketDisconnect
 
+from api.websockets import notify_ping_interval
 from core.apps.summary_and_translate import submit_query, submit_translation
 from logger import logger
 
@@ -10,6 +11,7 @@ router = APIRouter()
 @router.websocket("/ws")
 async def summary_and_translate_ws(websocket: WebSocket):
     await websocket.accept()
+    await notify_ping_interval(websocket)
 
     while websocket.client_state != WebSocketState.DISCONNECTED:
         try:

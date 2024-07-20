@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const chatAnswer = document.getElementById('chatAnswer');
 
     let currentPhoneInfo = null;
-    const pingInterval = 15000; // 15 seconds
 
     const socket = new WebSocket('/api/recommend-me-a-phone/ws');
 
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     socket.onopen = function() {
         console.log('WebSocket connection established.');
-        setInterval(sendPing, pingInterval);
     };
 
     socket.onclose = function() {
@@ -38,7 +36,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if (data.action === "ping") {
-            socket.send(JSON.stringify({ action: 'pong' }));
+            socket.send(JSON.stringify({action: 'pong'}));
+        } else if (data.ping_interval_seconds !== undefined) {
+            let pingInterval = data.ping_interval_seconds * 1000 / 2;
+            console.log("Setting ping interval to", pingInterval, "ms");
+            setInterval(sendPing, pingInterval);
         } else {
             if (data.status === 'done') {
               loadingContainer.style.display = "none"; // Hide loading
