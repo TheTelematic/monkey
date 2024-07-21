@@ -54,6 +54,7 @@ spec:
   chart:
     spec:
       chart: kubernetes/chart
+      version: 0.0.4
       sourceRef:
         kind: GitRepository
         name: flux-system

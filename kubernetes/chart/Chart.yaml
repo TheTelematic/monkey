@@ -1,6 +1,6 @@
 apiVersion: v2
 name: monkey
-version: 0.0.3
+version: 0.0.4
 keywords:
   - pet project
 home: https://github.com/TheTelematic/monkey
