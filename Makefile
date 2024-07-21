@@ -73,7 +73,7 @@ debug-tests-pod: local-context
 	kubectl debug --profile general -n tests $(shell kubectl get pods -n tests | grep "monkey-tests" | awk '{print $$1}' ) -it --copy-to=debugger --container=monkey-tests -- sh
 	kubectl delete pod -n tests debugger
 
-publish: build tests
+publish: tests build
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
 	docker push ${docker_hub_image_name}:${image_tag}
 

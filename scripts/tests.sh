@@ -3,9 +3,11 @@
 set -e
 set -o pipefail
 
+image_tag=${image_tag:-latest}
+
 ########################################################## LINTING #####################################################
-make build image_name=monkey-tests target=tests
-docker run --rm monkey-tests:latest pylama --max-line-length 120
+make build image_name=monkey-tests image_tag="${image_tag}" target=tests
+docker run --rm monkey-tests:"${image_tag}" pylama --max-line-length 120
 
 ########################################################## TESTING #####################################################
 namespace=tests
@@ -22,10 +24,10 @@ helm upgrade --install --namespace "${namespace}" --create-namespace --wait \
 #kubectl exec -n "${namespace}" rabbitmq-0 -c rabbitmq -- rabbitmqctl add_vhost tests
 
 if [ -z "${DEBUG_ENABLED}" ]; then
-  helm upgrade --install --namespace "${namespace}" --wait "${release}" kubernetes/tests --set "tests.integration.debug.enabled=false"
+  helm upgrade --install --namespace "${namespace}" --wait "${release}" kubernetes/tests --set "image.tag=${image_tag}" --set "tests.integration.debug.enabled=false"
 else
   echo "Debug mode enabled !!!"
-  helm upgrade --install --namespace "${namespace}" --wait "${release}" kubernetes/tests --set "tests.integration.debug.enabled=true"
+  helm upgrade --install --namespace "${namespace}" --wait "${release}" kubernetes/tests --set "image.tag=${image_tag}" --set "tests.integration.debug.enabled=true"
 fi
 
 
