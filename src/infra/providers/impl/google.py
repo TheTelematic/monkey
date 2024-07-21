@@ -7,8 +7,18 @@ from infra.providers.base import ProviderBase
 
 class GoogleImagesSearch(ProviderBase):
     def __init__(self):
+        self._check_config()
+
         self.api_key = config.GOOGLE_IMAGES_SEARCH_API_KEY
         self.cx = config.GOOGLE_IMAGES_SEARCH_CX
+
+    @staticmethod
+    def _check_config():
+        if not config.GOOGLE_IMAGES_SEARCH_API_KEY:
+            raise ValueError("GOOGLE_IMAGES_SEARCH_API_KEY is not set in the config.")
+
+        if not config.GOOGLE_IMAGES_SEARCH_CX:
+            raise ValueError("GOOGLE_IMAGES_SEARCH_CX is not set in the config.")
 
     async def load_data(self):
         pass

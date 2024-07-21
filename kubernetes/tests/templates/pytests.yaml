@@ -24,7 +24,7 @@ spec:
             - /bin/sh
             - -c
           args:
-            - pytest --cov=. -v tests/integration
+            - pytest -v tests/integration
           env:
             {{- if .Values.tests.integration.debug.enabled }}
             - name: DEBUG

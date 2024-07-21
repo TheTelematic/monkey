@@ -28,6 +28,6 @@ helm upgrade --install --namespace "${namespace}" --wait "${release}" kubernetes
 set +e
 helm test --namespace "${namespace}" "${release}" --timeout 10m
 tests_return_code=$?
-kubectl logs -n "${namespace}" -l app="${release}" -c "${release}"
+kubectl logs -n "${namespace}" "$(kubectl get pods -n tests | grep "monkey-tests" | awk '{print $1}')"
 
 exit $tests_return_code

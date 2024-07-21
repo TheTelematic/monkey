@@ -66,6 +66,19 @@ class CachedProvider:
         return value.decode("utf-8")
 
 
-chat_provider = CachedProvider(ProviderTypes.CHAT)
-web_content_crawler_provider = CachedProvider(ProviderTypes.WEB_CONTENT_CRAWLER)
-google_images_search = CachedProvider(ProviderTypes.SEARCH_IMAGES)
+chat_provider: CachedProvider | None = None
+google_images_search_provider: CachedProvider | None = None
+web_content_crawler_provider: CachedProvider | None = None
+
+
+def load_providers():
+    global chat_provider, web_content_crawler_provider, google_images_search_provider
+
+    if chat_provider is None:
+        chat_provider = CachedProvider(ProviderTypes.CHAT)
+
+    if google_images_search_provider is None:
+        google_images_search_provider = CachedProvider(ProviderTypes.SEARCH_IMAGES)
+
+    if web_content_crawler_provider is None:
+        web_content_crawler_provider = CachedProvider(ProviderTypes.WEB_CONTENT_CRAWLER)

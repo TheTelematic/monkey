@@ -11,10 +11,14 @@ class OpenAI(ProviderBase):
     MODEL = "gpt-4o"
 
     def __init__(self):
-        if not config.OPENAI_API_KEY:
-            raise ValueError("OPENAI_API_KEY is not set in the config.")
+        self._check_config()
 
         self.ai_engine = ChatOpenAI(openai_api_key=config.OPENAI_API_KEY, model=self.MODEL)
+
+    @staticmethod
+    def _check_config():
+        if not config.OPENAI_API_KEY:
+            raise ValueError("OPENAI_API_KEY is not set in the config.")
 
     async def load_data(self):
         logger.warning("OpenAI does not require loading data.")

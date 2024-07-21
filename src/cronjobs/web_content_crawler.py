@@ -1,6 +1,6 @@
 import asyncio
 
-from infra.cached_provider import web_content_crawler_provider
+from infra.cached_provider import web_content_crawler_provider, load_providers
 from logger import logger
 
 
@@ -11,6 +11,7 @@ async def _crawl_web_content():
 
 
 def run_web_content_crawler():
+    load_providers()
     loop = asyncio.new_event_loop()
     loop.run_until_complete(_crawl_web_content())
     loop.close()

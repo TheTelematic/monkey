@@ -3,7 +3,7 @@ import json
 import config
 from core.ai import get_ai_response
 from dtos.recommend_me_a_phone import PhoneRecommendation, PhoneRecommendationWithJustification
-from infra.cached_provider import web_content_crawler_provider, google_images_search
+from infra.cached_provider import web_content_crawler_provider, google_images_search_provider
 from logger import logger
 
 _PROMPT = """
@@ -46,7 +46,7 @@ async def get_phone_recommendation(
     information = json.loads(response)
     first_phone = information["phones"][0]
     if not user_feedback:
-        first_phone["picture_link"] = await google_images_search.invoke(first_phone["name"])
+        first_phone["picture_link"] = await google_images_search_provider.invoke(first_phone["name"])
         return PhoneRecommendation(**first_phone)
     else:
         if not current_phone_info:
@@ -61,7 +61,7 @@ async def get_phone_recommendation(
         phone_name, justification = response.split(":")
         phone_info = next((phone for phone in information["phones"] if phone["name"] == phone_name), None)
         if phone_info and phone_info["name"] != first_phone["name"]:
-            phone_info["picture_link"] = await google_images_search.invoke(phone_info["name"])
+            phone_info["picture_link"] = await google_images_search_provider.invoke(phone_info["name"])
             return PhoneRecommendationWithJustification(
                 name=phone_info["name"],
                 price=phone_info["price"],
@@ -74,7 +74,7 @@ async def get_phone_recommendation(
                 name=first_phone["name"],
                 price=first_phone["price"],
                 specifications=first_phone["specifications"],
-                picture_link=await google_images_search.invoke(first_phone["name"]),
+                picture_link=await google_images_search_provider.invoke(first_phone["name"]),
                 justification=(
                     f"I'm sorry, I couldn't find the phone you requested. "
                     f"My information is based on {config.APIFY_CONTENT_CRAWLER_URL}."

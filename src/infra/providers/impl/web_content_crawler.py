@@ -69,6 +69,3 @@ class ApifyContentCrawler(ProviderBase):
         return await self._index.aquery(
             text, llm=ChatOpenAI(openai_api_key=config.OPENAI_API_KEY, model=self.LLM_MODEL)
         )
-
-
-apify = ApifyContentCrawler()

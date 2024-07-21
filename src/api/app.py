@@ -20,6 +20,7 @@ from api.routes import (
     ws_recommend_me_a_phone_router,
 )
 from core.probeness import graceful_shutdown
+from infra.cached_provider import load_providers
 from logger import logger
 from metrics import setup_api_metrics
 
@@ -28,6 +29,8 @@ COMMON_API_PREFIX = "/api"
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    load_providers()
+
     yield
 
     logger.info("Graceful Shutdown started...")
