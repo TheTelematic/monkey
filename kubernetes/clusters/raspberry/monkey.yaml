@@ -78,7 +78,7 @@ spec:
   values:
     image:
       name: thetelematic95/monkey
-      tag: 0.0.38 # {"$imagepolicy": "flux-system:monkey:tag"}
+      tag: 0.0.39 # {"$imagepolicy": "flux-system:monkey:tag"}
     ingress:
       enabled: true
       ingressClassName: ngrok
