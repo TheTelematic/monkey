@@ -27,31 +27,31 @@ def test_invoke_response():
 def mock_provider_chat(test_invoke_response):
     from infra import cached_provider
 
-    cached_provider.chat_provider = Mock(invoke=AsyncMock(return_value=test_invoke_response), load_data=AsyncMock())
+    cached_provider._chat_provider = Mock(invoke=AsyncMock(return_value=test_invoke_response), load_data=AsyncMock())
 
-    return cached_provider.chat_provider
+    return cached_provider._chat_provider
 
 
 @pytest.fixture(scope="session")
 def mock_provider_google_images_search(test_invoke_response):
     from infra import cached_provider
 
-    cached_provider.google_images_search_provider = Mock(
+    cached_provider._google_images_search_provider = Mock(
         invoke=AsyncMock(return_value=test_invoke_response), load_data=AsyncMock()
     )
 
-    return cached_provider.google_images_search_provider
+    return cached_provider._google_images_search_provider
 
 
 @pytest.fixture(scope="session")
 def mock_provider_web_content_crawler(test_invoke_response):
     from infra import cached_provider
 
-    cached_provider.web_content_crawler_provider = Mock(
+    cached_provider._web_content_crawler_provider = Mock(
         invoke=AsyncMock(return_value=test_invoke_response), load_data=AsyncMock()
     )
 
-    return cached_provider.web_content_crawler_provider
+    return cached_provider._web_content_crawler_provider
 
 
 @pytest.fixture(scope="session")

@@ -66,19 +66,30 @@ class CachedProvider:
         return value.decode("utf-8")
 
 
-chat_provider: CachedProvider | None = None
-google_images_search_provider: CachedProvider | None = None
-web_content_crawler_provider: CachedProvider | None = None
+_chat_provider: CachedProvider | None = None
+_google_images_search_provider: CachedProvider | None = None
+_web_content_crawler_provider: CachedProvider | None = None
 
 
-def load_providers():
-    global chat_provider, web_content_crawler_provider, google_images_search_provider
+def get_chat_provider() -> CachedProvider:
+    global _chat_provider
+    if _chat_provider is None:
+        logger.info("Loading chat provider...")
+        _chat_provider = CachedProvider(ProviderTypes.CHAT)
+    return _chat_provider
 
-    if chat_provider is None:
-        chat_provider = CachedProvider(ProviderTypes.CHAT)
 
-    if google_images_search_provider is None:
-        google_images_search_provider = CachedProvider(ProviderTypes.SEARCH_IMAGES)
+def get_google_images_search_provider() -> CachedProvider:
+    global _google_images_search_provider
+    if _google_images_search_provider is None:
+        logger.info("Loading google images search provider...")
+        _google_images_search_provider = CachedProvider(ProviderTypes.SEARCH_IMAGES)
+    return _google_images_search_provider
 
-    if web_content_crawler_provider is None:
-        web_content_crawler_provider = CachedProvider(ProviderTypes.WEB_CONTENT_CRAWLER)
+
+def get_web_content_crawler_provider() -> CachedProvider:
+    global _web_content_crawler_provider
+    if _web_content_crawler_provider is None:
+        logger.info("Loading web content crawler provider...")
+        _web_content_crawler_provider = CachedProvider(ProviderTypes.WEB_CONTENT_CRAWLER)
+    return _web_content_crawler_provider

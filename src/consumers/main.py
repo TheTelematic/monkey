@@ -13,7 +13,6 @@ from aio_pika.abc import AbstractIncomingMessage
 import config
 from consumers.routes import ROUTES, consumers
 from core.probeness import check_dependencies, graceful_shutdown
-from infra.cached_provider import load_providers
 from logger import logger
 from metrics import setup_consumer_metrics, Observer, monkey_consumer_callback_duration_seconds
 
@@ -166,7 +165,6 @@ async def _run_consumer(queue_name: str, callback: Callable[[dataclass], Awaitab
 
 
 def run_consumer(consumer_type: consumers) -> None:
-    load_providers()
     loop = asyncio.new_event_loop()
     try:
         loop.run_until_complete(_run_consumer(ROUTES[consumer_type]["queue"], ROUTES[consumer_type]["callback"]))
