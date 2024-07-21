@@ -30,7 +30,7 @@ spec:
             - /bin/sh
             - -c
           args:
-            - python main.py consumer_{{ $key }}
+            - python main.py consumer {{ $key }}
           {{- if not $value.debug.enabled }}
           livenessProbe:
             exec:

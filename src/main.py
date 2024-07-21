@@ -5,6 +5,7 @@ import uvicorn
 
 import config
 
+
 if os.getenv("DEBUG"):
     import subprocess
 
@@ -36,20 +37,13 @@ if __name__ == "__main__":
                 ws_ping_interval=config.WS_PING_INTERVAL,
                 ws_ping_timeout=config.WS_PING_TIMEOUT,
             )
-        case _:
+        case "consumer":
             from consumers.main import run_consumer
-            from consumers.routes import consumers
 
-            match arg:
-                case "consumer_translations":
-                    run_consumer(consumers.TRANSLATIONS)
-                case "consumer_summaries":
-                    run_consumer(consumers.SUMMARIES)
-                case "cronjobs":
-                    match sys.argv[2]:
-                        case "web_content_crawler":
-                            from cronjobs.web_content_crawler import run_web_content_crawler
+            run_consumer(sys.argv[2])
+        case "cronjobs":
+            from cronjobs.main import run_cronjob
 
-                            run_web_content_crawler()
-                case _:
-                    raise ValueError("Invalid argument.")
+            run_cronjob(sys.argv[2])
+        case _:
+            raise ValueError("Invalid argument.")
