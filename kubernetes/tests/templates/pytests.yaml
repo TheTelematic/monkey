@@ -24,8 +24,14 @@ spec:
             - /bin/sh
             - -c
           args:
-            - pytest -v tests/integration
+            - pytest -vv tests/integration
           env:
+            - name: VERSION
+              value: "{{ .Values.image.tag }}"
+            {{- range $key, $value := .Values.config }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
             {{- if .Values.tests.integration.debug.enabled }}
             - name: DEBUG
               value: "true"

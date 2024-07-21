@@ -67,6 +67,9 @@ tests: local-context
 	./scripts/tests.sh
 
 debug-tests: local-context
+	DEBUG_ENABLED=1 ./scripts/tests.sh
+
+debug-tests-pod: local-context
 	kubectl debug --profile general -n tests $(shell kubectl get pods -n tests | grep "monkey-tests" | awk '{print $$1}' ) -it --copy-to=debugger --container=monkey-tests -- sh
 	kubectl delete pod -n tests debugger
 

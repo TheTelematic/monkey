@@ -8,6 +8,7 @@
         <list>
           <mapping local-root="$PROJECT_DIR$/src" remote-root="/app" />
           <mapping local-root="$PROJECT_DIR$/venv" remote-root="/opt/venv" />
+          <mapping local-root="$PROJECT_DIR$/tests" remote-root="/app/tests" />
         </list>
       </option>
     </PathMappingSettings>
