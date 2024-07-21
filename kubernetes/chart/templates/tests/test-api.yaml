@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-api-test-main-page
+  labels:
+    app: {{ .Release.Name }}-api
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: wget
+      image: busybox
+      command:
+        - wget
+      args:
+        - "http://{{ .Release.Name }}-api:{{ .Values.service.port.exposed }}/"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-api-test-recommend-me-a-phone
+  labels:
+    app: {{ .Release.Name }}-api
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: wget
+      image: busybox
+      command:
+        - wget
+      args:
+        - "http://{{ .Release.Name }}-api:{{ .Values.service.port.exposed }}/recommend-me-a-phone"
+---

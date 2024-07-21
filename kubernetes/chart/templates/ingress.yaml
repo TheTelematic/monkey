@@ -15,5 +15,5 @@ spec:
               service:
                 name: {{ .Release.Name }}-api
                 port:
-                  number: {{ .Values.service.port.port }}
+                  number: {{ .Values.service.port.exposed }}
 {{- end }}

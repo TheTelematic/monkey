@@ -4,7 +4,7 @@ import os
 APP_NAME = "monkey"
 VERSION = os.getenv("VERSION")
 BUILD_TIMESTAMP = os.getenv("BUILD_TIMESTAMP")
-DOMAIN_HOST = os.getenv("DOMAIN_HOST")
+DOMAIN_HOSTS = list(filter(lambda h: h, os.getenv("DOMAIN_HOSTS", "").split(",")))
 
 # API
 POD_IP = os.getenv("POD_IP")

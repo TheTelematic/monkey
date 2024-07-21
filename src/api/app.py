@@ -52,8 +52,8 @@ app.add_middleware(PrometheusWSMiddleware)
 allowed_hosts = [
     config.POD_IP,
 ]
-if config.DOMAIN_HOST:
-    allowed_hosts.append(config.DOMAIN_HOST)
+if config.DOMAIN_HOSTS:
+    allowed_hosts.extend(config.DOMAIN_HOSTS)
 
 logger.info(f"Allowed hosts: {allowed_hosts}")
 app.add_middleware(

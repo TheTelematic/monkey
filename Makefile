@@ -27,6 +27,7 @@ local-secret: local-context
 
 deploy-local: local-context local-secret
 	helm upgrade --install --wait monkey kubernetes/chart -f kubernetes/clusters/local/monkey.yaml
+	helm test monkey
 
 restart: local-context
 	kubectl rollout restart deployment $(shell kubectl get deployments | grep monkey | awk '{print $$1}')

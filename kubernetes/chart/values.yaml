@@ -70,7 +70,7 @@ service:
   port:
     container: 8000
     name: http
-    port: 80
+    exposed: 80
 
 ingress:
   enabled: false
