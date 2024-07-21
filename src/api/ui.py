@@ -25,14 +25,14 @@ async def get(request: Request):
 
 
 @router.get("/", response_class=HTMLResponse)
-async def get(request: Request):
+async def summary_and_translate(request: Request):
     return templates.TemplateResponse(
         request=request, name="summary_and_translate.html", context={"app_name": config.APP_NAME}
     )
 
 
 @router.get("/recommend-me-a-phone", response_class=HTMLResponse)
-async def get(request: Request):
+async def recommend_me_a_phone(request: Request):
     return templates.TemplateResponse(
         request=request, name="recommend_me_a_phone.html", context={"app_name": config.APP_NAME}
     )

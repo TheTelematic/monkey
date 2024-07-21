@@ -7,9 +7,9 @@ from infra.cached_provider import web_content_crawler_provider, google_images_se
 from logger import logger
 
 _PROMPT = """
-Can you make me the top of best phones please? 
-Please provide name, price and some details about each phone. 
-I give you an example of the format of the output, please respect and respond using it, avoid any other comment 
+Can you make me the top of best phones please?
+Please provide name, price and some details about each phone.
+I give you an example of the format of the output, please respect and respond using it, avoid any other comment
 and respond with the requested information. The first character of the output must be '{' and the last one '}'.
 
 EXAMPLE OF THE FORMAT:
@@ -32,8 +32,9 @@ And the user feedback:
 
 Previously, the chosen phone for the user was "{previous_phone_name}".
 Could you please choose the best phone for the user based on the information provided?
-Please respect the User Feedback section above to make the decision. 
-Also, please start your response with the name of the phone, next to the character ':' and the explanation of your decision.
+Please respect the User Feedback section above to make the decision.
+Also, please start your response with the name of the phone,
+next to the character ':' and the explanation of your decision.
 """
 
 
@@ -74,5 +75,8 @@ async def get_phone_recommendation(
                 price=first_phone["price"],
                 specifications=first_phone["specifications"],
                 picture_link=await google_images_search.invoke(first_phone["name"]),
-                justification=f"I'm sorry, I couldn't find the phone you requested. My information is based on {config.APIFY_CONTENT_CRAWLER_URL}.",
+                justification=(
+                    f"I'm sorry, I couldn't find the phone you requested. "
+                    f"My information is based on {config.APIFY_CONTENT_CRAWLER_URL}."
+                ),
             )

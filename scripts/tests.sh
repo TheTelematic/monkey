@@ -3,8 +3,13 @@
 set -e
 set -o pipefail
 
-namespace=${1:-tests}
-release=${2:-monkey-tests}
+########################################################## LINTING #####################################################
+make build image_name=monkey-tests target=tests
+docker run --rm monkey-tests:latest pylama --max-line-length 120
+
+########################################################## TESTING #####################################################
+namespace=tests
+release=monkey-tests
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
@@ -16,7 +21,6 @@ helm upgrade --install --namespace "${namespace}" --create-namespace --wait \
   rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
 kubectl exec -n "${namespace}" rabbitmq-0 -c rabbitmq -- rabbitmqctl add_vhost tests
 
-make build image_name=monkey-tests target=tests
 helm upgrade --install --namespace "${namespace}" --wait "${release}" kubernetes/tests
 
 # Workaround for https://github.com/helm/helm/issues/9098 so I can't use --logs in helm test

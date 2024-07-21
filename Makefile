@@ -64,9 +64,11 @@ infra-stop-local: local-context
 	-helm uninstall --namespace infra grafana
 
 tests: local-context
-	@namespace=$1
+	./scripts/tests.sh
 
-	./scripts/tests.sh ${namespace}
+debug-tests: local-context
+	kubectl debug --profile general -n tests $(shell kubectl get pods -n tests | grep "monkey-tests" | awk '{print $$1}' ) -it --copy-to=debugger --container=monkey-tests -- sh
+	kubectl delete pod -n tests debugger
 
 publish: build tests
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}

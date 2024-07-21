@@ -28,5 +28,5 @@ class GoogleImagesSearch(ProviderBase):
                 response.raise_for_status()
                 data = response.json()
                 return data["items"][0]["link"]
-            except httpx.HTTPStatusError as e:
+            except httpx.HTTPStatusError:
                 return f"{STATIC_PATH}/images/sample-phone.png"
