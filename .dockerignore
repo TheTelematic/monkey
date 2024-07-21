@@ -1,7 +1,12 @@
+.pycharm-debug/
+assets/
+grafana-dashboards/
 kubernetes/
+scripts/
 venv/
+.dockerignore
 .gitignore
 Dockerfile
+Makefile
 README.md
-local.env
-raspberry.env
+*.env

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
 data:
   VERSION: "{{ .Values.image.tag }}"
-  DOMAIN_HOSTS: "{{ .Release.Name }}-api,{{ .Values.ingress.host }}"
+  DOMAIN_HOSTS: "{{ .Release.Name }}-api,{{ .Values.ingress.hostname }}"
   {{- range $key, $value := .Values.config }}
   {{ $key }}: "{{ $value }}"
   {{- end }}

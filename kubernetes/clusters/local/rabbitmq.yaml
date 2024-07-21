@@ -3,6 +3,6 @@ auth:
   password: monkey
 
 ingress:
-  enabled: false
+  enabled: true
   hostname: rabbitmq.local
   ingressClassName: nginx

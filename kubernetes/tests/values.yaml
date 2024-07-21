@@ -1,0 +1,14 @@
+image:
+  name: monkey-tests
+  tag: latest
+  policy: IfNotPresent
+
+secretName: monkey
+
+config:
+  REDIS_HOST: "redis-master"
+  RABBITMQ_URL: "amqp://monkey:monkey@rabbitmq:5672/tests"
+  RABBITMQ_QUEUE_TRANSLATIONS: "tests.translations"
+  RABBITMQ_QUEUE_SUMMARIES: "tests.summaries"
+  PREFIX_KEYS_QUERIES: "tests.queries"
+  PREFIX_KEYS_TRANSLATIONS: "tests.translations"

@@ -81,7 +81,7 @@ spec:
     ingress:
       enabled: true
       ingressClassName: ngrok
-      host: ghoul-happy-evidently.ngrok-free.app
+      hostname: ghoul-happy-evidently.ngrok-free.app
     api:
       replicas:
         min: 2

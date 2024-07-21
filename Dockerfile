@@ -2,7 +2,10 @@ FROM python:3.12.3-alpine AS base
 
 WORKDIR /app
 
-ENV VIRTUAL_ENV=/opt/venv
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    VIRTUAL_ENV="/opt/venv"
+
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
@@ -13,8 +16,22 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install -U pip && pip install
 
 FROM base_app AS monkey_app
 
-COPY --from=base_app $VIRTUAL_ENV $VIRTUAL_ENV
 COPY src/ .
+
+ARG BUILD_TIMESTAMP
+ENV BUILD_TIMESTAMP=$BUILD_TIMESTAMP
+
+FROM base_app AS base_tests
+
+COPY requirements-tests.txt .
+RUN --mount=type=cache,target=/root/.cache/pip pip install -U pip && pip install -r requirements-tests.txt && rm requirements-tests.txt
+
+COPY pytest.ini tests/
+
+FROM base_tests AS monkey_tests
+
+COPY src/ .
+COPY tests/ .
 
 ARG BUILD_TIMESTAMP
 ENV BUILD_TIMESTAMP=$BUILD_TIMESTAMP

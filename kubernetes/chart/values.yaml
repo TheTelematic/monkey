@@ -75,7 +75,7 @@ service:
 ingress:
   enabled: false
   ingressClassName: ""
-  host: ""
+  hostname: ""
 
 config:
   LOG_LEVEL: "INFO"

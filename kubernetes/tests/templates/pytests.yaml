@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-integration
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  template:
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.policy }}
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - pytest -v tests/integration
+      restartPolicy: Never
+  backoffLimit: 4
+---

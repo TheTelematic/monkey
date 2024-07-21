@@ -1,7 +1,7 @@
 ingress:
   enabled: true
   ingressClassName: nginx
-  host: monkey.local
+  hostname: monkey.local
 
 config:
   CACHE_EXPIRATION_SECONDS: "300" # 5 minutes

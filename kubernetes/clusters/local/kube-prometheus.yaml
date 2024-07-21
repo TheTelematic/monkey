@@ -1,2 +1,8 @@
 alertmanager:
   enabled: false
+
+prometheus:
+  ingress:
+    enabled: true
+    hostname: prometheus.local
+    ingressClassName: nginx

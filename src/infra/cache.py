@@ -63,7 +63,7 @@ async def get_redis_queries() -> PrefixedRedis:
         if _redis_queries is None:
             logger.info("Creating a new Redis connection for queries...")
             _redis_queries = PrefixedRedis(
-                prefix_keys="queries",
+                prefix_keys=config.PREFIX_KEYS_QUERIES,
                 **__COMMON_KWARGS,
             )
             logger.info("Created a new Redis connection for queries...")
@@ -83,7 +83,7 @@ async def get_redis_translations() -> PrefixedRedis:
         if _redis_translations is None:
             logger.info("Creating a new Redis connection for translations...")
             _redis_translations = PrefixedRedis(
-                prefix_keys="translations",
+                prefix_keys=config.PREFIX_KEYS_TRANSLATIONS,
                 **__COMMON_KWARGS,
             )
             logger.info("Created a new Redis connection for translations...")
