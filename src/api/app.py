@@ -53,7 +53,7 @@ app.include_router(ui_router, prefix="")
 
 app.add_middleware(PrometheusWSMiddleware)
 if config.DOMAIN_HOSTS:
-    allowed_hosts = [config.POD_IP, config.DOMAIN_HOSTS]
+    allowed_hosts = [config.POD_IP, *config.DOMAIN_HOSTS]
     logger.info(f"Allowed hosts: {allowed_hosts}")
     app.add_middleware(
         TrustedHostMiddleware,
