@@ -3,7 +3,10 @@ image:
   tag: latest
   policy: IfNotPresent
 
-secretName: monkey
+tests:
+  integration:
+    debug:
+      enabled: false
 
 config:
   REDIS_HOST: "redis-master"
@@ -12,3 +15,6 @@ config:
   RABBITMQ_QUEUE_SUMMARIES: "tests.summaries"
   PREFIX_KEYS_QUERIES: "tests.queries"
   PREFIX_KEYS_TRANSLATIONS: "tests.translations"
+  DEBUG_PYDEVD_PYCHARM: "pydevd-pycharm~=241.18034.82"
+  DEBUG_HOST: "host.docker.internal"
+  DEBUG_PORT: "8888"

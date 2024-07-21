@@ -4,9 +4,18 @@ metadata:
   name: {{ .Release.Name }}-integration
   labels:
     app: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
+  backoffLimit: 0
   template:
+    metadata:
+      name: {{ .Release.Name }}-integration
+      labels:
+        app: {{ .Release.Name }}
     spec:
+      restartPolicy: Never
       containers:
         - name: {{ .Release.Name }}
           image: {{ .Values.image.name }}:{{ .Values.image.tag }}
@@ -16,6 +25,9 @@ spec:
             - -c
           args:
             - pytest -v tests/integration
-      restartPolicy: Never
-  backoffLimit: 4
+          env:
+            {{- if .Values.tests.integration.debug.enabled }}
+            - name: DEBUG
+              value: "true"
+            {{- end }}
 ---

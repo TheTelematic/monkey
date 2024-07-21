@@ -48,12 +48,12 @@ infra-start-local: local-context
 	helm repo add kedacore https://kedacore.github.io/charts
 	helm repo update
 
-	helm upgrade --namespace infra --create-namespace --install keda kedacore/keda  --version 2.14.2
-	helm upgrade --namespace infra --create-namespace --install redis bitnami/redis -f kubernetes/clusters/local/redis.yaml --version 19.5.0
-	helm upgrade --namespace infra --create-namespace --install rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
-	helm upgrade --namespace infra --create-namespace --install nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/clusters/local/nginx-ingress-controller.yaml --version 11.3.0
-	helm upgrade --namespace infra --create-namespace --install kube-prometheus bitnami/kube-prometheus -f kubernetes/clusters/local/kube-prometheus.yaml --version 9.2.1
-	helm upgrade --namespace infra --create-namespace --install grafana bitnami/grafana -f kubernetes/clusters/local/grafana.yaml --version 11.3.0
+	helm upgrade --install --namespace infra --create-namespace keda kedacore/keda  --version 2.14.2
+	helm upgrade --install --namespace infra --create-namespace redis bitnami/redis -f kubernetes/clusters/local/redis.yaml --version 19.5.0
+	helm upgrade --install --namespace infra --create-namespace rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
+	helm upgrade --install --namespace infra --create-namespace nginx-ingress-controller bitnami/nginx-ingress-controller -f kubernetes/clusters/local/nginx-ingress-controller.yaml --version 11.3.0
+	helm upgrade --install --namespace infra --create-namespace kube-prometheus bitnami/kube-prometheus -f kubernetes/clusters/local/kube-prometheus.yaml --version 9.2.1
+	helm upgrade --install --namespace infra --create-namespace grafana bitnami/grafana -f kubernetes/clusters/local/grafana.yaml --version 11.3.0
 
 infra-stop-local: local-context
 	-helm uninstall --namespace infra keda
@@ -64,21 +64,11 @@ infra-stop-local: local-context
 	-helm uninstall --namespace infra grafana
 
 tests: local-context
-	namespace=tests
-	helm repo add bitnami https://charts.bitnami.com/bitnami
-	helm repo update
+	@namespace=$1
 
-	helm upgrade --namespace ${namespace} --create-namespace --install --wait redis bitnami/redis -f kubernetes/clusters/local/redis.yaml --version 19.5.0
-	helm upgrade --namespace ${namespace} --create-namespace --install --wait rabbitmq bitnami/rabbitmq -f kubernetes/clusters/local/rabbitmq.yaml --version 14.3.1
-	kubectl exec -n ${namespace} rabbitmq-0 -- rabbitmqctl add_vhost tests
+	./scripts/tests.sh ${namespace}
 
-	#timestamp=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
-	timestamp=latest
-	make build image_name=monkey-tests image_tag=${timestamp} target=tests
-	helm install --namespace ${namespace} --create-namespace --wait monkey-tests kubernetes/tests  --set image.tag=${timestamp}
-	helm delete --namespace ${namespace} monkey-tests
-
-publish: build
+publish: build tests
 	docker tag ${image_name}:${image_tag} ${docker_hub_image_name}:${image_tag}
 	docker push ${docker_hub_image_name}:${image_tag}
 

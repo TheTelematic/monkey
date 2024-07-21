@@ -9,6 +9,10 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          name: {{ .Release.Name }}-web-content-crawler
+          labels:
+            app: {{ .Release.Name }}-web-content-crawler
         spec:
           terminationGracePeriodSeconds: {{ .Values.cronjobs.webContentCrawler.terminationGracePeriodSeconds }}
           restartPolicy: Never
